@@ -5,14 +5,14 @@ public enum CardGame {
 	BLACK_JACK("Black Jack"),
 	TEXAS_HOLDEM_POKER("Texas Holdem Poker");
 	
-	public final String name;
+	public final String gameName;
 	private CardGame(String name) {
-		this.name = name;
+		gameName = name;
 	}
 	
 	@Override
 	public String toString() {
-		return this.name;
+		return gameName;
 	}
 	
 	public static CardGame getConstant(String name) {

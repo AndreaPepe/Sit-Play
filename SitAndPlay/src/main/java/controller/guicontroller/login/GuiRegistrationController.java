@@ -1,4 +1,4 @@
-package main.java.controller.GUIctrl.login;
+package main.java.controller.guicontroller.login;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,7 +18,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
-import main.java.controller.applicationCtrl.RegistrationController;
+import main.java.controller.applicationcontroller.RegistrationController;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.EmptyDataException;

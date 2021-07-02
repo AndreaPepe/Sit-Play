@@ -1,4 +1,4 @@
-package main.java.engineering.bean.createTable;
+package main.java.engineering.bean.createtable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

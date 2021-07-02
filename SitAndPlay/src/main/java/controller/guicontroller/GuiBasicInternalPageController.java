@@ -1,4 +1,4 @@
-package main.java.controller.GUIctrl;
+package main.java.controller.guicontroller;
 
 import java.net.URL;
 import java.util.ResourceBundle;

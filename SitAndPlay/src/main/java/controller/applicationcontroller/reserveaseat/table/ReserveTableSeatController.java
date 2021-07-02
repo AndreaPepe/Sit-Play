@@ -1,4 +1,4 @@
-package main.java.controller.applicationCtrl.reserveSeat.table;
+package main.java.controller.applicationcontroller.reserveaseat.table;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
-import main.java.engineering.bean.createTable.TableBean;
+import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.dao.TableDAO;
 import main.java.engineering.exceptions.DAOException;
 import main.java.model.Table;

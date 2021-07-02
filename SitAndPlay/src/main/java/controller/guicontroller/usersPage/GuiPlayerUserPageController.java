@@ -1,4 +1,4 @@
-package main.java.controller.GUIctrl.usersPage;
+package main.java.controller.guicontroller.usersPage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import main.java.controller.GUIctrl.GuiBasicInternalPageController;
+import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.utils.Session;
 
 public class GuiPlayerUserPageController extends GuiBasicInternalPageController {

@@ -1,4 +1,4 @@
-package main.java.controller.applicationCtrl;
+package main.java.controller.applicationcontroller;
 
 import java.sql.SQLException;
 import java.util.logging.Level;

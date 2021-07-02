@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.java.controller.GUIctrl.login.GuiLoginController;
+import main.java.controller.guicontroller.login.GuiLoginController;
 
 public class HomePage extends Application {
 

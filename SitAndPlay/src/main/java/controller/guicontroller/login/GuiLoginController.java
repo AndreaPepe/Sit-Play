@@ -1,4 +1,4 @@
-package main.java.controller.GUIctrl.login;
+package main.java.controller.guicontroller.login;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,8 +20,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import main.java.controller.GUIctrl.GuiHomePageController;
-import main.java.controller.applicationCtrl.LoginController;
+import main.java.controller.applicationcontroller.LoginController;
+import main.java.controller.guicontroller.GuiHomePageController;
 import main.java.engineering.bean.login.BeanLoggedUser;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.exceptions.DAOException;

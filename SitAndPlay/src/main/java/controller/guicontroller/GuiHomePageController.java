@@ -1,4 +1,4 @@
-package main.java.controller.GUIctrl;
+package main.java.controller.guicontroller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -12,8 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import main.java.controller.GUIctrl.createTable.GuiPlayerCreateTableController;
-import main.java.controller.GUIctrl.usersPage.GuiPlayerUserPageController;
+import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
+import main.java.controller.guicontroller.usersPage.GuiPlayerUserPageController;
 import main.java.engineering.utils.Session;
 
 public class GuiHomePageController extends GuiBasicController {

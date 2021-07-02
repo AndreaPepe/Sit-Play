@@ -1,8 +1,8 @@
-package main.java.controller.applicationCtrl.createTable;
+package main.java.controller.applicationcontroller.createTable;
 
 import java.sql.SQLException;
 
-import main.java.engineering.bean.createTable.TableBean;
+import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.dao.TableDAO;
 import main.java.engineering.exceptions.DAOException;
 
