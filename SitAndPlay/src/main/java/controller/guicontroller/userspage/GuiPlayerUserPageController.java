@@ -1,4 +1,4 @@
-package main.java.controller.guicontroller.usersPage;
+package main.java.controller.guicontroller.userspage;
 
 import java.net.URL;
 import java.util.ResourceBundle;

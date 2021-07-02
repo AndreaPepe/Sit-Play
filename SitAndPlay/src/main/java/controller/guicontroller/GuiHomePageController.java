@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
-import main.java.controller.guicontroller.usersPage.GuiPlayerUserPageController;
+import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
 import main.java.engineering.utils.Session;
 
 public class GuiHomePageController extends GuiBasicController {
@@ -64,7 +64,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("User");
 			lblStatus.setText("User");
 			
-			var loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/usersPage/PlayerUserPage.fxml"));
+			var loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/userspage/PlayerUserPage.fxml"));
 			loader.setControllerFactory(c -> new GuiPlayerUserPageController(this.ssn));
 			Parent root = loader.load();		
 			pnPage.getChildren().removeAll();

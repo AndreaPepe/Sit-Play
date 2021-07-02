@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apnBackground" minHeight="430.0" minWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.GUIctrl.usersPage.GuiPlayerUserPageController">
+<AnchorPane fx:id="apnBackground" minHeight="430.0" minWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.userspage.GuiPlayerUserPageController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="650.0">
         <items>

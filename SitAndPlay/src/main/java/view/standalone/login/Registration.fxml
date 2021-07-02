@@ -16,7 +16,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="basePane" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.GUIctrl.login.GuiRegistrationController">
+<AnchorPane fx:id="basePane" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.login.GuiRegistrationController">
    <children>
       <VBox prefHeight="400.0" prefWidth="400.0">
          <children>
