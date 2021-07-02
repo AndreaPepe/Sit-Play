@@ -1,0 +1,38 @@
+.btn{
+ -fx-background-color : #296581;
+ background-color : #296581;
+ font-size: 18px;
+}
+.btn:hover{
+	-fx-background-color: #061A2D;
+	background-color: #061A2D;
+}
+.btn:focused{
+	-fx-background-color: #4CA1D8;
+	background-color: #4CA1D8;
+	
+	-fx-border-color: #FFFFFF;
+	border-color: #FFFFFF;
+	
+	-fx-border-width: 0px 0px 0px 4px;
+	border-width: 0px 0px 0px 4px;
+}
+
+.btnClose{
+	-fx-background-color: #949494;
+	background-color: #949494;	
+}
+.btnClose:hover{
+	-fx-background-color : #296581; 
+	background-color : #296581;
+}
+
+.pnDark{
+	-fx-background-color: #061A2D;
+	background-color: #061A2D;
+}
+
+.pnLight{
+	-fx-background-color: #296581;
+	background-color: #296581;
+}
