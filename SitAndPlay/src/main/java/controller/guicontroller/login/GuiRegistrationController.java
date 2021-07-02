@@ -96,6 +96,7 @@ public class GuiRegistrationController implements Initializable{
 			case "Player":	beanUser.setUserType(UserType.PLAYER); break;
 			case "Organizer": beanUser.setUserType(UserType.ORGANIZER); break;
 			case "Businessman": beanUser.setUserType(UserType.BUSINESSMAN); break;
+			default: break;
 			}
 			
 			// instantiate application controller

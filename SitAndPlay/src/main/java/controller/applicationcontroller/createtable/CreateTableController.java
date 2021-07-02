@@ -1,4 +1,4 @@
-package main.java.controller.applicationcontroller.createTable;
+package main.java.controller.applicationcontroller.createtable;
 
 import java.sql.SQLException;
 

@@ -23,7 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
-import main.java.controller.applicationcontroller.createTable.CreateTableController;
+import main.java.controller.applicationcontroller.createtable.CreateTableController;
 import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTableSeatController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.createtable.TableBean;

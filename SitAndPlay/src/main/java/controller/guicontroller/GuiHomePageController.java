@@ -64,7 +64,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("User");
 			lblStatus.setText("User");
 			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/usersPage/PlayerUserPage.fxml"));
+			var loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/usersPage/PlayerUserPage.fxml"));
 			loader.setControllerFactory(c -> new GuiPlayerUserPageController(this.ssn));
 			Parent root = loader.load();		
 			pnPage.getChildren().removeAll();
@@ -73,7 +73,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("Tables");
 			lblStatus.setText("Tables");
 			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/createTable/CreateTable.fxml"));
+			var loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/createTable/CreateTable.fxml"));
 			loader.setControllerFactory(c -> new GuiPlayerCreateTableController(this.ssn));
 			Parent root = loader.load();		
 			pnPage.getChildren().removeAll();

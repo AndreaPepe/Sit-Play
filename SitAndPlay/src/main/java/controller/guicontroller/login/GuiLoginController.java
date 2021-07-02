@@ -39,7 +39,7 @@ public class GuiLoginController implements Initializable{
 	private final String genericErrorMsg = "Something went wrong, please retry";
 	
 	// TODO: select this page dynamically
-	private final String startPage = "/main/java/view/standalone/HomePage.fxml";
+	private static final String startPage = "/main/java/view/standalone/HomePage.fxml";
 	
 	@FXML
 	private AnchorPane basePane;
@@ -78,29 +78,29 @@ public class GuiLoginController implements Initializable{
     	resetLabels();
     	
     	// create bean to store data
-    	BeanUser beanUser = new BeanUser();
+    	var beanUser = new BeanUser();
     	try {
 			beanUser.setUsername(tfUsername.getText());
 			beanUser.setPassword(pfPassword.getText());
 			
 			// new instance of application controller
-			LoginController ctrl = new LoginController();
+			var ctrl = new LoginController();
 			BeanLoggedUser resultLogin = ctrl.login(beanUser);
 			
 			// create a new desktop Session -> isWeb = false
-	    	Session ssn = new Session(false);
+	    	var ssn = new Session(false);
 	    	
 			//Registration of the user into Session
 			ssn.setLoggedUser(resultLogin);
 			ssn.setHomePage();
 			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(startPage));
+			var loader = new FXMLLoader(getClass().getResource(startPage));
 			loader.setControllerFactory(c -> new GuiHomePageController(ssn));
 			Parent root = loader.load();
 			// create a new scene with different dimensions
-			Scene scene = new Scene(root);
+			var scene = new Scene(root);
 			// retrieve the application Stage to set a new scene of different dimensions
-			Stage appStage = (Stage)((Node) event.getSource()).getScene().getWindow();
+			var appStage = (Stage)((Node) event.getSource()).getScene().getWindow();
 			appStage.setTitle("Sit&Play");
 			appStage.setScene(scene);
 			appStage.setX(20);
@@ -116,7 +116,7 @@ public class GuiLoginController implements Initializable{
 				lblErrorPassword.setText(emptyPasswordErrorMsg);
 				lblErrorPassword.setVisible(true);
 			}
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "EmptyDataException catched: " + e.getMessage());
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("EmptyDataException catched: %s", e.getMessage()));
 		} catch (WrongCredentialsExceptions e) {
 			lblErrorUsername.setText(e.getMessage());
 			lblErrorUsername.setVisible(true);
@@ -127,7 +127,7 @@ public class GuiLoginController implements Initializable{
 			e.printStackTrace();
 		lblErrorUsername.setText(genericErrorMsg);
 		lblErrorUsername.setVisible(true);
-		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "General Exception catched: " + e.getMessage());
+		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("General Exception catched: %s", e.getMessage()));
 		}
     }
     
@@ -135,7 +135,7 @@ public class GuiLoginController implements Initializable{
 
     @FXML
     private void handleSignIn(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource(this.registrationPage));
+    	var loader = new FXMLLoader(getClass().getResource(this.registrationPage));
     	loader.setControllerFactory(c -> new GuiRegistrationController());
     	Parent root = loader.load();
     	basePane.getChildren().removeAll();

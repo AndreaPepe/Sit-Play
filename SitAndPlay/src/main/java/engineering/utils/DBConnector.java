@@ -7,9 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
+
 
 
 /**
@@ -25,9 +24,9 @@ public class DBConnector {
 	private static DBConnector instance = null;
 	private Connection conn = null;
 	
-	private final String CONFIG_FILE = "./src/main/java/engineering/utils/configDB.xml";
-	private final String tagDatabase = "db";
-	private final String tagDriver = "driver";
+	private static final String CONFIG_FILE = "./src/main/java/engineering/utils/configDB.xml";
+	private static final String tagDatabase = "db";
+	private static final String tagDriver = "driver";
 	
 	protected DBConnector() {
 		// Singleton: protected constructor
@@ -57,13 +56,13 @@ public class DBConnector {
 		
 		if (this.conn == null) {
 			try {
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				var factory = DocumentBuilderFactory.newInstance();
 				factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
 				factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
 				
-				DocumentBuilder docBuilder = factory.newDocumentBuilder();
+				var docBuilder = factory.newDocumentBuilder();
 				// parse the XML file
-				Document document = docBuilder.parse(new File(CONFIG_FILE));
+				var document = docBuilder.parse(new File(CONFIG_FILE));
 				String connectionInfo = document.getElementsByTagName(tagDatabase).item(0).getTextContent();
 				String driver = document.getElementsByTagName(tagDriver).item(0).getTextContent();
 				

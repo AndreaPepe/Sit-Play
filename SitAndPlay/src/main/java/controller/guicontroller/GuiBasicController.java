@@ -32,7 +32,6 @@ public abstract class GuiBasicController implements Initializable{
 		this.ssn = ssn;
 	}
 	
-	@Override
-	public abstract void initialize(URL arg0, ResourceBundle arg1);
+
 	
 }
