@@ -14,8 +14,7 @@ public class CreateTableController {
 	 * 
 	 * @param TableBean bean
 	 * @return
-	 * @throws DAOException 
-	 * @throws  
+	 * @throws DAOException   
 	 */
 	public boolean createTable(TableBean bean) throws DAOException {
 		String name = bean.getName();

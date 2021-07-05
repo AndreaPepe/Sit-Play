@@ -1,5 +1,7 @@
 package main.java.controller.guicontroller.createtable;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import main.java.controller.applicationcontroller.createtable.CreateTableController;
 import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTableSeatController;
@@ -113,6 +117,13 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     
     @FXML
     private Label lblErrorSearch;
+    
+    @FXML
+    private WebView webMap;
+    private WebEngine engine;
+    
+    private static final String HTML_MAP = "src/main/java/view/standalone/createtable/mapbox.html";
+    
 
 	public GuiPlayerCreateTableController(Session ssn) {
 		super(ssn);
@@ -125,6 +136,21 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		lblError.setVisible(false);
 		lblSuccessCreate.setVisible(false);
 		
+		engine = webMap.getEngine();
+		loadMapbox();
+	}
+	
+	private void loadMapbox() {
+	
+		URL myUrl=null;
+		try {
+			myUrl = new File(HTML_MAP).toURI().toURL();
+		
+		String url= myUrl.toString();
+		engine.load(url);
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	

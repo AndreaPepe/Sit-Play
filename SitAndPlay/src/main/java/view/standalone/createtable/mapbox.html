@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="ISO-8859-1">
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.js"></script>
+		<link href="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.css" rel="stylesheet" />
+		
+		<title>Map</title>
+		
+		<style>
+			body { margin: 0; padding: 0; }
+			#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+		</style>
+		
+		<script>
+		var map;
+		function loadMap(){
+			map = null;
+			L.mapbox.accessToken = "pk.eyJ1IjoiYW5kcmVhcGVwZTMwIiwiYSI6ImNrcW52aGlzejAxNGUydXFzN2Y3N25lemwifQ._T3qFEHfLLxs4R4Nhy69rg";
+			map= L.mapbox.map('map').setView([41.89306,12.48278],5);
+		    L.mapbox.styleLayer('mapbox://styles/mapbox/outdoors-v11').addTo(map);
+		}
+		</script>
+		
+	</head>
+	
+		
+	<body onload="loadMap();">	
+		<div id='map'></div>
+	</body>
+
+</html>
