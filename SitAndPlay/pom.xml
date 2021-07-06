@@ -106,6 +106,26 @@
 	    <artifactId>sonar-maven-plugin</artifactId>
 	    <version>3.7.0.1746</version>
 	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+	<dependency>
+	    <groupId>com.googlecode.json-simple</groupId>
+	    <artifactId>json-simple</artifactId>
+	    <version>1.1.1</version>
+	</dependency>
+
   
+  	<!-- https://mvnrepository.com/artifact/org.wso2.apache.httpcomponents/httpclient -->
+	<dependency>
+	    <groupId>org.wso2.apache.httpcomponents</groupId>
+	    <artifactId>httpclient</artifactId>
+	    <version>4.3.1.wso2v1</version>
+	</dependency>
+	<dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1.1</version>
+	</dependency>
+  	
   </dependencies>
 </project>

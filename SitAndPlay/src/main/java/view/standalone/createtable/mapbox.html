@@ -15,11 +15,36 @@
 		
 		<script>
 		var map;
+		var singleMarker = null;
 		function loadMap(){
 			map = null;
 			L.mapbox.accessToken = "pk.eyJ1IjoiYW5kcmVhcGVwZTMwIiwiYSI6ImNrcW52aGlzejAxNGUydXFzN2Y3N25lemwifQ._T3qFEHfLLxs4R4Nhy69rg";
 			map= L.mapbox.map('map').setView([41.89306,12.48278],5);
 		    L.mapbox.styleLayer('mapbox://styles/mapbox/outdoors-v11').addTo(map);
+		}
+		
+		function updateMap(lat,lng,zoom){
+			map.flyTo(L.latLng(lat, lng), zoom);
+			addSingleMarker(lat,lng);
+		}
+		
+		function addSingleMarker(lat,lng){
+			if(singleMarker != null){
+				map.removeLayer(singleMarker);
+			}
+			singleMarker=L.marker(L.latLng(lat,lng), {
+				icon: L.mapbox.marker.icon({
+					'marker-size': 'large',
+			        'marker-symbol': "marker",
+			        'marker-color': "#214183"
+				})
+			});
+			map.addLayer(singleMarker);
+			
+			singleMarker.bindPopup("You have selected this place",{closeOnClick: false});
+			singleMarker.on('click',function(e){
+				singleMarker.openPopup();
+			});
 		}
 		</script>
 		

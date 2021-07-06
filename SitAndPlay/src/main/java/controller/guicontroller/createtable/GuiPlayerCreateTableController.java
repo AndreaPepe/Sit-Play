@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,7 +33,9 @@ import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.utils.Cities;
 import main.java.engineering.utils.Session;
+import main.java.engineering.utils.map.MapPlace;
 import main.java.model.CardGame;
+import main.java.view.standalone.SearchMapPlaceTextField;
 
 public class GuiPlayerCreateTableController extends GuiBasicInternalPageController{
 	
@@ -55,9 +56,6 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     
     @FXML
     private TextField tfTableName;
-
-    @FXML
-    private ComboBox<String> cbCity;
 
     @FXML
     private DatePicker datePicker;
@@ -120,9 +118,11 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     
     @FXML
     private WebView webMap;
-    private WebEngine engine;
-    
+    private WebEngine engine;    
     private static final String HTML_MAP = "src/main/java/view/standalone/createtable/mapbox.html";
+    
+    private SearchMapPlaceTextField autocompleteSearch;
+    private String location;
     
 
 	public GuiPlayerCreateTableController(Session ssn) {
@@ -138,6 +138,25 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		
 		engine = webMap.getEngine();
 		loadMapbox();
+		
+		var textField = new TextField();
+		textField.setPrefHeight(25);
+		textField.setPrefWidth(150);
+		textField.setLayoutX(144);
+		textField.setLayoutY(74);
+		autocompleteSearch = new SearchMapPlaceTextField(textField);
+		apnCreate.getChildren().add(autocompleteSearch.getTextField());
+		autocompleteSearch.getLastSelectedItem().addListener((observable,oldValue,newValue)->{
+			if(autocompleteSearch.getLastSelectedItem().get()!=null) {
+			MapPlace place = autocompleteSearch.getLastSelectedItem().getValue();
+			location = place.toString();
+			var lat = place.getCoordinates().get(0);
+			var lng = place.getCoordinates().get(1);
+			var zoom = 9;
+			engine.executeScript("updateMap("+lat+"," + lng + "," + zoom +");");
+			System.out.println("lat: " + place.getCoordinates().get(0) + "\nlng: " + place.getCoordinates().get(1));
+			}			
+		});
 	}
 	
 	private void loadMapbox() {
@@ -158,7 +177,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     public void handleCreateMenu(ActionEvent event) {
 		apnReserve.toBack();
 		apnCreate.toFront();
-		loadCities(cbCity);
+//		loadCities(cbCity);
 		loadGames();
 		loadTime();
 		lblError.setVisible(false);
@@ -174,7 +193,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     
     @FXML
     public void handleReset(ActionEvent event) {
-    	cbCity.valueProperty().set(null);
+//    	cbCity.valueProperty().set(null);
     	cbCardGame.valueProperty().set(null);
     	cbHours.valueProperty().set(null);
     	cbMinutes.valueProperty().set(null);
@@ -191,7 +210,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     	lblSuccessCreate.setVisible(false);
     	
     	String name = tfTableName.getText();
-    	String city = cbCity.getValue();
+//    	String city = cbCity.getValue();
     	String cardGame = cbCardGame.getValue();
     	String organizer = ssn.getLoggedUser().getUsername();
     	if (datePicker.getValue() != null) {
@@ -199,7 +218,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     		String time = cbHours.getValue() + ":" + cbMinutes.getValue();
         	
         	
-        	TableBean bean = new TableBean(name, city, cardGame, date, time, organizer);
+        	TableBean bean = new TableBean(name, location, cardGame, date, time, organizer);
         	if (bean.checkDateTime() == false) {
     			lblError.setText("Impossible to create a table in the past. Select future datetime.");
     			lblError.setVisible(true);
