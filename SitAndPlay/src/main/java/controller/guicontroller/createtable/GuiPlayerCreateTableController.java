@@ -154,7 +154,6 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 			var lng = place.getCoordinates().get(1);
 			var zoom = 9;
 			engine.executeScript("updateMap("+lat+"," + lng + "," + zoom +");");
-			System.out.println("lat: " + place.getCoordinates().get(0) + "\nlng: " + place.getCoordinates().get(1));
 			}			
 		});
 	}
