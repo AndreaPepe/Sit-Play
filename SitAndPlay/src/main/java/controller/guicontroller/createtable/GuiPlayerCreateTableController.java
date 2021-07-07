@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -20,9 +19,10 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
@@ -31,7 +31,6 @@ import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTabl
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.exceptions.DAOException;
-import main.java.engineering.utils.Cities;
 import main.java.engineering.utils.Session;
 import main.java.engineering.utils.map.MapPlace;
 import main.java.model.CardGame;
@@ -46,13 +45,12 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     private AnchorPane apnCreate;
 	
 	@FXML
-    private Button btnCreateMenu;
+    private ToggleButton btnCreateMenu;
 
     @FXML
-    private Button btnReserveMenu;
-
-    @FXML
-    private Pane pnBase;
+    private ToggleButton btnReserveMenu;
+    
+    private ToggleGroup topBarToggleGroup;
     
     @FXML
     private TextField tfTableName;
@@ -71,15 +69,13 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
     @FXML
     private ComboBox<String> cbMinutes;
-
-    @FXML
-    private Button btnReset;
     
     @FXML
     private Label lblError;
     
     @FXML
     private Label lblSuccessCreate;
+    
     
     
     
@@ -132,17 +128,30 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		// setting up the toggle group in the top bar of the pane
+		topBarToggleGroup = new ToggleGroup();
+		btnCreateMenu.setToggleGroup(topBarToggleGroup);
+		btnReserveMenu.setToggleGroup(topBarToggleGroup);
+		
+		// create the web engine for webMap in createTable pane
+		engine = webMap.getEngine();
+		
+		// start from the create table pane
 		btnCreateMenu.fire();
 		lblError.setVisible(false);
 		lblSuccessCreate.setVisible(false);
 		
-		engine = webMap.getEngine();
-		loadMapbox();
 		
+		
+		
+		
+	}
+	
+	private void setUpAutocompleteTextField() {
 		var textField = new TextField();
 		textField.setPrefHeight(25);
-		textField.setPrefWidth(150);
-		textField.setLayoutX(144);
+		textField.setPrefWidth(200);
+		textField.setLayoutX(115);
 		textField.setLayoutY(74);
 		autocompleteSearch = new SearchMapPlaceTextField(textField);
 		apnCreate.getChildren().add(autocompleteSearch.getTextField());
@@ -164,7 +173,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		try {
 			myUrl = new File(HTML_MAP).toURI().toURL();
 		
-		String url= myUrl.toString();
+		var url= myUrl.toString();
 		engine.load(url);
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
@@ -176,7 +185,8 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     public void handleCreateMenu(ActionEvent event) {
 		apnReserve.toBack();
 		apnCreate.toFront();
-//		loadCities(cbCity);
+		loadMapbox();
+		setUpAutocompleteTextField();
 		loadGames();
 		loadTime();
 		lblError.setVisible(false);
@@ -186,21 +196,9 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     @FXML
     public void handleReserveMenu(ActionEvent event) {
     	apnCreate.toBack();
-    	apnReserve.toFront();
-    	loadCities(cbSelectCity);    	   	
+    	apnReserve.toFront();  	   	
     }
     
-    @FXML
-    public void handleReset(ActionEvent event) {
-//    	cbCity.valueProperty().set(null);
-    	cbCardGame.valueProperty().set(null);
-    	cbHours.valueProperty().set(null);
-    	cbMinutes.valueProperty().set(null);
-    	datePicker.valueProperty().set(null);
-    	lblError.setVisible(false);
-    	lblSuccessCreate.setVisible(false);
-    	tfTableName.setText(null);
-    }
     
     @FXML
     public void handleCreateTable(ActionEvent event) {
@@ -242,25 +240,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     	
     	
     	
-    }
-
-    
-    private void loadCities(ComboBox<String> cbox) {
-		
-    	// upload the cities for combo box
-		cbox.getItems().clear();
-		
-		List<String> cities = new ArrayList<String>();
-		Cities enumCities[] = Cities.values();
-		
-		for(Cities city : enumCities) {
-			cities.add(city.toString());
-		}
-		
-		Collections.sort(cities);
-		cbox.getItems().addAll(cities);	
-	}
-    
+    }   
     
     
     private void loadGames() {

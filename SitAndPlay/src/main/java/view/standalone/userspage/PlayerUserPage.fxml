@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="apnBackground" minHeight="430.0" minWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.userspage.GuiPlayerUserPageController">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="650.0">
+      <ToolBar prefHeight="40.0" prefWidth="650.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <Button fx:id="btnProfile" mnemonicParsing="false" onAction="#profilePressed" prefHeight="30.0" prefWidth="100.0" styleClass="btn" stylesheets="@InternalPage.css" text="Profile" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="btnNotifications" mnemonicParsing="false" onAction="#notificationsPressed" prefHeight="30.0" prefWidth="100.0" styleClass="btn" stylesheets="@InternalPage.css" text="Notifications" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
+            <HBox prefHeight="0.0" prefWidth="600.0" spacing="20.0">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <children>
+                  <ToggleButton fx:id="btnProfile" mnemonicParsing="false" onAction="#profilePressed" prefWidth="120.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Profile" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </ToggleButton>
+                  <ToggleButton fx:id="btnNotifications" mnemonicParsing="false" onAction="#notificationsPressed" prefWidth="120.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Notifications" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </ToggleButton>
+               </children>
+            </HBox>
         </items>
       </ToolBar>
-      <Pane fx:id="pnBase" layoutY="40.0" prefHeight="390.0" prefWidth="650.0">
+      <Pane fx:id="pnBase" layoutY="40.0" prefHeight="390.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <AnchorPane fx:id="apnNotifications" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
                <children>
@@ -38,6 +46,7 @@
             </AnchorPane>
             <AnchorPane fx:id="apnProfile" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
                <children>
+                  <Separator layoutX="250.0" orientation="VERTICAL" prefHeight="354.0" prefWidth="0.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="15.0" />
                   <StackPane prefHeight="390.0" prefWidth="250.0">
                      <children>
                         <ImageView fitHeight="120.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
@@ -56,7 +65,6 @@
                               <Font name="System Bold Italic" size="18.0" />
                            </font>
                         </Label>
-                        <Line endX="100.0" fill="#aba8a8" startX="100.29289245605469" startY="-350.46636962890625" stroke="#8d8686" StackPane.alignment="CENTER_RIGHT" />
                      </children>
                   </StackPane>
                   <AnchorPane layoutX="250.0" prefHeight="390.0" prefWidth="401.0">

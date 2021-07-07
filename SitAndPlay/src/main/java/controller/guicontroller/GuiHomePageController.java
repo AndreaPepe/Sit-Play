@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
@@ -28,16 +30,18 @@ public class GuiHomePageController extends GuiBasicController {
 	private AnchorPane basePane;
 		
 	@FXML
-    private Button btnUser;
+    private ToggleButton btnUser;
 
     @FXML
-    private Button btnTables;
+    private ToggleButton btnTables;
 
     @FXML
-    private Button btnTournaments;
+    private ToggleButton btnTournaments;
 
     @FXML
-    private Button btnSettings;
+    private ToggleButton btnSettings;
+    
+    private ToggleGroup toggleGroup;
 
     @FXML
     private Pane pnlStatus;
@@ -54,9 +58,18 @@ public class GuiHomePageController extends GuiBasicController {
        
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-//		btnUser.fire();
+		setToggleSideMenu();
+		btnUser.fire();
 	}
 
+	
+	private void setToggleSideMenu() {
+		toggleGroup = new ToggleGroup();
+		btnUser.setToggleGroup(toggleGroup);
+		btnTables.setToggleGroup(toggleGroup);
+		btnTournaments.setToggleGroup(toggleGroup);
+		btnSettings.setToggleGroup(toggleGroup);
+	}
 	@FXML
 	public void handleClicks(ActionEvent event) throws IOException {
 		//TODO: add several content to display

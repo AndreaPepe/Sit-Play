@@ -5,8 +5,9 @@ import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.utils.Session;
@@ -23,10 +24,12 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
     private AnchorPane apnBackground;
 
     @FXML
-    private Button btnProfile;
+    private ToggleButton btnProfile;
 
     @FXML
-    private Button btnNotifications;
+    private ToggleButton btnNotifications;
+    
+    private ToggleGroup tgGroup;
 
     @FXML
     private AnchorPane apnProfile;
@@ -39,6 +42,10 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		tgGroup = new ToggleGroup();
+		btnProfile.setToggleGroup(tgGroup);
+		btnNotifications.setToggleGroup(tgGroup);
+		
 		btnProfile.fire();
 	}
 	

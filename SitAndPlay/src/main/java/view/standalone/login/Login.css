@@ -28,10 +28,4 @@
 .btn:focused{
 	-fx-background-color: #4CA1D8;
 	background-color: #4CA1D8;
-	
-	-fx-border-color: #FFFFFF;
-	border-color: #FFFFFF;
-	
-	-fx-border-width: 0px 0px 0px 4px;
-	border-width: 0px 0px 0px 4px;
 }
