@@ -32,14 +32,14 @@ import main.java.engineering.utils.Session;
 
 public class GuiLoginController implements Initializable{
 	
-	private final String registrationPage = "/main/java/view/standalone/login/Registration.fxml";
-	private final String emptyUsernameErrorMsg = "Username can't be empty!";
-	private final String emptyPasswordErrorMsg = "Password can't be empty!";
-	private final String daoErrorMessage = "Error with database, please retry";
-	private final String genericErrorMsg = "Something went wrong, please retry";
+	private static final String REGISTRATION_PAGE = "/main/java/view/standalone/login/Registration.fxml";
+	private static final String EMPTY_USERNAME_ERROR_MESSAGE = "Username can't be empty!";
+	private static final String EMPTY_PASSWORD_ERROR_MESSAGE = "Password can't be empty!";
+	private static final String DAO_ERROR_MESSAGE = "Error with database, please retry";
+	private static final String GENERIC_ERROR_MESSAGE = "Something went wrong, please retry";
 	
 	// TODO: select this page dynamically
-	private static final String startPage = "/main/java/view/standalone/HomePage.fxml";
+	private static final String START_PAGE = "/main/java/view/standalone/HomePage.fxml";
 	
 	@FXML
 	private AnchorPane basePane;
@@ -60,15 +60,14 @@ public class GuiLoginController implements Initializable{
     private Button btnLogin;
 
     @FXML
-    private Hyperlink hySignIn;
+    private Hyperlink hyRegistrate;
     
     @FXML
     private Button btnClose;
     
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-		
+		// Nothing is needed
 	}
     
 
@@ -94,7 +93,7 @@ public class GuiLoginController implements Initializable{
 			ssn.setLoggedUser(resultLogin);
 			ssn.setHomePage();
 			
-			var loader = new FXMLLoader(getClass().getResource(startPage));
+			var loader = new FXMLLoader(getClass().getResource(START_PAGE));
 			loader.setControllerFactory(c -> new GuiHomePageController(ssn));
 			Parent root = loader.load();
 			// create a new scene with different dimensions
@@ -110,10 +109,10 @@ public class GuiLoginController implements Initializable{
 		} catch (EmptyDataException e) {
 			int code = e.getErrorCode();
 			if (code == 0) {
-				lblErrorUsername.setText(emptyUsernameErrorMsg);
+				lblErrorUsername.setText(EMPTY_USERNAME_ERROR_MESSAGE);
 				lblErrorUsername.setVisible(true);
 			}else if (code == 3) {
-				lblErrorPassword.setText(emptyPasswordErrorMsg);
+				lblErrorPassword.setText(EMPTY_PASSWORD_ERROR_MESSAGE);
 				lblErrorPassword.setVisible(true);
 			}
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("EmptyDataException catched: %s", e.getMessage()));
@@ -121,11 +120,11 @@ public class GuiLoginController implements Initializable{
 			lblErrorUsername.setText(e.getMessage());
 			lblErrorUsername.setVisible(true);
 		} catch (DAOException e) {
-			lblErrorUsername.setText(daoErrorMessage);
+			lblErrorUsername.setText(DAO_ERROR_MESSAGE);
 			lblErrorUsername.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-		lblErrorUsername.setText(genericErrorMsg);
+		lblErrorUsername.setText(GENERIC_ERROR_MESSAGE);
 		lblErrorUsername.setVisible(true);
 		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("General Exception catched: %s", e.getMessage()));
 		}
@@ -134,8 +133,8 @@ public class GuiLoginController implements Initializable{
     
 
     @FXML
-    private void handleSignIn(ActionEvent event) throws IOException {
-    	var loader = new FXMLLoader(getClass().getResource(this.registrationPage));
+    private void handleRegistration(ActionEvent event) throws IOException {
+    	var loader = new FXMLLoader(getClass().getResource(REGISTRATION_PAGE));
     	loader.setControllerFactory(c -> new GuiRegistrationController());
     	Parent root = loader.load();
     	basePane.getChildren().removeAll();

@@ -50,8 +50,6 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     @FXML
     private ToggleButton btnReserveMenu;
     
-    private ToggleGroup topBarToggleGroup;
-    
     @FXML
     private TextField tfTableName;
 
@@ -129,9 +127,15 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// setting up the toggle group in the top bar of the pane
-		topBarToggleGroup = new ToggleGroup();
+		var topBarToggleGroup = new ToggleGroup();
 		btnCreateMenu.setToggleGroup(topBarToggleGroup);
 		btnReserveMenu.setToggleGroup(topBarToggleGroup);
+		// avoid unselected button
+		topBarToggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
+			if (newVal == null) {
+				oldVal.setSelected(true);
+			}
+		});		
 		
 		// create the web engine for webMap in createTable pane
 		engine = webMap.getEngine();

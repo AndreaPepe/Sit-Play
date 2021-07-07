@@ -28,8 +28,6 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
 
     @FXML
     private ToggleButton btnNotifications;
-    
-    private ToggleGroup tgGroup;
 
     @FXML
     private AnchorPane apnProfile;
@@ -42,10 +40,15 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		tgGroup = new ToggleGroup();
+		var tgGroup = new ToggleGroup();
 		btnProfile.setToggleGroup(tgGroup);
 		btnNotifications.setToggleGroup(tgGroup);
-		
+		// avoid unselected button
+		tgGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
+			if (newVal == null) {
+				oldVal.setSelected(true);
+			}
+		});
 		btnProfile.fire();
 	}
 	

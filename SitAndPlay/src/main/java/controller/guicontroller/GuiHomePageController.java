@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
 import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
@@ -25,9 +24,6 @@ public class GuiHomePageController extends GuiBasicController {
 		super(ssn);
 		// TODO Auto-generated constructor stub
 	}
-
-	@FXML
-	private AnchorPane basePane;
 		
 	@FXML
     private ToggleButton btnUser;
@@ -40,8 +36,6 @@ public class GuiHomePageController extends GuiBasicController {
 
     @FXML
     private ToggleButton btnSettings;
-    
-    private ToggleGroup toggleGroup;
 
     @FXML
     private Pane pnlStatus;
@@ -64,11 +58,18 @@ public class GuiHomePageController extends GuiBasicController {
 
 	
 	private void setToggleSideMenu() {
-		toggleGroup = new ToggleGroup();
+		var toggleGroup = new ToggleGroup();
 		btnUser.setToggleGroup(toggleGroup);
 		btnTables.setToggleGroup(toggleGroup);
 		btnTournaments.setToggleGroup(toggleGroup);
 		btnSettings.setToggleGroup(toggleGroup);
+		
+		// avoid unselected button
+		toggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
+			if (newVal == null) {
+				oldVal.setSelected(true);
+			}
+		});
 	}
 	@FXML
 	public void handleClicks(ActionEvent event) throws IOException {

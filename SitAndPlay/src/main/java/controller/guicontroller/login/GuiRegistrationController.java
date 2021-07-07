@@ -60,7 +60,7 @@ public class GuiRegistrationController implements Initializable{
     private Button btnBack;
 
     @FXML
-    private Button btnSignIn;
+    private Button btnRegistrate;
 
     @FXML
     private Label lblGenericError;
@@ -83,7 +83,7 @@ public class GuiRegistrationController implements Initializable{
 	}
 	
 	@FXML
-	public void handleSignIn(ActionEvent event) throws IOException {
+	public void handleRegistration(ActionEvent event) throws IOException {
 		
 		resetLabels();
 		BeanUser beanUser = new BeanUser();
