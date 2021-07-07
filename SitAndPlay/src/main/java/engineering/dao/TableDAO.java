@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.utils.DBConnector;
 import main.java.engineering.utils.query.QueryTable;
 import main.java.model.CardGame;
+import main.java.model.Place;
 import main.java.model.Table;
 
 public class TableDAO {
@@ -34,11 +34,13 @@ public class TableDAO {
 			}
 			rs.first();
 			
-			String name = rs.getString("name");
-			String city = rs.getString("city");
-			CardGame cardGame = CardGame.getConstant(rs.getString("cardGame"));
-			String date = rs.getString("date");
-			String time = rs.getString("time");
+			var name = rs.getString("name");
+			var address = rs.getString("address");
+			var lat = rs.getDouble("lat");
+			var lng = rs.getDouble("lng");
+			var cardGame = CardGame.getConstant(rs.getString("cardGame"));
+			var date = rs.getString("date");
+			var time = rs.getString("time");
 			
 			rs.close();
 			stmt.close();
@@ -51,16 +53,17 @@ public class TableDAO {
 			}
 			rs2.first();
 			
-			String organizer = rs2.getString("organizer");
+			var organizer = rs2.getString("organizer");
 			
-			table = new Table(name, city, cardGame, date, time, organizer);
+			var place = new Place(address, lat, lng);
+			table = new Table(name, place, cardGame, date, time, organizer);
 			rs2.close();
 			stmt.close();
 			
 			// load the participants and add them to the table instance			
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet rs3 = QueryTable.retrieveParticipants(stmt, tableName);
-			ArrayList<String> participants = new ArrayList<String>();
+			ArrayList<String> participants = new ArrayList<>();
 			String participant;
 			if (rs3.first()) {
 				do {
@@ -82,38 +85,7 @@ public class TableDAO {
 	}
 	
 	
-	
-	public static ArrayList<Table> loadTablesByCity(String city) throws SQLException, DAOException{
-		Statement stmt = null;
-		Connection conn = null;
-		ArrayList<Table> tables = new ArrayList<Table>();
-		
-		conn = DBConnector.getInstance().getConnection();
-		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			
-			ResultSet rs = QueryTable.retrieveTablesByCity(stmt, city);
-			String tableName = new String();
-			Table table;
-			if (rs.first()) {
-				do {
-					tableName = rs.getString("name");
-					table = retrieveTable(tableName);
-					tables.add(table);
-				} while (rs.next());
-			}
-						
-			rs.close();
-		} finally {
-			if (stmt != null) {
-				stmt.close();
-			}
-		}
-		return tables;
-	}
-	
-	
-	public static void insertTable(String name, String city, String cardGame, String date, String time, String organizer) throws SQLException, DAOException {
+	public static void insertTable(String name, Place place, String cardGame, String date, String time, String organizer) throws SQLException, DAOException {
 		Statement stmt1 = null;
 		Statement stmt2 = null;
 		Connection conn = null;
@@ -122,8 +94,8 @@ public class TableDAO {
 		
 		try {
 			stmt1 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			QueryTable.insertTable(stmt1, stmt2, name, city, cardGame, date, time, organizer);
+			QueryTable.insertTable(conn, name, place, cardGame, date, time);
+			
 			
 		}catch (SQLIntegrityConstraintViolationException e) {
 			throw new DAOException("Table's name already in use");
@@ -131,10 +103,10 @@ public class TableDAO {
 			if (stmt1 != null) {
 				stmt1.close();
 			}
-			if (stmt2 != null) {
-				stmt2.close();
-			}
 		}
+		stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		QueryTable.insertOrganizedTable(stmt2, name, organizer);
+		
 	}
 	
 	

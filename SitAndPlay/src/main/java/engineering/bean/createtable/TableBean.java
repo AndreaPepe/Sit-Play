@@ -6,22 +6,28 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class TableBean {
 
 	private String name;
-	private String city;
+	private String address;
+	private double latitude;
+	private double longitude;
 	private String cardGame;
 	private String date;
 	private String time;
 	private String organizer;
 	private ArrayList<String> participants;
 	
+	private static final String DATETIME_FORMAT = "dd/MM/yyyy HH:mm";
 	
-	public TableBean(String name, String city, String cardGame, String date, String time, String organizer) {
+	public TableBean(String name, PlaceBean place, String cardGame, String date, String time, String organizer) {
 		super();
 		this.name = name;
-		this.city = city;
+		this.address = place.getAddress();
+		this.latitude = place.getLatitude();
+		this.longitude = place.getLongitude();
 		this.cardGame = cardGame;
 		this.date = date;
 		this.time = time;
@@ -29,16 +35,18 @@ public class TableBean {
 		this.participants = null;
 	}
 	
-	public TableBean(String name, String city, String cardGame, String date, String time, String organizer,
-			ArrayList<String> participants) {
+	public TableBean(String name, PlaceBean place, String cardGame, String date, String time, String organizer,
+			List<String> participants) {
 		super();
 		this.name = name;
-		this.city = city;
+		this.address = place.getAddress();
+		this.latitude = place.getLatitude();
+		this.longitude = place.getLongitude();
 		this.cardGame = cardGame;
 		this.date = date;
 		this.time = time;
 		this.organizer = organizer;
-		this.participants = participants;
+		this.participants = new ArrayList<>(participants);
 	}
 	
 	public String getName() {
@@ -47,13 +55,29 @@ public class TableBean {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCity() {
-		return city;
+	public String getAddress() {
+		return address;
 	}
-	public void setCity(String city) {
-		this.city = city;
+
+	public double getLatitude() {
+		return latitude;
 	}
-	
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}	
 	public String getCardGame() {
 		return cardGame;
 	}
@@ -80,28 +104,24 @@ public class TableBean {
 	public void setOrganizer(String organizer) {
 		this.organizer = organizer;
 	}
-	public ArrayList<String> getParticipants() {
+	public List<String> getParticipants() {
 		return participants;
 	}
-	public void setParticipants(ArrayList<String> participants) {
-		this.participants = participants;
+	public void setParticipants(List<String> participants) {
+		this.participants = new ArrayList<>(participants);
 	}
 	
 	public Boolean checkDateTime() {
-		Date dateToCheck = buildDatetime(this.getDate(), this.getTime());
-		Date currentDate = getCurrentDateTime();
-		if (dateToCheck.after(currentDate)) {
-			return true;
-		}else {
-			return false;
-		}
+		var dateToCheck = buildDatetime(this.getDate(), this.getTime());
+		var currentDate = getCurrentDateTime();
+		return (dateToCheck != null && dateToCheck.after(currentDate));
 	}
 	
 	
 	private Date buildDatetime(String date, String time) {
 		
 		try {
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			var format = new SimpleDateFormat(DATETIME_FORMAT);
 			return format.parse(date + " " + time);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -111,9 +131,9 @@ public class TableBean {
 	}
 	
 	private Date getCurrentDateTime() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		LocalDateTime currentDateTime = LocalDateTime.now();
+		var formatter = DateTimeFormatter.ofPattern(DATETIME_FORMAT);
+		var format = new SimpleDateFormat(DATETIME_FORMAT);
+		var currentDateTime = LocalDateTime.now();
 		String now = formatter.format(currentDateTime);
 		try {
 			return format.parse(now);
@@ -122,5 +142,21 @@ public class TableBean {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public Boolean checkCreateTable() {
+		if (name == null || name.isBlank()) {
+			return false;
+		}
+		if (address == null || address.isBlank()) {
+			return false;
+		}
+		if (cardGame == null) {
+			return false;
+		}
+		if (Boolean.FALSE.equals(checkDateTime())) {
+			return false;
+		}
+		return (!(organizer==null || organizer.isBlank()));
 	}
 }

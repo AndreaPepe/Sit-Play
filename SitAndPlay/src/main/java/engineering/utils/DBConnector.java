@@ -25,8 +25,8 @@ public class DBConnector {
 	private Connection conn = null;
 	
 	private static final String CONFIG_FILE = "./src/main/java/engineering/utils/configDB.xml";
-	private static final String tagDatabase = "db";
-	private static final String tagDriver = "driver";
+	private static final String TAG_DATABASE = "db";
+	private static final String TAG_DRIVER = "driver";
 	
 	protected DBConnector() {
 		// Singleton: protected constructor
@@ -63,8 +63,8 @@ public class DBConnector {
 				var docBuilder = factory.newDocumentBuilder();
 				// parse the XML file
 				var document = docBuilder.parse(new File(CONFIG_FILE));
-				String connectionInfo = document.getElementsByTagName(tagDatabase).item(0).getTextContent();
-				String driver = document.getElementsByTagName(tagDriver).item(0).getTextContent();
+				String connectionInfo = document.getElementsByTagName(TAG_DATABASE).item(0).getTextContent();
+				String driver = document.getElementsByTagName(TAG_DRIVER).item(0).getTextContent();
 				
 				// dynamic loading of drivers
 				Class.forName(driver);

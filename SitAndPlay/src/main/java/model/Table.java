@@ -1,25 +1,26 @@
 package main.java.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Table {
 
 	private String name;
-	private String city;
+	private Place place;
 	private CardGame cardGame;
 	private String date;
 	private String time;
 	private String organizer;
-	private ArrayList<String> participants;
+	private List<String> participants;
 	
-	public Table(String name, String city, CardGame cardGame, String date, String time, String organizer) {
+	public Table(String name, Place place, CardGame cardGame, String date, String time, String organizer) {
 		this.name = name;
-		this.city = city;
+		this.place = place;
 		this.cardGame = cardGame;
 		this.date = date;
 		this.time = time;
 		this.organizer = organizer;
-		this.participants = new ArrayList<String>();
+		this.participants = new ArrayList<>();
 	}
 
 	public String getName() {
@@ -30,12 +31,12 @@ public class Table {
 		this.name = name;
 	}
 
-	public String getCity() {
-		return city;
+	public Place getPlace() {
+		return place;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setPlace(Place place) {
+		this.place = place;
 	}
 	
 	public CardGame getCardGame() {
@@ -70,12 +71,12 @@ public class Table {
 		this.organizer = organizer;
 	}
 
-	public ArrayList<String> getParticipants() {
+	public List<String> getParticipants() {
 		return participants;
 	}
 
-	public void setParticipants(ArrayList<String> participants) {
-		this.participants = participants;
+	public void setParticipants(List<String> participants) {
+		this.participants = new ArrayList<>(participants);
 	}
 	
 	public void addParticipant(String username) {

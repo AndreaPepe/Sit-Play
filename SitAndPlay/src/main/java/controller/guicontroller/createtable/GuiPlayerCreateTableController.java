@@ -7,28 +7,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.util.Callback;
 import main.java.controller.applicationcontroller.createtable.CreateTableController;
-import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTableSeatController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
+import main.java.engineering.bean.createtable.PlaceBean;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.utils.Session;
@@ -117,6 +112,8 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     
     private SearchMapPlaceTextField autocompleteSearch;
     private String location;
+    private double latitude;
+    private double longitude;
     
 
 	public GuiPlayerCreateTableController(Session ssn) {
@@ -162,11 +159,12 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		autocompleteSearch.getLastSelectedItem().addListener((observable,oldValue,newValue)->{
 			if(autocompleteSearch.getLastSelectedItem().get()!=null) {
 			MapPlace place = autocompleteSearch.getLastSelectedItem().getValue();
+			// update values to save data of selected place
 			location = place.toString();
-			var lat = place.getCoordinates().get(0);
-			var lng = place.getCoordinates().get(1);
+			latitude = place.getCoordinates().get(0);
+			longitude = place.getCoordinates().get(1);
 			var zoom = 9;
-			engine.executeScript("updateMap("+lat+"," + lng + "," + zoom +");");
+			engine.executeScript("updateMap("+latitude+"," + longitude + "," + zoom +");");
 			}			
 		});
 	}
@@ -211,24 +209,23 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     	lblSuccessCreate.setVisible(false);
     	
     	String name = tfTableName.getText();
-//    	String city = cbCity.getValue();
     	String cardGame = cbCardGame.getValue();
     	String organizer = ssn.getLoggedUser().getUsername();
     	if (datePicker.getValue() != null) {
     		String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     		String time = cbHours.getValue() + ":" + cbMinutes.getValue();
         	
-        	
-        	TableBean bean = new TableBean(name, location, cardGame, date, time, organizer);
-        	if (bean.checkDateTime() == false) {
+        	var placeBean = new PlaceBean(location, latitude, longitude);
+        	var tableBean = new TableBean(name, placeBean, cardGame, date, time, organizer);
+        	if (Boolean.FALSE.equals(tableBean.checkCreateTable())) {
     			lblError.setText("Impossible to create a table in the past. Select future datetime.");
     			lblError.setVisible(true);
     			return;
     		}
         	
-        	CreateTableController ctrl = new CreateTableController();
+        	var ctrl = new CreateTableController();
         	try {
-    			if(ctrl.createTable(bean)) {
+    			if(ctrl.createTable(tableBean)) {
     				// table created successfully
     				lblSuccessCreate.setText("Table created successfully");
     				lblSuccessCreate.setVisible(true);
@@ -252,8 +249,8 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     	// upload the cardGames for combo box
 		cbCardGame.getItems().clear();
 		
-		List<String> games = new ArrayList<String>();
-		CardGame enumGames[] = CardGame.values();
+		List<String> games = new ArrayList<>();
+		CardGame[] enumGames = CardGame.values();
 		
 		for(CardGame cardGame : enumGames) {
 			games.add(cardGame.toString());
@@ -268,7 +265,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		cbHours.getItems().clear();
 		cbMinutes.getItems().clear();
 		
-		for (int i = 0; i < 60; i++) {
+		for (var i = 0; i < 60; i++) {
 			if (i < 24)
 				cbHours.getItems().add(String.format("%02d", i));
 			cbMinutes.getItems().add(String.format("%02d", i));
@@ -302,68 +299,71 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 //		initTable(list);
 //		addButtonToTable();
     	
-    	try {
-    		ObservableList<TableBean> list = FXCollections.observableArrayList();
-        	ReserveTableSeatController ctrl = new ReserveTableSeatController();
-			ArrayList<TableBean> beans = ctrl.retrieveTablesByCity(cbSelectCity.getValue());
-			for(TableBean bean : beans) {
-				list.add(bean);
-			}
-			initTable(list);
-			addButtonToTable();
-		} 
-    	catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	
+    	// THIS MUST BE DELETED IN FUTURE; A DIFFERENT FEATURE IS COMING IN TOWN!!!
+    	
+//    	try {
+//    		ObservableList<TableBean> list = FXCollections.observableArrayList();
+//        	ReserveTableSeatController ctrl = new ReserveTableSeatController();
+//			ArrayList<TableBean> beans = ctrl.retrieveTablesByCity(cbSelectCity.getValue());
+//			for(TableBean bean : beans) {
+//				list.add(bean);
+//			}
+//			initTable(list);
+//			addButtonToTable();
+//		} 
+//    	catch (DAOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
     	
     }
     
-    private void addButtonToTable() {
-
-        Callback<TableColumn<TableBean, Void>, TableCell<TableBean, Void>> cellFactory = new Callback<TableColumn<TableBean, Void>, TableCell<TableBean, Void>>() {
-            @Override
-            public TableCell<TableBean, Void> call(final TableColumn<TableBean, Void> param) {
-                final TableCell<TableBean, Void> cell = new TableCell<TableBean, Void>() {
-
-                    private final Button btn = new Button("Join");
-
-                    {
-                        btn.setOnAction((ActionEvent event) -> {
-                            TableBean data = getTableView().getItems().get(getIndex());
-                            // TODO: create a real controller to join a table
-                            System.out.println("selectedData: " + data);
-                        });
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(btn);
-                        }
-                    }
-                };
-                return cell;
-            }
-        };
-        
-        tcAction.setCellFactory(cellFactory);
-    }
-    
-    private void initTable(ObservableList<TableBean> list) {
-    	
-    	tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    
-    	tcTable.setCellValueFactory(new PropertyValueFactory<TableBean, String>("name"));
-    	tcCardGame.setCellValueFactory(new PropertyValueFactory<TableBean, String>("cardGame"));
-    	tcCity.setCellValueFactory(new PropertyValueFactory<TableBean, String>("city"));
-    	tcDate.setCellValueFactory(new PropertyValueFactory<TableBean, String>("date"));
-    	tcTime.setCellValueFactory(new PropertyValueFactory<TableBean, String>("time"));
-    	tcOrganizer.setCellValueFactory(new PropertyValueFactory<TableBean, String>("organizer"));
-    	
-    	tableView.setItems(list);
-    }
+//    private void addButtonToTable() {
+//
+//        Callback<TableColumn<TableBean, Void>, TableCell<TableBean, Void>> cellFactory = new Callback<TableColumn<TableBean, Void>, TableCell<TableBean, Void>>() {
+//            @Override
+//            public TableCell<TableBean, Void> call(final TableColumn<TableBean, Void> param) {
+//                final TableCell<TableBean, Void> cell = new TableCell<TableBean, Void>() {
+//
+//                    private final Button btn = new Button("Join");
+//
+//                    {
+//                        btn.setOnAction((ActionEvent event) -> {
+//                            TableBean data = getTableView().getItems().get(getIndex());
+//                            // TODO: create a real controller to join a table
+//                            System.out.println("selectedData: " + data);
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void updateItem(Void item, boolean empty) {
+//                        super.updateItem(item, empty);
+//                        if (empty) {
+//                            setGraphic(null);
+//                        } else {
+//                            setGraphic(btn);
+//                        }
+//                    }
+//                };
+//                return cell;
+//            }
+//        };
+//        
+//        tcAction.setCellFactory(cellFactory);
+//    }
+//    
+//    private void initTable(ObservableList<TableBean> list) {
+//    	
+//    	tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+//    
+//    	tcTable.setCellValueFactory(new PropertyValueFactory<TableBean, String>("name"));
+//    	tcCardGame.setCellValueFactory(new PropertyValueFactory<TableBean, String>("cardGame"));
+//    	tcCity.setCellValueFactory(new PropertyValueFactory<TableBean, String>("city"));
+//    	tcDate.setCellValueFactory(new PropertyValueFactory<TableBean, String>("date"));
+//    	tcTime.setCellValueFactory(new PropertyValueFactory<TableBean, String>("time"));
+//    	tcOrganizer.setCellValueFactory(new PropertyValueFactory<TableBean, String>("organizer"));
+//    	
+//    	tableView.setItems(list);
+//    }
 }
