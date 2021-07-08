@@ -1,6 +1,7 @@
 package main.java.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Table {
@@ -8,17 +9,15 @@ public class Table {
 	private String name;
 	private Place place;
 	private CardGame cardGame;
-	private String date;
-	private String time;
+	private Date datetime;
 	private String organizer;
 	private List<String> participants;
 	
-	public Table(String name, Place place, CardGame cardGame, String date, String time, String organizer) {
+	public Table(String name, Place place, CardGame cardGame, Date datetime, String organizer) {
 		this.name = name;
 		this.place = place;
 		this.cardGame = cardGame;
-		this.date = date;
-		this.time = time;
+		this.setDatetime(datetime);
 		this.organizer = organizer;
 		this.participants = new ArrayList<>();
 	}
@@ -46,23 +45,15 @@ public class Table {
 	public void setCardGame(CardGame cardGame) {
 		this.cardGame = cardGame;
 	}
-
-	public String getDate() {
-		return date;
+	
+	public Date getDatetime() {
+		return datetime;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setDatetime(Date datetime) {
+		this.datetime = datetime;
 	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String time) {
-		this.time = time;
-	}
-
+	
 	public String getOrganizer() {
 		return organizer;
 	}
@@ -86,5 +77,7 @@ public class Table {
 	public void removeParticipant(String username) {
 		this.participants.remove(username);
 	}
+
+	
 	
 }

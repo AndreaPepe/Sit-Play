@@ -7,14 +7,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.java.controller.applicationcontroller.createtable.CreateTableController;
+import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTableSeatController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.createtable.PlaceBean;
 import main.java.engineering.bean.createtable.TableBean;
@@ -69,42 +70,6 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     @FXML
     private Label lblSuccessCreate;
     
-    
-    
-    
-    @FXML
-    private TableView<TableBean> tableView;
-
-    @FXML
-    private TableColumn<TableBean, String> tcTable;
-    
-    @FXML
-    private TableColumn<TableBean, String> tcCardGame;
-
-    @FXML
-    private TableColumn<TableBean, String> tcCity;
-
-    @FXML
-    private TableColumn<TableBean, String> tcDate;
-
-    @FXML
-    private TableColumn<TableBean, String> tcTime;
-
-    @FXML
-    private TableColumn<TableBean, String> tcOrganizer;
-
-    @FXML
-    private TableColumn<TableBean, Void> tcAction;
-
-    @FXML
-    private ComboBox<String> cbSelectCity;
-
-    @FXML
-    private Button btnSearch;
-    
-    @FXML
-    private Label lblErrorSearch;
-    
     @FXML
     private WebView webMap;
     private WebEngine engine;    
@@ -115,6 +80,18 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     private double latitude;
     private double longitude;
     
+    // second pane attributes    
+    @FXML
+    private Label lblJoinResult;
+    
+    @FXML
+    private Button btnJoin;
+    
+    @FXML
+    private WebView webViewAllTables;
+    private WebEngine allEngine;
+    private static final String MAP_WITH_MARKERS = "src/main/java/view/standalone/createtable/BigMapWithMarkers.html";
+        
 
 	public GuiPlayerCreateTableController(Session ssn) {
 		super(ssn);
@@ -140,12 +117,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		// start from the create table pane
 		btnCreateMenu.fire();
 		lblError.setVisible(false);
-		lblSuccessCreate.setVisible(false);
-		
-		
-		
-		
-		
+		lblSuccessCreate.setVisible(false);		
 	}
 	
 	private void setUpAutocompleteTextField() {
@@ -197,6 +169,8 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
     @FXML
     public void handleReserveMenu(ActionEvent event) {
+    	
+    	loadSecondPage();
     	apnCreate.toBack();
     	apnReserve.toFront();  	   	
     }
@@ -278,92 +252,82 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     /**
      * Event controller of the second page "Reserve Seat"
      */
+    private void loadSecondPage() {
+    	// create the web engine for webViewAllTables in second pane
+    	allEngine = webViewAllTables.getEngine();
+    	URL myUrl=null;
+		try {
+			myUrl = new File(MAP_WITH_MARKERS).toURI().toURL();
+		
+			var url= myUrl.toString();
+			allEngine.getLoadWorker().stateProperty().addListener((Observable ,oldState, newState)->{
+				if (newState == Worker.State.SUCCEEDED) {
+					loadMarkers();
+				}
+				
+			});
+			allEngine.load(url);
+		} catch (MalformedURLException e1) {
+			//TODO: alert
+			e1.printStackTrace();
+		}
+    }
+    
+    private void loadMarkers() {
+    	var ctrl = new ReserveTableSeatController();
+		try {
+			var beanList = ctrl.retrieveOpenTables();
+			if (beanList.isEmpty()) {
+				lblJoinResult.setText("No open table has been found");
+				lblJoinResult.setVisible(true);
+			}else {
+				for (TableBean bean : beanList){
+					var lat = bean.getLatitude();
+					var lng = bean.getLongitude();
+					var idname = "\"" + bean.getName() + "\"";
+					var address = "\"" + bean.getAddress() + "\"";
+					var date = "\"" + bean.getDate() + "\"";
+					var time = "\"" + bean.getTime() + "\"";
+					var color = "\"" + "#214183" + "\"";
+
+					allEngine.executeScript("addMarker("+lat+"," + lng + "," + null
+							+ "," + color + "," + idname + "," + address + "," + date + "," + time							
+							+");");
+				}
+				
+			}
+		} catch (DAOException e) {
+			lblJoinResult.setText(e.getMessage());
+			lblJoinResult.setVisible(true);
+		}
+    }
     
     
     @FXML
-    public void handleSearch(ActionEvent event) {
-    	
-    	lblErrorSearch.setVisible(false);
-    	if (cbSelectCity.getValue() == null) {
-			lblErrorSearch.setText("You have to select a city first!");
-			lblErrorSearch.setVisible(true);
+    public void joinTable() {
+    	String tableName = getSelectedTable();
+    	if (tableName == null) {
+    		lblJoinResult.setText("No table has been selected");
+			lblJoinResult.setVisible(true);
 			return;
 		}
-    	
-//    	ObservableList<TableBean> list = FXCollections.observableArrayList();
-//    	ReserveTableSeatController ctrl = new ReserveTableSeatController();
-//		ArrayList<TableBean> beans = ctrl.dummyRetrieve(cbSelectCity.getValue());
-//		for(TableBean bean : beans) {
-//			list.add(bean);
-//		}
-//		initTable(list);
-//		addButtonToTable();
-    	
-    	
-    	// THIS MUST BE DELETED IN FUTURE; A DIFFERENT FEATURE IS COMING IN TOWN!!!
-    	
-//    	try {
-//    		ObservableList<TableBean> list = FXCollections.observableArrayList();
-//        	ReserveTableSeatController ctrl = new ReserveTableSeatController();
-//			ArrayList<TableBean> beans = ctrl.retrieveTablesByCity(cbSelectCity.getValue());
-//			for(TableBean bean : beans) {
-//				list.add(bean);
-//			}
-//			initTable(list);
-//			addButtonToTable();
-//		} 
-//    	catch (DAOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-    	
+    	var ctrl = new ReserveTableSeatController();
+    	try {
+			TableBean bean = ctrl.retrieveTable(tableName);
+			String newParticipant = ssn.getLoggedUser().getUsername();
+			if (bean.checkBooleanJoinTable(newParticipant)){
+				ctrl.joinTable(bean, newParticipant);
+				lblJoinResult.setText("Join Successfully");
+				lblJoinResult.setVisible(true);
+			}
+			
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
-    
-//    private void addButtonToTable() {
-//
-//        Callback<TableColumn<TableBean, Void>, TableCell<TableBean, Void>> cellFactory = new Callback<TableColumn<TableBean, Void>, TableCell<TableBean, Void>>() {
-//            @Override
-//            public TableCell<TableBean, Void> call(final TableColumn<TableBean, Void> param) {
-//                final TableCell<TableBean, Void> cell = new TableCell<TableBean, Void>() {
-//
-//                    private final Button btn = new Button("Join");
-//
-//                    {
-//                        btn.setOnAction((ActionEvent event) -> {
-//                            TableBean data = getTableView().getItems().get(getIndex());
-//                            // TODO: create a real controller to join a table
-//                            System.out.println("selectedData: " + data);
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void updateItem(Void item, boolean empty) {
-//                        super.updateItem(item, empty);
-//                        if (empty) {
-//                            setGraphic(null);
-//                        } else {
-//                            setGraphic(btn);
-//                        }
-//                    }
-//                };
-//                return cell;
-//            }
-//        };
-//        
-//        tcAction.setCellFactory(cellFactory);
-//    }
-//    
-//    private void initTable(ObservableList<TableBean> list) {
-//    	
-//    	tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-//    
-//    	tcTable.setCellValueFactory(new PropertyValueFactory<TableBean, String>("name"));
-//    	tcCardGame.setCellValueFactory(new PropertyValueFactory<TableBean, String>("cardGame"));
-//    	tcCity.setCellValueFactory(new PropertyValueFactory<TableBean, String>("city"));
-//    	tcDate.setCellValueFactory(new PropertyValueFactory<TableBean, String>("date"));
-//    	tcTime.setCellValueFactory(new PropertyValueFactory<TableBean, String>("time"));
-//    	tcOrganizer.setCellValueFactory(new PropertyValueFactory<TableBean, String>("organizer"));
-//    	
-//    	tableView.setItems(list);
-//    }
-}
+    public String getSelectedTable(){
+    	var script = "getSelectedTable();";
+    	return (String) allEngine.executeScript(script);
+    }   
+ }

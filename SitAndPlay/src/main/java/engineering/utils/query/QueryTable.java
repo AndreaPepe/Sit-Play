@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Locale;
 
 import main.java.model.Place;
 
@@ -18,8 +21,8 @@ public class QueryTable {
 		return stmt.executeQuery(query);
 	}
 	
-	public static void insertTable(Connection conn, String name, Place place, String cardGame, String date, String time) throws SQLException {
-		var query = "INSERT INTO Tables (name, address, lat, lng, cardGame, date, time) VALUES (?,?,?,?,?,?,?);";
+	public static void insertTable(Connection conn, String name, Place place, String cardGame, Timestamp datetime) throws SQLException {
+		var query = "INSERT INTO Tables (name, address, lat, lng, cardGame, datetime) VALUES (?,?,?,?,?,?);";
 		
 		var pstmt = conn.prepareStatement(query);
 		try {
@@ -28,8 +31,7 @@ public class QueryTable {
 		pstmt.setDouble(3, place.getLatitude());
 		pstmt.setDouble(4, place.getLongitude());
 		pstmt.setString(5, cardGame);
-		pstmt.setString(6, date);
-		pstmt.setString(7, time);
+		pstmt.setTimestamp(6, datetime, Calendar.getInstance(Locale.getDefault()));
 		pstmt.executeUpdate();
 		}finally {
 			pstmt.close();
@@ -75,6 +77,14 @@ public class QueryTable {
 	
 	public static ResultSet retrieveTablesByCity(Statement stmt, String city) throws SQLException{
 		var query = String.format("SELECT name FROM Tables WHERE city = '%s';" , city);
+		return stmt.executeQuery(query);
+	}
+	
+	public static ResultSet retrieveOpenTables(Statement stmt) throws SQLException{
+		var query = "SELECT name, address, lat, lng, cardGame, datetime, organizer "
+				+ "FROM tables JOIN organizedtables "
+				+ "WHERE name=tablename "
+				+ "AND datetime > ADDTIME(current_timestamp(), '01:00:00');";
 		return stmt.executeQuery(query);
 	}
 }

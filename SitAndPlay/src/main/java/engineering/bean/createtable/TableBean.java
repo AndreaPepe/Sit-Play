@@ -1,12 +1,9 @@
 package main.java.engineering.bean.createtable;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import main.java.engineering.utils.DatetimeUtil;
 
 public class TableBean {
 
@@ -19,8 +16,6 @@ public class TableBean {
 	private String time;
 	private String organizer;
 	private ArrayList<String> participants;
-	
-	private static final String DATETIME_FORMAT = "dd/MM/yyyy HH:mm";
 	
 	public TableBean(String name, PlaceBean place, String cardGame, String date, String time, String organizer) {
 		super();
@@ -112,37 +107,9 @@ public class TableBean {
 	}
 	
 	public Boolean checkDateTime() {
-		var dateToCheck = buildDatetime(this.getDate(), this.getTime());
-		var currentDate = getCurrentDateTime();
-		return (dateToCheck != null && dateToCheck.after(currentDate));
+		return DatetimeUtil.isFutureDatetime(this.getDate(), this.getTime());
 	}
 	
-	
-	private Date buildDatetime(String date, String time) {
-		
-		try {
-			var format = new SimpleDateFormat(DATETIME_FORMAT);
-			return format.parse(date + " " + time);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	private Date getCurrentDateTime() {
-		var formatter = DateTimeFormatter.ofPattern(DATETIME_FORMAT);
-		var format = new SimpleDateFormat(DATETIME_FORMAT);
-		var currentDateTime = LocalDateTime.now();
-		String now = formatter.format(currentDateTime);
-		try {
-			return format.parse(now);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
 	
 	public Boolean checkCreateTable() {
 		if (name == null || name.isBlank()) {
@@ -158,5 +125,10 @@ public class TableBean {
 			return false;
 		}
 		return (!(organizer==null || organizer.isBlank()));
+	}
+	
+	public Boolean checkBooleanJoinTable(String newParticipant) {
+		//TODO add more checks
+		return (newParticipant != organizer);
 	}
 }

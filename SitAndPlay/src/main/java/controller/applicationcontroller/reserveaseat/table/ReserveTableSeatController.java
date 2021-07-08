@@ -1,60 +1,75 @@
 package main.java.controller.applicationcontroller.reserveaseat.table;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.java.engineering.bean.createtable.PlaceBean;
 import main.java.engineering.bean.createtable.TableBean;
+import main.java.engineering.dao.TableDAO;
+import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.utils.DatetimeUtil;
 import main.java.model.Table;
 
 public class ReserveTableSeatController {
 
 	public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
 	
-	public void dummyMethod(Table table) {
-		TableBean bean = translateTableToBean(table);
-		buildDatetime(bean.getDate(), bean.getTime());
-		getCurrentDateTime();
+	public List<TableBean> retrieveOpenTables() throws DAOException{
+		List<TableBean> beans = new ArrayList<>();
+		try {
+			var listOfTables = TableDAO.retrieveOpenTables();
+			for (Table table : listOfTables) {
+				var placeBean = new PlaceBean(table.getPlace().getAddress(), table.getPlace().getLatitude(), table.getPlace().getLongitude());
+				String date = DatetimeUtil.getDate(table.getDatetime());
+				String time = DatetimeUtil.getTime(table.getDatetime());
+				var bean = new TableBean(table.getName(), placeBean, table.getCardGame().toString(), date, time, table.getOrganizer());
+				
+				beans.add(bean);
+			}
+		} catch (SQLException e) {
+			// Change the exception type, so the graphic controller
+			// has not to be aware of database concepts and error 
+			e.printStackTrace();
+			throw new DAOException("Error occurred in interaction with database");
+		}
+		return beans;
+	}
+	
+	public TableBean retrieveTable(String tableName) throws DAOException {
+		Table table;
+		try {
+			table = TableDAO.retrieveTable(tableName);
+		}  catch (SQLException e) {
+			// Change the exception type, so the graphic controller
+			// has not to be aware of database concepts and error 
+			e.printStackTrace();
+			throw new DAOException("Error occurred in interaction with database");
+		}
+		return translateTableToBean(table);
+	}
+	
+	
+	public void joinTable(TableBean table, String participant) throws DAOException {
+		try {
+			TableDAO.addParticipant(table.getName(), participant);
+		}catch (SQLException e) {
+			// Change the exception type, so the graphic controller
+			// has not to be aware of database concepts and error 
+			e.printStackTrace();
+			throw new DAOException("Error occurred in interaction with database");
+		}
 	}
 	
 	private TableBean translateTableToBean(Table table) {
 		String name = table.getName();
 		var placeBean = new PlaceBean(table.getPlace().getAddress(), table.getPlace().getLatitude(), table.getPlace().getLongitude());
 		var cardGame = table.getCardGame().toString();
-		String date = table.getDate();
-		String time = table.getTime();
+		var datetime = table.getDatetime();
 		String organizer = table.getOrganizer();
 		
-		return new TableBean(name, placeBean, cardGame, date, time, organizer);
+		return new TableBean(name, placeBean, cardGame, DatetimeUtil.getDate(datetime), DatetimeUtil.getTime(datetime), organizer);
 
 	}
 	
-	private Date buildDatetime(String date, String time) {
-		
-		try {
-			SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-			return format.parse(date + " " + time);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	private Date getCurrentDateTime() {
-		var formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
-		var format = new SimpleDateFormat(DATE_FORMAT);
-		var currentDateTime = LocalDateTime.now();
-		String now = formatter.format(currentDateTime);
-		try {
-			return format.parse(now);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
 }
