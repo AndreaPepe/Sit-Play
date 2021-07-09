@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -57,6 +58,9 @@ public class GuiCreateTournamentController implements Initializable {
 
     @FXML
     private TextField tfAwards;
+    
+    @FXML
+    private CheckBox cbSearchSponsor;
 
     @FXML
     private Button btnCreateTournament;
