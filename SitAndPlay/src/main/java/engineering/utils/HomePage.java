@@ -3,17 +3,22 @@ package main.java.engineering.utils;
 public enum HomePage {
 	
 	//TODO: modify these strings to real pages!!!
-	webHomePlayer("HomePagePlayerView.jsp"),
-	webHomeOrganizer("HomePageOrganizerView.jsp"),
-	webHomeBusinessman("HomePageBusinessmanView.jsp"), 
+	WEB_HOME_PLAYER("HomePagePlayerView.jsp"),
+	WEB_HOME_ORGANIZER("HomePageOrganizerView.jsp"),
+	WEB_HOME_BUSINESSMAN("HomePageBusinessmanView.jsp"), 
 	//TODO: set different pages; now they're the same page to test login
-	homePlayer("/main/java/view/standalone/HomePage.fxml"),		
-	homeOrganizer("/main/java/view/standalone/HomePage.fxml"),
-	homeBusinessman("/main/java/view/standalone/HomePage.fxml");
+	HOME_PLAYER("/main/java/view/standalone/HomePage.fxml"),		
+	HOME_ORGANIZER("/main/java/view/standalone/HomePage.fxml"),
+	HOME_BUSINESSMAN("/main/java/view/standalone/HomePage.fxml");
 	
-	public final String page;
+	private final String page;
 	private HomePage(String page) {
 		this.page = page;
+	}
+	
+	@Override
+	public String toString() {
+		return this.page;
 	}
 	
 }

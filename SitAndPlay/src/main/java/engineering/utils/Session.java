@@ -33,23 +33,18 @@ public class Session {
 		return homePage;
 	}
 	
-	// Trying a private method; TODO: check for NPE when calling getHomePage
 	public void setHomePage() {
 		if (isWeb) {
 			switch(loggedUser.getUserType()) {
-			case PLAYER: homePage = HomePage.webHomePlayer.page; break;
-			case ORGANIZER: homePage = HomePage.webHomeOrganizer.page; break;
-			case BUSINESSMAN: homePage = HomePage.webHomeBusinessman.page; break;
-			// TODO: maybe add some exception
-			default:
+			case PLAYER: homePage = HomePage.WEB_HOME_PLAYER.toString(); break;
+			case ORGANIZER: homePage = HomePage.WEB_HOME_ORGANIZER.toString(); break;
+			case BUSINESSMAN: homePage = HomePage.WEB_HOME_BUSINESSMAN.toString(); break;
 			}
 		}else {
 			switch(loggedUser.getUserType()) {
-			case PLAYER: homePage = HomePage.homePlayer.page; break;
-			case ORGANIZER: homePage = HomePage.homeOrganizer.page; break;
-			case BUSINESSMAN: homePage = HomePage.homeBusinessman.page; break;
-			// TODO: maybe add some exception
-			default:
+			case PLAYER: homePage = HomePage.HOME_PLAYER.toString(); break;
+			case ORGANIZER: homePage = HomePage.HOME_ORGANIZER.toString(); break;
+			case BUSINESSMAN: homePage = HomePage.HOME_BUSINESSMAN.toString(); break;
 			}
 		}
 	}
