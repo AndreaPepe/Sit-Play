@@ -35,8 +35,7 @@ public class QueryTable {
 		pstmt.executeUpdate();
 		}finally {
 			pstmt.close();
-		}
-		
+		}	
 	}
 	
 	public static void insertOrganizedTable(Statement stmt, String table, String organizer) throws SQLException {
@@ -72,11 +71,6 @@ public class QueryTable {
 	
 	public static ResultSet retrieveOrganizer(Statement stmt, String table) throws SQLException{
 		var query = String.format("SELECT organizer FROM OrganizedTables WHERE tablename = '%s';" , table);
-		return stmt.executeQuery(query);
-	}
-	
-	public static ResultSet retrieveTablesByCity(Statement stmt, String city) throws SQLException{
-		var query = String.format("SELECT name FROM Tables WHERE city = '%s';" , city);
 		return stmt.executeQuery(query);
 	}
 	
