@@ -127,8 +127,4 @@ public class TableBean {
 		return (!(organizer==null || organizer.isBlank()));
 	}
 	
-	public Boolean checkBooleanJoinTable(String newParticipant) {
-		//TODO add more checks
-		return (newParticipant != organizer);
-	}
 }

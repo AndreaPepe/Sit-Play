@@ -18,12 +18,14 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.java.controller.applicationcontroller.LoginController;
 import main.java.controller.guicontroller.GuiHomePageController;
 import main.java.engineering.bean.login.BeanLoggedUser;
 import main.java.engineering.bean.login.BeanUser;
+import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.EmptyDataException;
 import main.java.engineering.exceptions.WrongCredentialsExceptions;
@@ -111,21 +113,27 @@ public class GuiLoginController implements Initializable{
 			if (code == 0) {
 				lblErrorUsername.setText(EMPTY_USERNAME_ERROR_MESSAGE);
 				lblErrorUsername.setVisible(true);
+				
+				AlertFactory.getInstance().createAlert(EMPTY_USERNAME_ERROR_MESSAGE, AlertType.ERROR).showAndWait();
 			}else if (code == 3) {
 				lblErrorPassword.setText(EMPTY_PASSWORD_ERROR_MESSAGE);
 				lblErrorPassword.setVisible(true);
+				AlertFactory.getInstance().createAlert(EMPTY_PASSWORD_ERROR_MESSAGE, AlertType.ERROR).showAndWait();
 			}
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("EmptyDataException catched: %s", e.getMessage()));
 		} catch (WrongCredentialsExceptions e) {
 			lblErrorUsername.setText(e.getMessage());
 			lblErrorUsername.setVisible(true);
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).showAndWait();
 		} catch (DAOException e) {
 			lblErrorUsername.setText(DAO_ERROR_MESSAGE);
 			lblErrorUsername.setVisible(true);
+			AlertFactory.getInstance().createAlert(DAO_ERROR_MESSAGE, AlertType.ERROR).showAndWait();
 		} catch (Exception e) {
 			e.printStackTrace();
 		lblErrorUsername.setText(GENERIC_ERROR_MESSAGE);
 		lblErrorUsername.setVisible(true);
+		AlertFactory.getInstance().createAlert(GENERIC_ERROR_MESSAGE, AlertType.ERROR).showAndWait();
 		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("General Exception catched: %s", e.getMessage()));
 		}
     }

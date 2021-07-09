@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -19,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.java.controller.applicationcontroller.createtable.CreateTableController;
@@ -26,10 +28,12 @@ import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTabl
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.createtable.PlaceBean;
 import main.java.engineering.bean.createtable.TableBean;
+import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.utils.Session;
 import main.java.engineering.utils.map.MapPlace;
 import main.java.model.CardGame;
+import main.java.model.UserType;
 import main.java.view.standalone.SearchMapPlaceTextField;
 
 public class GuiPlayerCreateTableController extends GuiBasicInternalPageController{
@@ -75,7 +79,6 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     private WebEngine engine;    
     private static final String HTML_MAP = "src/main/java/view/standalone/createtable/mapbox.html";
     
-    private SearchMapPlaceTextField autocompleteSearch;
     private String location;
     private double latitude;
     private double longitude;
@@ -126,7 +129,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		textField.setPrefWidth(200);
 		textField.setLayoutX(115);
 		textField.setLayoutY(74);
-		autocompleteSearch = new SearchMapPlaceTextField(textField);
+		var autocompleteSearch = new SearchMapPlaceTextField(textField);
 		apnCreate.getChildren().add(autocompleteSearch.getTextField());
 		autocompleteSearch.getLastSelectedItem().addListener((observable,oldValue,newValue)->{
 			if(autocompleteSearch.getLastSelectedItem().get()!=null) {
@@ -260,16 +263,16 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 			myUrl = new File(MAP_WITH_MARKERS).toURI().toURL();
 		
 			var url= myUrl.toString();
-			allEngine.getLoadWorker().stateProperty().addListener((Observable ,oldState, newState)->{
+			allEngine.getLoadWorker().stateProperty().addListener((observable ,oldState, newState)->{
 				if (newState == Worker.State.SUCCEEDED) {
 					loadMarkers();
 				}
 				
 			});
 			allEngine.load(url);
-		} catch (MalformedURLException e1) {
+		} catch (MalformedURLException e) {
 			//TODO: alert
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
     }
     
@@ -315,16 +318,17 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
     	try {
 			TableBean bean = ctrl.retrieveTable(tableName);
 			String newParticipant = ssn.getLoggedUser().getUsername();
-			if (bean.checkBooleanJoinTable(newParticipant)){
-				ctrl.joinTable(bean, newParticipant);
-				lblJoinResult.setText("Join Successfully");
-				lblJoinResult.setVisible(true);
+			if (Boolean.TRUE.equals(ssn.getLoggedUser().getUserType() != UserType.PLAYER)){
+				AlertFactory.getInstance().createAlert("Only players can join a table", AlertType.ERROR).show();
+				return;
 			}
+			ctrl.joinTable(bean, newParticipant);
+			lblJoinResult.setText("Join Successfully");
+			lblJoinResult.setTextFill(Color.GREEN);
+			lblJoinResult.setVisible(true);		
 			
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();		}
     }
     public String getSelectedTable(){
     	var script = "getSelectedTable();";

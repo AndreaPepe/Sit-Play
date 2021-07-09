@@ -126,7 +126,7 @@ public class TableDAO {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			QueryTable.addParticipant(stmt, tableName, participant);
 		}catch (SQLIntegrityConstraintViolationException e) {
-			throw new DAOException("Constraint problem. Probably the table has not been found");
+			throw new DAOException("Constraint problem. Probably the table has not been found or you have already joined this table");
 		}
 	}
 	
