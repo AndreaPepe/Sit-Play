@@ -14,6 +14,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
+import main.java.controller.guicontroller.tournaments.GuiJoinTournamentController;
 import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
 import main.java.engineering.utils.Session;
 
@@ -87,7 +88,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("Tables");
 			lblStatus.setText("Tables");
 			
-			var loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/createTable/CreateTable.fxml"));
+			var loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/createtable/CreateTable.fxml"));
 			loader.setControllerFactory(c -> new GuiPlayerCreateTableController(this.ssn));
 			Parent root = loader.load();		
 			pnPage.getChildren().removeAll();
@@ -96,6 +97,12 @@ public class GuiHomePageController extends GuiBasicController {
 		}else if (event.getSource() == btnTournaments) {
 			lblMiniStatus.setText("Tournaments");
 			lblStatus.setText("Tournaments");
+			
+			var loader = new FXMLLoader(getClass().getResource("/main/java/view/standalone/tournaments/JoinTournament.fxml"));
+			loader.setControllerFactory(c -> new GuiJoinTournamentController(this.ssn));
+			Parent root = loader.load();		
+			pnPage.getChildren().removeAll();
+			pnPage.getChildren().setAll(root);
 			
 		}else if (event.getSource() == btnSettings) {
 			lblMiniStatus.setText("Settings");

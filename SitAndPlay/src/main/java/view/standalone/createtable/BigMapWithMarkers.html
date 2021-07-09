@@ -24,7 +24,7 @@
 		    L.mapbox.styleLayer('mapbox://styles/mapbox/outdoors-v11').addTo(map);
 		}	
 		
-		function addMarker(lat,lng,icon,color,idname, address, date, time){
+		function addMarker(lat,lng,icon,color,idname, game, address, date, time){
 			if(icon == "null"){
 				icon = "marker";
 			}
@@ -38,6 +38,7 @@
 			
 			let popupHtml = `
 			<h3>` + idname + `</h3>
+			<p> Game: ` + game + `</p>
 			<p> Address: ` + address + `</p>
 			<p> Date: ` + date + `</p>
 			<p> Time: ` + time + `</p>

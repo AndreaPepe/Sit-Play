@@ -271,8 +271,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 			});
 			allEngine.load(url);
 		} catch (MalformedURLException e) {
-			//TODO: alert
-			e.printStackTrace();
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		}
     }
     
@@ -288,13 +287,14 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 					var lat = bean.getLatitude();
 					var lng = bean.getLongitude();
 					var idname = "\"" + bean.getName() + "\"";
+					var cardGame = "\"" + bean.getCardGame() + "\"";
 					var address = "\"" + bean.getAddress() + "\"";
 					var date = "\"" + bean.getDate() + "\"";
 					var time = "\"" + bean.getTime() + "\"";
 					var color = "\"" + "#214183" + "\"";
 
 					allEngine.executeScript("addMarker("+lat+"," + lng + "," + null
-							+ "," + color + "," + idname + "," + address + "," + date + "," + time							
+							+ "," + color + "," + idname + "," + cardGame + "," + address + "," + date + "," + time							
 							+");");
 				}
 				
