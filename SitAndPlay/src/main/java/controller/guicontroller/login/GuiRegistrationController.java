@@ -26,11 +26,11 @@ import main.java.model.UserType;
 
 public class GuiRegistrationController implements Initializable{
 	
-	private final String loginPage = "/main/java/view/standalone/login/Login.fxml";
-	private final String emptyUsernameErrorMsg = "Username can't be empty!";
-	private final String emptyPasswordErrorMsg = "Password can't be empty!";
-	private final String genericErrorMsg = "Something went wrong, please retry";
-	private final String successfulSignInMsg = "Registration succedeed! Go back to login page to log in";
+	private static final String LOGIN_PAGE = "/main/java/view/standalone/login/Login.fxml";
+	private static final String EMPTY_USERNAME_ERR_MSG = "Username can't be empty!";
+	private static final String EMPTY_PASSWORD_ERR_MSG = "Password can't be empty!";
+	private static final String GENERIC_ERR_MSG = "Something went wrong, please retry";
+	private static final String SUCCESSFUL_REGISTRATION_MSG = "Registration succedeed! Go back to login page to log in";
 	
 	@FXML
 	private AnchorPane basePane;
@@ -70,12 +70,12 @@ public class GuiRegistrationController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+		// nothing to init
 	}
 	
 	@FXML
 	public void handleBack(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(this.loginPage));
+		var loader = new FXMLLoader(getClass().getResource(LOGIN_PAGE));
     	loader.setControllerFactory(c -> new GuiLoginController());
     	Parent root = loader.load();
     	basePane.getChildren().removeAll();
@@ -83,10 +83,10 @@ public class GuiRegistrationController implements Initializable{
 	}
 	
 	@FXML
-	public void handleRegistration(ActionEvent event) throws IOException {
+	public void handleRegistration(ActionEvent event){
 		
 		resetLabels();
-		BeanUser beanUser = new BeanUser();
+		var beanUser = new BeanUser();
 		
 		try {
 			beanUser.setUsername(tfUsername.getText());
@@ -100,30 +100,30 @@ public class GuiRegistrationController implements Initializable{
 			}
 			
 			// instantiate application controller
-			RegistrationController ctrl = new RegistrationController();
+			var ctrl = new RegistrationController();
 			boolean result = ctrl.signIn(beanUser);
 			
 			if(result) {
-				lblSuccess.setText(successfulSignInMsg);
+				lblSuccess.setText(SUCCESSFUL_REGISTRATION_MSG);
 				lblSuccess.setVisible(true);
 			}
 		} catch (EmptyDataException e) {
 			int code = e.getErrorCode();
 			if (code == 0) {
-				lblGenericError.setText(emptyUsernameErrorMsg);
+				lblGenericError.setText(EMPTY_USERNAME_ERR_MSG);
 				lblGenericError.setVisible(true);
 			}else if (code == 3) {
-				lblGenericError.setText(emptyPasswordErrorMsg);
+				lblGenericError.setText(EMPTY_PASSWORD_ERR_MSG);
 				lblGenericError.setVisible(true);
 			}
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "EmptyDataException catched: " + e.getMessage());
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("EmptyDataException catched: %s" , e.getMessage()));
 		} catch (DAOException e) {
 			lblGenericError.setText(e.getMessage());
 			lblGenericError.setVisible(true);
 		} catch (Exception e) {
-		lblGenericError.setText(genericErrorMsg);
+		lblGenericError.setText(GENERIC_ERR_MSG);
 		lblGenericError.setVisible(true);
-		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Generic exception catched: " + e.getMessage());
+		Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("Generic exception catched: %s", e.getMessage()));
 	}
 		
 	}

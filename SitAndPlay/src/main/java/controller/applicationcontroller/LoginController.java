@@ -1,9 +1,6 @@
 package main.java.controller.applicationcontroller;
 
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import main.java.engineering.bean.login.BeanLoggedUser;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.dao.LoginDAO;
@@ -15,7 +12,7 @@ public class LoginController {
 
 	public BeanLoggedUser login(BeanUser beanUser) throws DAOException, WrongCredentialsExceptions {
 				
-		BeanLoggedUser beanLoggedUser = new BeanLoggedUser();
+		var beanLoggedUser = new BeanLoggedUser();
 		
 		User user;
 		try {
@@ -33,11 +30,9 @@ public class LoginController {
 //				
 //			case BUSINESSMAN:
 //			}
-			Logger.getLogger(this.getClass().getName()).log(Level.CONFIG, "Successful login as" + user.getUserType());	
 			
 			return beanLoggedUser;
 		} catch (SQLException e) {
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "SQLexception catched: " + e.getMessage());
 			throw new DAOException(e.getMessage());		
 		}
 		

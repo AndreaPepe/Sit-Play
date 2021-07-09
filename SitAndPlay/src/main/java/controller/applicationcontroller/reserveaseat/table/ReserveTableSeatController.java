@@ -8,6 +8,7 @@ import main.java.engineering.bean.createtable.PlaceBean;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.dao.TableDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.model.Table;
 
@@ -31,7 +32,7 @@ public class ReserveTableSeatController {
 			// Change the exception type, so the graphic controller
 			// has not to be aware of database concepts and error 
 			e.printStackTrace();
-			throw new DAOException("Error occurred in interaction with database");
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 		return beans;
 	}
@@ -44,7 +45,7 @@ public class ReserveTableSeatController {
 			// Change the exception type, so the graphic controller
 			// has not to be aware of database concepts and error 
 			e.printStackTrace();
-			throw new DAOException("Error occurred in interaction with database");
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 		return translateTableToBean(table);
 	}
@@ -57,7 +58,7 @@ public class ReserveTableSeatController {
 			// Change the exception type, so the graphic controller
 			// has not to be aware of database concepts and error 
 			e.printStackTrace();
-			throw new DAOException("Error occurred in interaction with database");
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 	}
 	
