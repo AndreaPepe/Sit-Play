@@ -31,8 +31,7 @@ public class QueryTournament {
 	}
 	
 	public static void insertTournament(Connection conn, Tournament tournament) throws SQLException {
-		var query = "INSERT INTO Tournaments (name, address, lat, lng, cardGame, datetime, price, award, limit, requestedSponsor, winner) " + 
-	"VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+		var query = "INSERT INTO Tournaments (name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, winner) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
 		
 		var pstmt = conn.prepareStatement(query);
 		try {

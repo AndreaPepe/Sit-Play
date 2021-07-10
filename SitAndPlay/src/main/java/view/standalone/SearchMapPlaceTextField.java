@@ -32,7 +32,7 @@ public class SearchMapPlaceTextField extends AutocompleteTextField<MapPlace> {
 	
 	
 	@Override
-	protected List<MapPlace> getPredictions(String text) {
+	public List<MapPlace> getPredictions(String text) {
 		var controller = new MapboxController();
 		List<MapPlace> mapPlaces = new ArrayList<>();
 		try {

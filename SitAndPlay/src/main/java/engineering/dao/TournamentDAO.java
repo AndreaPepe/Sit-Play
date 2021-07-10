@@ -48,7 +48,7 @@ public class TournamentDAO {
 			}
 			var price = rs.getFloat("price");
 			var award = rs.getFloat("award");
-			var limit = rs.getInt("limit");
+			var maxParticipants = rs.getInt("maxParticipants");
 			var requestedSponsor = rs.getBoolean("requestedSponsor");
 			var winner = rs.getString("winner");
 			var sponsor = rs.getString("sponsor");
@@ -68,7 +68,7 @@ public class TournamentDAO {
 			rs2.close();
 			
 			var place = new Place(address, lat, lng);
-			var participationInfo = new ParticipationInfo(limit, price, award);
+			var participationInfo = new ParticipationInfo(maxParticipants, price, award);
 			tournament = new Tournament(tournamentName, place, cardGame, datetime, organizer, requestedSponsor, participationInfo);
 			
 			if (winner != null) {
@@ -115,6 +115,7 @@ public class TournamentDAO {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			QueryTournament.addOrganizer(stmt, tournament.getName(), tournament.getOrganizer());
 		} catch (SQLIntegrityConstraintViolationException e) {
+			e.printStackTrace();
 			throw new DAOException("A tournament with this name already exists");
 		}
 		

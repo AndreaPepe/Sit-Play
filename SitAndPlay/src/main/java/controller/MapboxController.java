@@ -36,11 +36,11 @@ public class MapboxController {
 			upperBound = 1;
 		}
 		
-		String newText;
+		String encodedInput;
 		try {
-			newText = URLEncoder.encode(input,"UTF-8");
+			encodedInput = URLEncoder.encode(input,"UTF-8");
 		    HttpClient client = HttpClientBuilder.create().build();
-		    String urlFormat = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + newText + ".json" +		    		
+		    String urlFormat = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + encodedInput + ".json" +		    		
 		    		"?fuzzyMatch=" + fuzzyMatch +
 		    		"&limit=" + upperBound +
 		    		"&types=" + types +
@@ -66,7 +66,7 @@ public class MapboxController {
 			if (resultObject instanceof JSONObject) {
 				JSONObject obj = (JSONObject) resultObject;
 				JSONArray array = (JSONArray) obj.get("features");
-				for (int i = 0; i < array.size(); i++) {
+				for (var i = 0; i < array.size(); i++) {
 					results.add((JSONObject)array.get(i));
 				}							
 			}

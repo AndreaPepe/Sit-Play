@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.dao.TableDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.model.Place;
 
@@ -31,7 +32,7 @@ public class CreateTableController {
 			// Change the exception type, so the graphic controller
 			// has not to be aware of database concepts and error 
 			e.printStackTrace();
-			throw new DAOException("Error occurred in interaction with database");
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 		
 	}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="ISO-8859-1">
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.js"></script>
+		<link href="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.css" rel="stylesheet" />
+		
+		<title>Map</title>
+		
+		<style>
+			body { margin: 0; padding: 0; }
+			#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+		</style>
+		
+		<script>
+		var map;
+		var selectedTable = null;
+		var lastSelectedMarker = null;
+		function loadMap(){
+			map = null;
+			L.mapbox.accessToken = "pk.eyJ1IjoiYW5kcmVhcGVwZTMwIiwiYSI6ImNrcW52aGlzejAxNGUydXFzN2Y3N25lemwifQ._T3qFEHfLLxs4R4Nhy69rg";
+			map= L.mapbox.map('map').setView([41.89306,12.48278],5);
+		    L.mapbox.styleLayer('mapbox://styles/mapbox/outdoors-v11').addTo(map);
+		}	
+		
+		function addMarker(lat,lng,icon,color,idname, game, address, date, time){
+			if(icon == "null"){
+				icon = "marker";
+			}
+			var marker = L.marker(L.latLng(lat,lng), {
+				icon: L.mapbox.marker.icon({
+					'marker-size': 'large',
+					'marker-symbol': "circle",
+					'marker-color': color
+				})
+			}).addTo(map);
+			
+			let popupHtml = `
+			<h3>` + idname + `</h3>
+			<p> Game: ` + game + `</p>
+			<p> Address: ` + address + `</p>
+			<p> Date: ` + date + `</p>
+			<p> Time: ` + time + `</p>
+			`;
+			
+			var popup = L.popup().setContent(popupHtml);
+			popup.addEventListener
+			marker.bindPopup(popup,{closeOnClick: false})
+			
+			marker.on('click', function(e){
+				// make the selected marker red
+				marker.setIcon(L.mapbox.marker.icon({
+					'marker-size': 'large',
+					'marker-symbol': "circle",
+					'marker-color': "#ff0000"
+				}));
+				if(lastSelectedMarker != null && lastSelectedMarker != marker){
+					lastSelectedMarker.setIcon(L.mapbox.marker.icon({
+						'marker-size': 'large',
+						'marker-symbol': "circle",
+						'marker-color': color
+					}));
+				}				
+				lastSelectedMarker = marker;
+				selectedTable = idname;
+			});
+		}
+		
+		function getSelectedTable(){
+			return selectedTable;
+		}
+		</script>
+		
+	</head>
+	
+		
+	<body onload="loadMap();">	
+		<div id='map'></div>
+	</body>
+
+</html>

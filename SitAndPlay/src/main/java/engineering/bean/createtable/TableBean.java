@@ -3,6 +3,7 @@ package main.java.engineering.bean.createtable;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.utils.DatetimeUtil;
 
 public class TableBean {
@@ -15,7 +16,7 @@ public class TableBean {
 	private String date;
 	private String time;
 	private String organizer;
-	private ArrayList<String> participants;
+	private List<String> participants;
 	
 	public TableBean(String name, PlaceBean place, String cardGame, String date, String time, String organizer) {
 		super();
@@ -111,20 +112,23 @@ public class TableBean {
 	}
 	
 	
-	public Boolean checkCreateTable() {
+	public Boolean checkCreateTable() throws BeanCheckException {
 		if (name == null || name.isBlank()) {
-			return false;
+			throw new BeanCheckException("Table name is blank");
 		}
 		if (address == null || address.isBlank()) {
-			return false;
+			throw new BeanCheckException("Place has not been selected");
 		}
 		if (cardGame == null) {
-			return false;
+			throw new BeanCheckException("Card game has not been selected");
 		}
 		if (Boolean.FALSE.equals(checkDateTime())) {
-			return false;
+			throw new BeanCheckException("Impossible to create a table in the past");
 		}
-		return (!(organizer==null || organizer.isBlank()));
+		if (organizer == null || organizer.isBlank()) {
+			throw new BeanCheckException("Something didn't work. Organizer blank");
+		}
+		return true;
 	}
 	
 }
