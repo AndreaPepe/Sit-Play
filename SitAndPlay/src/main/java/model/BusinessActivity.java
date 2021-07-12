@@ -1,13 +1,15 @@
 package main.java.model;
 
+import java.io.InputStream;
+
 public class BusinessActivity {
 	private String activityName;
 	//TODO: change with image
-	private String logo;
+	private InputStream logo;
 	private String businessman;
 	
 
-	public BusinessActivity(String activityName, String logo, String businessman) {
+	public BusinessActivity(String activityName, InputStream logo, String businessman) {
 		this.activityName = activityName;
 		this.logo = logo;
 		this.businessman = businessman;
@@ -16,13 +18,13 @@ public class BusinessActivity {
 	public String getActivityName() {
 		return activityName;
 	}
-	public String getLogo() {
+	public InputStream getLogo() {
 		return logo;
 	}
 	public void setActivityName(String activityName) {
 		this.activityName = activityName;
 	}
-	public void setLogo(String logo) {
+	public void setLogo(InputStream logo) {
 		this.logo = logo;
 	}
 	public String getBusinessman() {

@@ -144,7 +144,6 @@ public class TableDAO {
 			if(!rs.first()) {
 				return tables;
 			}
-			rs.first();
 			if(!rs.isBeforeFirst())
 				rs.previous();
 			while(rs.next()) {
@@ -160,8 +159,6 @@ public class TableDAO {
 			
 			return tables;
 			
-		}catch (SQLIntegrityConstraintViolationException e) {
-			throw new DAOException("Table's name already in use");
 		} finally {
 			if (stmt != null) {
 				stmt.close();

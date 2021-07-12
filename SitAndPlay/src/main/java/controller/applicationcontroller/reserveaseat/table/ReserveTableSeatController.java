@@ -14,7 +14,6 @@ import main.java.model.Table;
 
 public class ReserveTableSeatController {
 
-	public static final String DATE_FORMAT = "dd/MM/yyyy HH:mm";
 	
 	public List<TableBean> retrieveOpenTables() throws DAOException{
 		List<TableBean> beans = new ArrayList<>();

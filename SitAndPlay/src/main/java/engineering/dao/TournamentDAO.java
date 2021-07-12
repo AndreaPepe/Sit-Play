@@ -6,10 +6,13 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.utils.DBConnector;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.engineering.utils.query.QueryTournament;
+import main.java.model.BusinessActivity;
 import main.java.model.CardGame;
 import main.java.model.ParticipationInfo;
 import main.java.model.Place;
@@ -119,5 +122,48 @@ public class TournamentDAO {
 			throw new DAOException("A tournament with this name already exists");
 		}
 		
+	}
+	
+	public static List<Tournament> retrieveOpenTournaments() throws SQLException{
+		Statement stmt = null;
+		Connection conn = null;
+		List<Tournament> tournaments = new ArrayList<>();
+		
+		conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.retrieveOpenTournaments(stmt);
+			if (!rs.first()) {
+				// empty list
+				return tournaments;
+			}			
+			if(!rs.isBeforeFirst())
+				rs.previous();
+			
+			while(rs.next()) {
+				var name = rs.getString("name");
+				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
+				var cardGame = CardGame.getConstant(rs.getString("cardGame"));
+				var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
+				var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"), rs.getFloat("award"));
+				var sponsorRequested = rs.getBoolean("sponsorRequested");
+				var organizer = rs.getString("organizer");
+				BusinessActivity sponsorActivity = null;
+				var activity = rs.getString("sponsor");
+				if (activity != null) {
+					sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"), rs.getString("businessman"));
+				}
+				var tournament = new Tournament(name, place, cardGame, datetime, organizer, sponsorRequested, pInfo);
+				tournament.setSponsor(sponsorActivity);
+				tournaments.add(tournament);				
+			}
+			rs.close();
+			
+			return tournaments;
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
 	}
 }

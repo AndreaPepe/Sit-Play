@@ -71,4 +71,15 @@ public class QueryTournament {
 		var query = String.format("INSERT INTO OrganizedTournaments(tournament, organizer) VALUES ('%s', '%s');", tournament, organizer);
 		stmt.executeUpdate(query);
 	}
+	
+	
+	// reservation of a seat is allowed only in 3 hours from the beginning of the tournament
+	public static ResultSet retrieveOpenTournaments(Statement stmt) throws SQLException{
+		var query = "SELECT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, sponsorRequested, organizer, sponsor, businessman, logo "
+				+ "FROM tournaments JOIN OrganizedTournaments "
+				+ "ON name=tournament "
+				+ "LEFT JOIN businessactivity on sponsor = activity "
+				+ "WHERE datetime > ADDTIME(current_timestamp(), '3:00:00');";
+		return stmt.executeQuery(query);
+	}
 }
