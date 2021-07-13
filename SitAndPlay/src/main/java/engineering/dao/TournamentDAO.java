@@ -21,25 +21,25 @@ import main.java.model.Tournament;
 public class TournamentDAO {
 
 	private TournamentDAO() {
-		
+
 	}
-	
+
 	public static Tournament retrieveTournament(String name) throws DAOException, SQLException {
 		Statement stmt = null;
 		Connection conn = null;
 		Tournament tournament = null;
-		
+
 		conn = DBConnector.getInstance().getConnection();
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet rs = QueryTournament.retrieveTournament(stmt, name);
 			if (!rs.first()) {
-				// no result 
+				// no result
 				throw new DAOException("Tournament not found");
 			}
-			
+
 			rs.first();
-			
+
 			var tournamentName = rs.getString("name");
 			var address = rs.getString("address");
 			var lat = rs.getDouble("lat");
@@ -55,36 +55,37 @@ public class TournamentDAO {
 			var requestedSponsor = rs.getBoolean("requestedSponsor");
 			var winner = rs.getString("winner");
 			var sponsor = rs.getString("sponsor");
-			
-			//retrieve the organizer
+
+			// retrieve the organizer
 			rs.close();
 			stmt.close();
-			
+
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet rs2 = QueryTournament.retrieveOrganizer(stmt, name);
 			if (!rs2.first()) {
 				// exists tournament but no one has created it !!!
-				throw new DAOException("Something is corrupted: tournament seems to not have an organizer!"); 
+				throw new DAOException("Something is corrupted: tournament seems to not have an organizer!");
 			}
 			rs2.first();
 			var organizer = rs2.getString("organizer");
 			rs2.close();
-			
+
 			var place = new Place(address, lat, lng);
 			var participationInfo = new ParticipationInfo(maxParticipants, price, award);
-			tournament = new Tournament(tournamentName, place, cardGame, datetime, organizer, requestedSponsor, participationInfo);
-			
+			tournament = new Tournament(tournamentName, place, cardGame, datetime, organizer, requestedSponsor,
+					participationInfo);
+
 			if (winner != null) {
 				tournament.setWinner(winner);
 			}
 			if (sponsor != null) {
-				//TODO: build businessActivity class
+				// TODO: build businessActivity class
 			}
-			
+
 			// retrieve list of participants
 			stmt.close();
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			
+
 			ResultSet rs3 = QueryTournament.retrieveParticipants(stmt, name);
 			ArrayList<String> participants = new ArrayList<>();
 			String participant;
@@ -94,21 +95,20 @@ public class TournamentDAO {
 					participants.add(participant);
 				} while (rs3.next());
 			}
-					
+
 			rs3.close();
-			
+
 			tournament.setParticipants(participants);
-			
-		}finally {
+
+		} finally {
 			if (stmt != null) {
 				stmt.close();
 			}
 		}
-		
+
 		return tournament;
 	}
-	
-	
+
 	public static void insertTournament(Tournament tournament) throws SQLException, DAOException {
 		var conn = DBConnector.getInstance().getConnection();
 		Statement stmt = null;
@@ -121,14 +121,14 @@ public class TournamentDAO {
 			e.printStackTrace();
 			throw new DAOException("A tournament with this name already exists");
 		}
-		
+
 	}
-	
-	public static List<Tournament> retrieveOpenTournaments() throws SQLException{
+
+	public static List<Tournament> retrieveOpenTournaments() throws SQLException {
 		Statement stmt = null;
 		Connection conn = null;
 		List<Tournament> tournaments = new ArrayList<>();
-		
+
 		conn = DBConnector.getInstance().getConnection();
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -136,30 +136,74 @@ public class TournamentDAO {
 			if (!rs.first()) {
 				// empty list
 				return tournaments;
-			}			
-			if(!rs.isBeforeFirst())
+			}
+			if (!rs.isBeforeFirst())
 				rs.previous();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				var name = rs.getString("name");
 				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
 				var cardGame = CardGame.getConstant(rs.getString("cardGame"));
 				var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
-				var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"), rs.getFloat("award"));
-				var sponsorRequested = rs.getBoolean("sponsorRequested");
+				var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
+						rs.getFloat("award"));
+				var sponsorRequested = rs.getBoolean("requestedSponsor");
 				var organizer = rs.getString("organizer");
 				BusinessActivity sponsorActivity = null;
 				var activity = rs.getString("sponsor");
 				if (activity != null) {
-					sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"), rs.getString("businessman"));
+					sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"),
+							rs.getString("businessman"));
 				}
 				var tournament = new Tournament(name, place, cardGame, datetime, organizer, sponsorRequested, pInfo);
 				tournament.setSponsor(sponsorActivity);
-				tournaments.add(tournament);				
+				tournaments.add(tournament);
 			}
 			rs.close();
-			
+
 			return tournaments;
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	}
+
+	public static List<String> retrieveParticipants(String tournament) throws SQLException {
+		Statement stmt = null;
+		Connection conn = null;
+		List<String> participants = new ArrayList<>();
+
+		conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.retrieveParticipants(stmt, tournament);
+			if (!rs.first()) {
+				return participants;
+			}
+			rs.beforeFirst();
+			while (rs.next()) {
+				participants.add(rs.getString("participant"));
+			}
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return participants;
+	}
+
+	public static void addParticipant(String tournament, String participant) throws SQLException, DAOException {
+		Statement stmt = null;
+		Connection conn = null;
+
+		conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			QueryTournament.addParticipant(stmt, tournament, participant);
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new DAOException(
+					"Constraint problem. Probably the tournament has not been found or you have already joined this tournament");
 		} finally {
 			if (stmt != null) {
 				stmt.close();

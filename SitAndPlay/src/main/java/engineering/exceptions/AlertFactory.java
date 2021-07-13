@@ -11,8 +11,9 @@ import javafx.scene.image.ImageView;
 
 public class AlertFactory {
 
-	private static final String WARN_IMG = "src/main/resources/alert/warning.png";
-	private static final String ERR_IMG= "src/main/resources/alert/error.png";
+	private static final String WARN_IMG = "src/main/resources/alert/warning_yellow.png";
+	private static final String ERR_IMG = "src/main/resources/alert/error_red.png";
+	private static final String SUCCESS_IMG = "src/main/resources/alert/success.png";
 	
 	private static AlertFactory instance = null;
 	
@@ -43,8 +44,8 @@ public class AlertFactory {
 				}
 			
 			case INFORMATION: {
-				url = new File(WARN_IMG).toURI().toURL();
-				headerText = "INFO";
+				url = new File(SUCCESS_IMG).toURI().toURL();
+				headerText = "SUCCESS";
 				alert = new Alert(AlertType.INFORMATION);
 				break;
 				}

@@ -192,7 +192,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 				.createAlert("Please select a card game", AlertType.ERROR).show();
 			return;
 		}
-		String organizer = ssn.getLoggedUser().getUsername();
+		String organizer = ssn.getUser().getUsername();
 		if (datePicker.getValue() != null) {
 			String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			String time = cbHours.getValue() + ":" + cbMinutes.getValue();
@@ -321,8 +321,8 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		var ctrl = new ReserveTableSeatController();
 		try {
 			TableBean bean = ctrl.retrieveTable(tableName);
-			String newParticipant = ssn.getLoggedUser().getUsername();
-			if (Boolean.TRUE.equals(ssn.getLoggedUser().getUserType() != UserType.PLAYER)) {
+			String newParticipant = ssn.getUser().getUsername();
+			if (Boolean.TRUE.equals(ssn.getUser().getUserType() != UserType.PLAYER)) {
 				AlertFactory.getInstance().createAlert("Only players can join a table", AlertType.ERROR).show();
 				return;
 			}

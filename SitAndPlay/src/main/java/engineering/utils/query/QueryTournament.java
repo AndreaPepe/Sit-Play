@@ -26,7 +26,7 @@ public class QueryTournament {
 	}
 	
 	public static ResultSet retrieveParticipants(Statement stmt, String tournament) throws SQLException {
-		var query = String.format("SELECT organizer FROM TournamentsParticipants WHERE tournament = '%s';" , tournament);
+		var query = String.format("SELECT participant FROM TournamentsParticipants WHERE tournament = '%s';" , tournament);
 		return stmt.executeQuery(query);
 	}
 	
@@ -75,7 +75,7 @@ public class QueryTournament {
 	
 	// reservation of a seat is allowed only in 3 hours from the beginning of the tournament
 	public static ResultSet retrieveOpenTournaments(Statement stmt) throws SQLException{
-		var query = "SELECT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, sponsorRequested, organizer, sponsor, businessman, logo "
+		var query = "SELECT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo "
 				+ "FROM tournaments JOIN OrganizedTournaments "
 				+ "ON name=tournament "
 				+ "LEFT JOIN businessactivity on sponsor = activity "

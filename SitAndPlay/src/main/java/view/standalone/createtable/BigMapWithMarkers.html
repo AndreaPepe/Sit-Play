@@ -12,7 +12,16 @@
 			body { margin: 0; padding: 0; }
 			#map { position: absolute; top: 0; bottom: 0; width: 100%; }
 		</style>
-		
+		<style >
+			.leaflet-popup-close-button {
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding: 4px 0 0 5px;
+				text-align: center;
+				font-weight: bold;
+			}
+		</style>
 		<script>
 		var map;
 		var selectedTable = null;
@@ -44,11 +53,12 @@
 			<p> Time: ` + time + `</p>
 			`;
 			
-			var popup = L.popup().setContent(popupHtml);
+			var popup = L.popup({maxHeight: 220, minWidth: 400}).setContent(popupHtml);
 			popup.addEventListener
 			marker.bindPopup(popup,{closeOnClick: false})
 			
 			marker.on('click', function(e){
+				// make the selected marker red
 				marker.setIcon(L.mapbox.marker.icon({
 					'marker-size': 'large',
 					'marker-symbol': "circle",

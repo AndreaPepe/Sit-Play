@@ -23,7 +23,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.java.controller.applicationcontroller.LoginController;
 import main.java.controller.guicontroller.GuiHomePageController;
-import main.java.engineering.bean.login.BeanLoggedUser;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
@@ -86,13 +85,13 @@ public class GuiLoginController implements Initializable{
 			
 			// new instance of application controller
 			var ctrl = new LoginController();
-			BeanLoggedUser resultLogin = ctrl.login(beanUser);
+			ctrl.login(beanUser);
 			
 			// create a new desktop Session -> isWeb = false
 	    	var ssn = new Session(false);
 	    	
 			//Registration of the user into Session
-			ssn.setLoggedUser(resultLogin);
+			ssn.setUser(beanUser);
 			ssn.setHomePage();
 			
 			var loader = new FXMLLoader(getClass().getResource(START_PAGE));

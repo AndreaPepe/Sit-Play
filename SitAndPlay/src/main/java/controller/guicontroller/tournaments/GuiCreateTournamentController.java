@@ -189,7 +189,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 	public void createTournament(ActionEvent event) {
 		String name = tfName.getText();
 		String cardGame = cbCardGame.getValue();
-		String organizer = this.ssn.getLoggedUser().getUsername();
+		String organizer = this.ssn.getUser().getUsername();
 		int maxParticipants;
 		float price;
 		float award;
@@ -254,7 +254,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 			try {
 				if (Boolean.TRUE.equals(ctrl.createTournament(tournamentBean))) {
 					AlertFactory.getInstance()
-					.createAlert("Tournament succesfully created", AlertType.WARNING).show();
+					.createAlert("Tournament succesfully created", AlertType.INFORMATION).show();
 				}
 			} catch (DAOException e) {
 				AlertFactory.getInstance()

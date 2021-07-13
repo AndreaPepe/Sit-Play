@@ -79,7 +79,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("User");
 			lblStatus.setText("User");
 
-			FXMLLoader loader = getInternalPageLoader(1, ssn.getLoggedUser().getUserType());
+			FXMLLoader loader = getInternalPageLoader(1, ssn.getUser().getUserType());
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -87,7 +87,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("Tables");
 			lblStatus.setText("Tables");
 
-			FXMLLoader loader = getInternalPageLoader(2, ssn.getLoggedUser().getUserType());
+			FXMLLoader loader = getInternalPageLoader(2, ssn.getUser().getUserType());
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -96,7 +96,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("Tournaments");
 			lblStatus.setText("Tournaments");
 
-			FXMLLoader loader = getInternalPageLoader(3, ssn.getLoggedUser().getUserType());
+			FXMLLoader loader = getInternalPageLoader(3, ssn.getUser().getUserType());
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);

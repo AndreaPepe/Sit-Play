@@ -12,10 +12,24 @@
 			body { margin: 0; padding: 0; }
 			#map { position: absolute; top: 0; bottom: 0; width: 100%; }
 		</style>
-		
+		<style >
+			.leaflet-popup-close-button {
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding: 4px 0 0 5px;
+				text-align: center;
+				font-weight: bold;
+			}
+			
+			.centered{
+				display:block;
+				text-align: center;
+			}
+		</style>
 		<script>
 		var map;
-		var selectedTable = null;
+		var selectedTournament = null;
 		var lastSelectedMarker = null;
 		function loadMap(){
 			map = null;
@@ -24,51 +38,68 @@
 		    L.mapbox.styleLayer('mapbox://styles/mapbox/outdoors-v11').addTo(map);
 		}	
 		
-		function addMarker(lat,lng,icon,color,idname, game, address, date, time){
+		function addMarker(lat,lng,icon,color,idname, game, address, date, time, organizer, maxParticipants, price, award, sponsor, imgType, logo){
 			if(icon == "null"){
 				icon = "marker";
 			}
 			var marker = L.marker(L.latLng(lat,lng), {
 				icon: L.mapbox.marker.icon({
 					'marker-size': 'large',
-					'marker-symbol': "circle",
+					'marker-symbol': icon,
 					'marker-color': color
 				})
 			}).addTo(map);
 			
 			let popupHtml = `
-			<h3>` + idname + `</h3>
+			<h3 style="text-align:center">` + idname + `</h3>
 			<p> Game: ` + game + `</p>
 			<p> Address: ` + address + `</p>
 			<p> Date: ` + date + `</p>
 			<p> Time: ` + time + `</p>
+			<p> Price: ` + price + `</p>
+			<h4> Award: ` + award+ `</h4>		
+			<p> Organizer: ` + organizer + `</p>
 			`;
 			
-			var popup = L.popup().setContent(popupHtml);
+			if(sponsor != "null"){
+				popupHtml += `
+				<p style="text-align:center;"> Sponsored by ` + sponsor + `</p>
+				`;
+				if(imgType == "png"){
+					popupHtml += `<p style="text-align:center;"><img id="logoImg" class="center" src="data:image/png;base64,"` + logo + ` width="80" height="80"></p>`;
+				}else if(imgType == "jpeg"){
+					popupHtml += `<p style="text-align:center;"><img id="logoImg" class="center" src="data:image/png;base64,"` + logo + ` width="80" height="80"></p>`;
+				}else{
+					// no image
+					popupHtml += `<p style="text-align:center;"><img src="../../../../resources/no_image.png" width="80" height="80"></p>`;
+				}
+			}
+			
+			 
+			var popup = L.popup({maxHeight: 220, minWidth: 400}).setContent(popupHtml);
 			popup.addEventListener
 			marker.bindPopup(popup,{closeOnClick: false})
 			
 			marker.on('click', function(e){
-				// make the selected marker red
 				marker.setIcon(L.mapbox.marker.icon({
 					'marker-size': 'large',
-					'marker-symbol': "circle",
+					'marker-symbol': icon,
 					'marker-color': "#ff0000"
 				}));
 				if(lastSelectedMarker != null && lastSelectedMarker != marker){
 					lastSelectedMarker.setIcon(L.mapbox.marker.icon({
 						'marker-size': 'large',
-						'marker-symbol': "circle",
+						'marker-symbol': icon,
 						'marker-color': color
 					}));
 				}				
 				lastSelectedMarker = marker;
-				selectedTable = idname;
+				selectedTournament = idname;
 			});
 		}
 		
-		function getSelectedTable(){
-			return selectedTable;
+		function getSelectedTournament(){
+			return selectedTournament;
 		}
 		</script>
 		

@@ -55,7 +55,7 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
 	@FXML
 	public void profilePressed(ActionEvent event) {
 		apnNotifications.toBack();
-		lblUsername.setText(ssn.getLoggedUser().getUsername());
+		lblUsername.setText(ssn.getUser().getUsername());
 		apnProfile.toFront();
 	}
 	
