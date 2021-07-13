@@ -14,17 +14,14 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
-import main.java.controller.guicontroller.tournaments.GuiCreateTournamentController;
 import main.java.controller.guicontroller.tournaments.GuiJoinTournamentController;
 import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
 import main.java.engineering.utils.Session;
-import main.java.model.UserType;
 
-public class GuiHomePageController extends GuiBasicController {
+public class GuiHomePagePlayerController extends GuiBasicController {
 
-	public GuiHomePageController(Session ssn) {
+	public GuiHomePagePlayerController(Session ssn) {
 		super(ssn);
-		// TODO Auto-generated constructor stub
 	}
 
 	@FXML
@@ -74,12 +71,11 @@ public class GuiHomePageController extends GuiBasicController {
 
 	@FXML
 	public void handleClicks(ActionEvent event) throws IOException {
-		// TODO: add several content to display
 		if (event.getSource() == btnUser) {
 			lblMiniStatus.setText("User");
 			lblStatus.setText("User");
 
-			FXMLLoader loader = getInternalPageLoader(1, ssn.getUser().getUserType());
+			FXMLLoader loader = getInternalPageLoader(1);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -87,7 +83,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("Tables");
 			lblStatus.setText("Tables");
 
-			FXMLLoader loader = getInternalPageLoader(2, ssn.getUser().getUserType());
+			FXMLLoader loader = getInternalPageLoader(2);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -96,7 +92,7 @@ public class GuiHomePageController extends GuiBasicController {
 			lblMiniStatus.setText("Tournaments");
 			lblStatus.setText("Tournaments");
 
-			FXMLLoader loader = getInternalPageLoader(3, ssn.getUser().getUserType());
+			FXMLLoader loader = getInternalPageLoader(3);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -109,56 +105,22 @@ public class GuiHomePageController extends GuiBasicController {
 
 	}
 
-	private FXMLLoader getInternalPageLoader(int numberPage, UserType type) {
-		//TODO: fix this better
+	private FXMLLoader getInternalPageLoader(int numberPage) {
 		FXMLLoader loader;
 		String page;
 		GuiBasicInternalPageController ctrl;
-		switch (type) {
-		case PLAYER: {
-			switch (numberPage) {
-			case 1:
-				page = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
-				ctrl = new GuiPlayerUserPageController(ssn);
-				break;
-			case 2:
-				page = "/main/java/view/standalone/createtable/CreateTable.fxml";
-				ctrl = new GuiPlayerCreateTableController(ssn);
-				break;
-			case 3:
-				page = "/main/java/view/standalone/tournaments/JoinTournament.fxml";
-				ctrl = new GuiJoinTournamentController(ssn);
-				break;
-			default:
-				page = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
-				ctrl = new GuiPlayerUserPageController(ssn);
-				break;
-			}
+		
+		switch (numberPage) {
+		case 2:
+			page = "/main/java/view/standalone/createtable/CreateTable.fxml";
+			ctrl = new GuiPlayerCreateTableController(ssn);
 			break;
-		}
-		case ORGANIZER: {
-			switch (numberPage) {
-			case 1:
-				page = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
-				ctrl = new GuiPlayerUserPageController(ssn);
-				break;
-			case 2:
-				page = "/main/java/view/standalone/createtable/CreateTable.fxml";
-				ctrl = new GuiPlayerCreateTableController(ssn);
-				break;
-			case 3:
-				page = "/main/java/view/standalone/tournaments/CreateTournament.fxml";
-				ctrl = new GuiCreateTournamentController(ssn);
-				break;
-			default:
-				page = "/main/java/view/standalone/userspage/CreateTournament.fxml";
-				ctrl = new GuiCreateTournamentController(ssn);
-				break;
-			}
+		case 3:
+			page = "/main/java/view/standalone/tournaments/JoinTournament.fxml";
+			ctrl = new GuiJoinTournamentController(ssn);
 			break;
-		}
-
 		default:
+			// also page number 1
 			page = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
 			ctrl = new GuiPlayerUserPageController(ssn);
 			break;

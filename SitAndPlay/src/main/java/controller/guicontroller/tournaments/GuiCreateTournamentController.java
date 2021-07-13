@@ -187,62 +187,9 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 
 	@FXML
 	public void createTournament(ActionEvent event) {
-		String name = tfName.getText();
-		String cardGame = cbCardGame.getValue();
-		String organizer = this.ssn.getUser().getUsername();
-		int maxParticipants;
-		float price;
-		float award;
-		if (dpDatePicker.getValue() != null) {
-			String date = dpDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-			String time = cbHours.getValue() + ":" + cbMin.getValue();
-			if (cbHours.getValue() == null || cbMin.getValue() == null) {
-				AlertFactory.getInstance()
-					.createAlert("Insert hours and minutes correctly please", AlertType.ERROR).show();
-				return;
-			}
-
-			// check correct parsing of numbers from text fields
-			try {
-				maxParticipants = Integer.parseInt(tfMaxParticipants.getText());
-			} catch (NumberFormatException e) {
-				AlertFactory.getInstance()
-						.createAlert("The 'Max participants' field must be an integer number", AlertType.ERROR).show();
-				return;
-			}
-
-			try {
-				price = Float.parseFloat(tfPrice.getText());
-			} catch (NumberFormatException e) {
-				AlertFactory.getInstance()
-						.createAlert("The 'Price' field must be a floating point number", AlertType.ERROR).show();
-				return;
-			}
-
-			try {
-				award = Float.parseFloat(tfAwards.getText());
-			} catch (NumberFormatException e) {
-				AlertFactory.getInstance()
-						.createAlert("The 'Award' field must be a floating point number", AlertType.ERROR).show();
-				return;
-			}
-
-			Boolean reqSponsor = cbSearchSponsor.isSelected();
-
-			var tournamentBean = new TournamentBean();
-			tournamentBean.setName(name);
-			tournamentBean.setCardGame(cardGame);
-			tournamentBean.setAddress(location);
-			tournamentBean.setLatitude(latitude);
-			tournamentBean.setLongitude(longitude);
-			tournamentBean.setDate(date);
-			tournamentBean.setTime(time);
-			tournamentBean.setOrganizer(organizer);
-			tournamentBean.setMaxParticipants(maxParticipants);
-			tournamentBean.setPrice(price);
-			tournamentBean.setAward(award);
-			tournamentBean.setInRequestForSponsor(reqSponsor);
-			
+		
+		var tournamentBean = buildBeanFromInput();
+		if (tournamentBean != null) {
 			try {
 				tournamentBean.checkRulesForInsert();
 			} catch (BeanCheckException e) {
@@ -260,11 +207,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 				AlertFactory.getInstance()
 				.createAlert(e.getMessage(), AlertType.ERROR).show();
 			}
-		}else {
-			AlertFactory.getInstance()
-			.createAlert("You have to select a date!", AlertType.ERROR).show();
 		}
-		
 	}
 
 	// second page controllers
@@ -275,5 +218,72 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 
 		setMap();
 		setAutocompleteTextField();
+	}
+	
+	private TournamentBean buildBeanFromInput() {
+		
+		TournamentBean tournamentBean = null;
+		String name = tfName.getText();
+		String cardGame = cbCardGame.getValue();
+		String organizer = this.ssn.getUser().getUsername();
+		int maxParticipants;
+		float price;
+		float award;
+		if (dpDatePicker.getValue() != null) {
+			String date = dpDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			String time = cbHours.getValue() + ":" + cbMin.getValue();
+			if (cbHours.getValue() == null || cbMin.getValue() == null) {
+				AlertFactory.getInstance()
+					.createAlert("Insert hours and minutes correctly please", AlertType.ERROR).show();
+				return null;
+			}
+
+			// check correct parsing of numbers from text fields
+			try {
+				maxParticipants = Integer.parseInt(tfMaxParticipants.getText());
+			} catch (NumberFormatException e) {
+				AlertFactory.getInstance()
+						.createAlert("The 'Max participants' field must be an integer number", AlertType.ERROR).show();
+				return null;
+			}
+
+			try {
+				price = Float.parseFloat(tfPrice.getText());
+			} catch (NumberFormatException e) {
+				AlertFactory.getInstance()
+						.createAlert("The 'Price' field must be a floating point number", AlertType.ERROR).show();
+				return null;
+			}
+
+			try {
+				award = Float.parseFloat(tfAwards.getText());
+			} catch (NumberFormatException e) {
+				AlertFactory.getInstance()
+						.createAlert("The 'Award' field must be a floating point number", AlertType.ERROR).show();
+				return null;
+			}
+
+			Boolean reqSponsor = cbSearchSponsor.isSelected();
+
+			tournamentBean = new TournamentBean();
+			tournamentBean.setName(name);
+			tournamentBean.setCardGame(cardGame);
+			tournamentBean.setAddress(location);
+			tournamentBean.setLatitude(latitude);
+			tournamentBean.setLongitude(longitude);
+			tournamentBean.setDate(date);
+			tournamentBean.setTime(time);
+			tournamentBean.setOrganizer(organizer);
+			tournamentBean.setMaxParticipants(maxParticipants);
+			tournamentBean.setPrice(price);
+			tournamentBean.setAward(award);
+			tournamentBean.setInRequestForSponsor(reqSponsor);
+			
+			
+		}else {
+			AlertFactory.getInstance()
+			.createAlert("You have to select a date!", AlertType.ERROR).show();
+		}
+		return tournamentBean;
 	}
 }

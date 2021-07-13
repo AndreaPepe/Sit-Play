@@ -126,12 +126,12 @@ public class TableDAO {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			QueryTable.addParticipant(stmt, tableName, participant);
 		}catch (SQLIntegrityConstraintViolationException e) {
-			throw new DAOException("Constraint problem. Probably the table has not been found or you have already joined this table");
+			throw new DAOException("Constraint problem. Probably you have already joined this table or the table has not been found");
 		}
 	}
 	
 	
-	public static List<Table> retrieveOpenTables() throws SQLException, DAOException {
+	public static List<Table> retrieveOpenTables() throws SQLException {
 		Statement stmt = null;
 		Connection conn = null;
 		List<Table> tables = new ArrayList<>();
