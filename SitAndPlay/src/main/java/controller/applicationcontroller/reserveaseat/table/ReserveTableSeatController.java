@@ -6,11 +6,14 @@ import java.util.List;
 
 import main.java.engineering.bean.createtable.PlaceBean;
 import main.java.engineering.bean.createtable.TableBean;
+import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.dao.TableDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.model.Table;
+import main.java.model.UserType;
 
 public class ReserveTableSeatController {
 
@@ -36,40 +39,18 @@ public class ReserveTableSeatController {
 		return beans;
 	}
 	
-	public TableBean retrieveTable(String tableName) throws DAOException {
-		Table table;
-		try {
-			table = TableDAO.retrieveTable(tableName);
-		}  catch (SQLException e) {
-			// Change the exception type, so the graphic controller
-			// has not to be aware of database concepts and error 
-			e.printStackTrace();
-			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+	public void joinTable(TableBean table, BeanUser user) throws DAOException, WrongUserTypeException {
+		if (user.getUserType() != UserType.PLAYER) {
+			throw new WrongUserTypeException(CommonStrings.getWrongUserErrMsg());
 		}
-		return translateTableToBean(table);
-	}
-	
-	
-	public void joinTable(TableBean table, String participant) throws DAOException {
 		try {
-			TableDAO.addParticipant(table.getName(), participant);
+			TableDAO.addParticipant(table.getName(), user.getUsername());
 		}catch (SQLException e) {
 			// Change the exception type, so the graphic controller
 			// has not to be aware of database concepts and error 
 			e.printStackTrace();
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
-	}
-	
-	private TableBean translateTableToBean(Table table) {
-		String name = table.getName();
-		var placeBean = new PlaceBean(table.getPlace().getAddress(), table.getPlace().getLatitude(), table.getPlace().getLongitude());
-		var cardGame = table.getCardGame().toString();
-		var datetime = table.getDatetime();
-		String organizer = table.getOrganizer();
-		
-		return new TableBean(name, placeBean, cardGame, DatetimeUtil.getDate(datetime), DatetimeUtil.getTime(datetime), organizer);
-
 	}
 	
 }

@@ -20,7 +20,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.java.controller.applicationcontroller.createtable.CreateTableController;
@@ -31,10 +30,10 @@ import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.Session;
 import main.java.engineering.utils.map.MapPlace;
 import main.java.model.CardGame;
-import main.java.model.UserType;
 import main.java.view.standalone.SearchMapPlaceTextField;
 
 public class GuiPlayerCreateTableController extends GuiBasicInternalPageController {
@@ -96,9 +95,10 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	private WebEngine allEngine;
 	private static final String MAP_WITH_MARKERS = "src/main/java/view/standalone/createtable/BigMapWithMarkers.html";
 
+	private List<TableBean> beanList;
+
 	public GuiPlayerCreateTableController(Session ssn) {
 		super(ssn);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -133,8 +133,8 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		apnCreate.getChildren().add(autocompleteSearch.getTextField());
 		autocompleteSearch.getLastSelectedItem().addListener((observable, oldValue, newValue) -> {
 			if (autocompleteSearch.getLastSelectedItem().get() != null) {
-				
-				//target interface of Adapter GOF pattern
+
+				// target interface of Adapter GOF pattern
 				MapPlace place = autocompleteSearch.getLastSelectedItem().getValue();
 				// update values to save data of selected place
 				location = place.toString();
@@ -188,8 +188,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		String name = tfTableName.getText();
 		String cardGame = cbCardGame.getValue();
 		if (cardGame == null) {
-			AlertFactory.getInstance()
-				.createAlert("Please select a card game", AlertType.ERROR).show();
+			AlertFactory.getInstance().createAlert("Please select a card game", AlertType.ERROR).show();
 			return;
 		}
 		String organizer = ssn.getUser().getUsername();
@@ -197,8 +196,8 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 			String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			String time = cbHours.getValue() + ":" + cbMinutes.getValue();
 			if (cbHours.getValue() == null || cbMinutes.getValue() == null) {
-				AlertFactory.getInstance()
-					.createAlert("Insert hours and minutes correctly please", AlertType.ERROR).show();
+				AlertFactory.getInstance().createAlert("Insert hours and minutes correctly please", AlertType.ERROR)
+						.show();
 				return;
 			}
 			var placeBean = new PlaceBean(location, latitude, longitude);
@@ -215,16 +214,13 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 			try {
 				if (ctrl.createTable(tableBean)) {
 					// table created successfully
-					lblSuccessCreate.setText("Table created successfully");
-					lblSuccessCreate.setVisible(true);
+					AlertFactory.getInstance().createAlert("Table created succesfully", AlertType.INFORMATION).show();
 				}
 			} catch (DAOException e) {
-				lblError.setText(e.getMessage());
-				lblError.setVisible(true);
+				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 			}
 		} else {
-			lblError.setText("Please, select a date");
-			lblError.setVisible(true);
+			AlertFactory.getInstance().createAlert("Please select a date", AlertType.ERROR).show();
 		}
 
 	}
@@ -284,10 +280,9 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	private void loadMarkers() {
 		var ctrl = new ReserveTableSeatController();
 		try {
-			var beanList = ctrl.retrieveOpenTables();
+			beanList = ctrl.retrieveOpenTables();
 			if (beanList.isEmpty()) {
-				lblJoinResult.setText("No open table has been found");
-				lblJoinResult.setVisible(true);
+				AlertFactory.getInstance().createAlert("No open table has been found; retry later", AlertType.WARNING).show();
 			} else {
 				for (TableBean bean : beanList) {
 					var lat = bean.getLatitude();
@@ -305,8 +300,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 			}
 		} catch (DAOException e) {
-			lblJoinResult.setText(e.getMessage());
-			lblJoinResult.setVisible(true);
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		}
 	}
 
@@ -314,26 +308,34 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	public void joinTable() {
 		String tableName = getSelectedTable();
 		if (tableName == null) {
-			lblJoinResult.setText("No table has been selected");
-			lblJoinResult.setVisible(true);
-			return;
+			AlertFactory.getInstance()
+					.createAlert("No table has been selected. First select one on the map.", AlertType.WARNING).show();
+			;
 		}
-		var ctrl = new ReserveTableSeatController();
+
 		try {
-			TableBean bean = ctrl.retrieveTable(tableName);
-			String newParticipant = ssn.getUser().getUsername();
-			if (Boolean.TRUE.equals(ssn.getUser().getUserType() != UserType.PLAYER)) {
-				AlertFactory.getInstance().createAlert("Only players can join a table", AlertType.ERROR).show();
+			TableBean bean = findSelectedTable(tableName);
+			if (bean == null) {
+				AlertFactory.getInstance().createAlert("Something went wrong, please reload the page", AlertType.ERROR)
+						.show();
 				return;
 			}
-			ctrl.joinTable(bean, newParticipant);
-			lblJoinResult.setText("Join Successfully");
-			lblJoinResult.setTextFill(Color.GREEN);
-			lblJoinResult.setVisible(true);
+			var ctrl = new ReserveTableSeatController();
+			ctrl.joinTable(bean, ssn.getUser());
+			AlertFactory.getInstance().createAlert("Table joined successfully", AlertType.INFORMATION).show();
 
-		} catch (DAOException e) {
+		} catch (DAOException | WrongUserTypeException e) {
 			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		}
+	}
+
+	private TableBean findSelectedTable(String tableName) {
+		for (TableBean tb : beanList) {
+			if (tb.getName().equals(tableName)) {
+				return tb;
+			}
+		}
+		return null;
 	}
 
 	public String getSelectedTable() {

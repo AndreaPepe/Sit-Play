@@ -21,7 +21,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTournamentSeatController;
+import main.java.controller.applicationcontroller.reserveaseat.tournament.ReserveTournamentSeatController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.exceptions.AlertFactory;

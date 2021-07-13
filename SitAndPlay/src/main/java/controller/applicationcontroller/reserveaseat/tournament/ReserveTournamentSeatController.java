@@ -1,4 +1,4 @@
-package main.java.controller.applicationcontroller.reserveaseat.table;
+package main.java.controller.applicationcontroller.reserveaseat.tournament;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
