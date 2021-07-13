@@ -3,11 +3,11 @@ package main.java.engineering.bean.businessactivity;
 import java.io.InputStream;
 
 import javafx.scene.image.Image;
+import main.java.engineering.exceptions.BeanCheckException;
 
 public class BusinessActivityBean {
 
 	private String name;
-	//TODO: change with Image
 	private InputStream logo;
 	private String owner;
 	
@@ -45,5 +45,12 @@ public class BusinessActivityBean {
 	}
 	public void setFxLogo(Image fxLogo) {
 		this.fxLogo = fxLogo;
+	}
+	
+	public Boolean checkFields() throws BeanCheckException {
+		if (name.isBlank()) {
+			throw new BeanCheckException("The name of the activity can not be blank!");
+		}
+		return true;
 	}
 }

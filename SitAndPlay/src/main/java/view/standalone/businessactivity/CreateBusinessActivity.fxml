@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="430.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.business.GuiManageActivitiesController">
+   <children>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" styleClass="top-bar" stylesheets="@../css/Style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <HBox prefHeight="0.0" prefWidth="600.0" spacing="20.0">
+               <padding>
+                  <Insets left="15.0" />
+               </padding>
+               <children>
+                  <ToggleButton fx:id="toggleAdd" mnemonicParsing="false" onAction="#handleToggleAdd" prefWidth="120.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Add activity" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </ToggleButton>
+                  <ToggleButton fx:id="toggleMyActivities" mnemonicParsing="false" onAction="#handleToggleMyActivities" prefWidth="120.0" styleClass="toggle" stylesheets="@../css/Style.css" text="My Activities" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </ToggleButton>
+               </children>
+            </HBox>
+         </items>
+      </ToolBar>
+      <Pane layoutY="40.0" prefHeight="390.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <AnchorPane fx:id="apMyActivities" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: white;" />
+            <AnchorPane fx:id="apAddActivity" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: ffffff;">
+               <children>
+                  <VBox prefHeight="326.0" prefWidth="210.0" spacing="10.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="30.0">
+                     <children>
+                        <Label prefHeight="150.0" text="Here you can add a new business activity to sponsor tournaments" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                           <font>
+                              <Font name="Papyrus" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Give a name to the new activity and, if you want, upload a representative logo" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                           <font>
+                              <Font name="Papyrus" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" layoutX="325.0" layoutY="30.0" prefHeight="358.0" prefWidth="280.0" spacing="20.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                     <children>
+                        <TextField fx:id="tfActivityName" promptText="Activity's name" />
+                        <Button fx:id="btnUpload" alignment="CENTER" cache="true" mnemonicParsing="false" onAction="#uploadLogo" prefWidth="100.0" styleClass="btn" stylesheets="@../css/Style.css" text="Upload logo" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Button>
+                        <ImageView fx:id="ivLogo" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../resources/upload_img.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets top="-10.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Button fx:id="btnCreateActivity" mnemonicParsing="false" onAction="#createNewActivity" prefWidth="200.0" styleClass="btn" stylesheets="@../css/Style.css" text="Create New Activity" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="40.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <Separator layoutX="303.0" layoutY="30.0" orientation="VERTICAL" prefHeight="410.0" prefWidth="4.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="290.0" AnchorPane.topAnchor="30.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

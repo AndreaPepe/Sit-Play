@@ -310,7 +310,6 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		if (tableName == null) {
 			AlertFactory.getInstance()
 					.createAlert("No table has been selected. First select one on the map.", AlertType.WARNING).show();
-			;
 		}
 
 		try {

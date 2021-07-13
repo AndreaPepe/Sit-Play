@@ -31,7 +31,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnTables" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Tables" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
+                  <ToggleButton fx:id="btnActivities" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Activities" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                      <font>
                         <Font size="18.0" />
                      </font>

@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
-import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
+import main.java.controller.guicontroller.business.GuiManageActivitiesController;
 import main.java.controller.guicontroller.tournaments.GuiJoinTournamentController;
 import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
 import main.java.engineering.utils.Session;
@@ -28,7 +28,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 	private ToggleButton btnUser;
 
 	@FXML
-	private ToggleButton btnTables;
+	private ToggleButton btnActivities;
 
 	@FXML
 	private ToggleButton btnTournaments;
@@ -57,7 +57,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 	private void setToggleSideMenu() {
 		var toggleGroup = new ToggleGroup();
 		btnUser.setToggleGroup(toggleGroup);
-		btnTables.setToggleGroup(toggleGroup);
+		btnActivities.setToggleGroup(toggleGroup);
 		btnTournaments.setToggleGroup(toggleGroup);
 		btnSettings.setToggleGroup(toggleGroup);
 
@@ -79,7 +79,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
-		} else if (event.getSource() == btnTables) {
+		} else if (event.getSource() == btnActivities) {
 			lblMiniStatus.setText("Tables");
 			lblStatus.setText("Tables");
 
@@ -113,8 +113,8 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 		//TODO: for now are the same pages of player; remember to change also controllers
 		switch (numberPage) {
 		case 2:
-			page = "/main/java/view/standalone/createtable/CreateTable.fxml";
-			ctrl = new GuiPlayerCreateTableController(ssn);
+			page = "/main/java/view/standalone/businessactivity/CreateBusinessActivity.fxml";
+			ctrl = new GuiManageActivitiesController(ssn);
 			break;
 		case 3:
 			page = "/main/java/view/standalone/tournaments/JoinTournament.fxml";

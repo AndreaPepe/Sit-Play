@@ -1,0 +1,46 @@
+.top-bar{
+	-fx-background-color: #D5D5D5;
+	background-color: #D5D5D5;	
+}
+
+.btn{
+ -fx-background-color : #296581;
+ background-color : #296581;
+ font-size: 18px;
+ -fx-text-fill: #FFFFFF;
+}
+.btn:hover{
+	-fx-background-color: #4CA1D8;
+	background-color: #4CA1D8;
+}
+.btn:pressed:hover {	
+  	-fx-scale-x: 0.9;
+  	-fx-scale-y: 0.9;
+}
+
+.pnDark{
+	-fx-background-color: #061A2D;
+	background-color: #061A2D;
+}
+
+.pnLight{
+	-fx-background-color: #296581;
+	background-color: #296581;
+}
+
+.toggle{
+	-fx-background-color : #296581;
+	 background-color : #296581;
+	 font-size: 18px;
+}
+
+.toggle:hover{
+	-fx-background-color: #061A2D;
+	background-color: #061A2D;
+}
+
+.toggle:selected{
+	-fx-background-color: #4CA1D8;
+	background-color: #4CA1D8;
+	
+}

@@ -39,6 +39,17 @@
       </ToolBar>
       <Pane fx:id="pnBase" layoutY="40.0" prefHeight="390.0" prefWidth="650.0">
          <children>
+            <AnchorPane fx:id="apnReserve" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                  <Label fx:id="lblJoinResult" alignment="TOP_LEFT" layoutX="288.0" layoutY="16.0" prefHeight="25.0" prefWidth="260.0" text="Error" textFill="RED" visible="false" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="150.0" />
+                  <WebView fx:id="webViewAllTables" layoutX="14.0" layoutY="14.0" prefHeight="340.0" prefWidth="650.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="5.0" />
+                  <Button fx:id="btnJoin" mnemonicParsing="false" onAction="#joinTable" prefWidth="120.0" styleClass="btn" stylesheets="@StandardStyle.css" text="Join Table" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="20.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="apnCreate" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
                <children>
                   <DatePicker fx:id="datePicker" layoutX="115.0" layoutY="181.0" prefHeight="25.0" prefWidth="200.0" />
@@ -75,17 +86,6 @@
                   <Label fx:id="lblSuccessCreate" layoutX="25.0" layoutY="363.0" prefHeight="27.0" prefWidth="599.0" text="Success!" textFill="#00a822" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
                   <WebView fx:id="webMap" layoutX="318.0" layoutY="21.0" prefHeight="350.0" prefWidth="300.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                   <Label layoutX="25.0" layoutY="235.0" text="Time:" />
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="apnReserve" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
-               <children>
-                  <Label fx:id="lblJoinResult" alignment="TOP_LEFT" layoutX="288.0" layoutY="16.0" prefHeight="25.0" prefWidth="260.0" text="Error" textFill="RED" visible="false" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="150.0" />
-                  <WebView fx:id="webViewAllTables" layoutX="14.0" layoutY="14.0" prefHeight="340.0" prefWidth="650.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="5.0" />
-                  <Button fx:id="btnJoin" mnemonicParsing="false" onAction="#joinTable" prefWidth="120.0" styleClass="btn" stylesheets="@StandardStyle.css" text="Join Table" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="20.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
                </children>
             </AnchorPane>
          </children>
