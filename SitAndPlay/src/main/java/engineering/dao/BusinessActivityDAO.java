@@ -90,23 +90,23 @@ public class BusinessActivityDAO {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet rs = QueryBusinessActivity.retrieveOpenSponosrizedTournaments(stmt, activityName);
 			while (rs.next()) {
-				var name = rs.getString("name");
+				var tournamentName = rs.getString("name");
 				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
-				var cardGame = CardGame.getConstant(rs.getString("cardGame"));
-				var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
-				var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
+				var game = CardGame.getConstant(rs.getString("cardGame"));
+				var date = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
+				var partInformation = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
 						rs.getFloat("award"));
-				var sponsorRequested = rs.getBoolean("requestedSponsor");
-				var organizer = rs.getString("organizer");
-				BusinessActivity sponsorActivity = null;
-				var activity = rs.getString("sponsor");
-				if (activity != null) {
-					sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"),
+				var requested = rs.getBoolean("requestedSponsor");
+				var org = rs.getString("organizer");
+				BusinessActivity busActivity = null;
+				var sponsorName = rs.getString("sponsor");
+				if (sponsorName != null) {
+					busActivity = new BusinessActivity(sponsorName, rs.getBinaryStream("logo"),
 							rs.getString("businessman"));
 				}
-				var tournament = new Tournament(name, place, cardGame, datetime, organizer, sponsorRequested, pInfo);
-				tournament.setSponsor(sponsorActivity);
-				list.add(tournament);	
+				var t = new Tournament(tournamentName, place, game, date, org, requested, partInformation);
+				t.setSponsor(busActivity);
+				list.add(t);	
 			}
 			rs.close();
 		} finally {
