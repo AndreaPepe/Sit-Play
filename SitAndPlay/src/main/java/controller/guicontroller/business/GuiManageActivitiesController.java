@@ -2,11 +2,10 @@ package main.java.controller.guicontroller.business;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -103,26 +102,41 @@ public class GuiManageActivitiesController extends GuiBasicInternalPageControlle
 		if (activityName == null) {
 			AlertFactory.getInstance().createAlert("Please insert a name for the activity", AlertType.ERROR).show();
 		}
-		InputStream fis;
-		try {
-			if (logoFile != null) {
-				fis = new FileInputStream(logoFile);
-			}else {
-				fis = null;
+		BusinessActivityBean bean;
+		if (logoFile == null) {
+			bean = new BusinessActivityBean(activityName, null, ssn.getUser().getUsername());
+			try {
+				bean.checkFields();
+
+				var ctrl = new CreateBusinessActivityController();
+				ctrl.createActivity(bean, ssn.getUser());
+
+				AlertFactory.getInstance()
+						.createAlert("The new activity has been successfully created!", AlertType.INFORMATION).show();
+
+			} catch (BeanCheckException | DAOException | WrongUserTypeException e) {
+				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 			}
-			var bean = new BusinessActivityBean(activityName, fis, ssn.getUser().getUsername());
-			bean.checkFields();
-			
-			var ctrl = new CreateBusinessActivityController();
-			ctrl.createActivity(bean, ssn.getUser());
-			
-			AlertFactory.getInstance().createAlert("The new activity has been successfully created!", AlertType.INFORMATION).show();
-			
-		} catch (FileNotFoundException e) {
-			AlertFactory.getInstance().createAlert(
-					"Something went wrong loading the logo; please try to upload it again.", AlertType.ERROR).show();
-		} catch (BeanCheckException | DAOException | WrongUserTypeException e) {
-			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+		} else {
+			// try with resources, to guarantee the closure of the stream in each case
+			try (InputStream fis = new FileInputStream(logoFile)) {
+				bean = new BusinessActivityBean(activityName, fis, ssn.getUser().getUsername());
+
+				bean.checkFields();
+
+				var ctrl = new CreateBusinessActivityController();
+				ctrl.createActivity(bean, ssn.getUser());
+
+				AlertFactory.getInstance()
+						.createAlert("The new activity has been successfully created!", AlertType.INFORMATION).show();
+			} catch (IOException e) {
+				AlertFactory.getInstance()
+						.createAlert("Something went wrong loading the logo; please try to upload it again.",
+								AlertType.ERROR)
+						.show();
+			} catch (BeanCheckException | DAOException | WrongUserTypeException e) {
+				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+			}
 		}
 
 	}
