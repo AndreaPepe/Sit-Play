@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,9 +17,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import main.java.controller.applicationcontroller.business.CreateBusinessActivityController;
+import main.java.controller.applicationcontroller.business.ManageActivitiesController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.businessactivity.BusinessActivityBean;
 import main.java.engineering.exceptions.AlertFactory;
@@ -26,6 +29,8 @@ import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.Session;
+import main.java.view.listview.ListElementFactory;
+import main.java.view.listview.ListElementType;
 
 public class GuiManageActivitiesController extends GuiBasicInternalPageController {
 
@@ -58,6 +63,10 @@ public class GuiManageActivitiesController extends GuiBasicInternalPageControlle
 	private Button btnCreateActivity;
 
 	private File logoFile = null;
+	
+	// second page elements
+	@FXML
+	private VBox vboxContainer;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -83,6 +92,7 @@ public class GuiManageActivitiesController extends GuiBasicInternalPageControlle
 	void handleToggleMyActivities(ActionEvent event) {
 		apAddActivity.toBack();
 		apMyActivities.toFront();
+		loadActivities();
 	}
 
 	@FXML
@@ -138,7 +148,25 @@ public class GuiManageActivitiesController extends GuiBasicInternalPageControlle
 				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 			}
 		}
-
+	}
+	
+	
+	
+	// second page controls
+	private void loadActivities() {
+		vboxContainer.getChildren().clear();
+		var ctrl = new ManageActivitiesController();
+		try {
+			List<BusinessActivityBean> beans = ctrl.retrieveActivities(ssn.getUser());
+			for(BusinessActivityBean bean : beans) {
+				ListElementFactory.getInstance().createElement(ListElementType.ACTIVITY, vboxContainer, bean);
+			}
+			
+		} catch (DAOException e) {
+			AlertFactory.getInstance().createAlert("Impossible to load your activities", AlertType.ERROR).show();
+		} catch (WrongUserTypeException e) {
+			AlertFactory.getInstance().createAlert("Only BUSINESSMAN users can have activities", AlertType.ERROR).show();
+		}
 	}
 
 }

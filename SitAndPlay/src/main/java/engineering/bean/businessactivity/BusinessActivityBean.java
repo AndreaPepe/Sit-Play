@@ -38,7 +38,7 @@ public class BusinessActivityBean {
 	public void setLogo(InputStream logo) {
 		this.logo = logo;
 		// set also the javaFX image
-		this.setFxLogo(new Image(logo));
+		
 	}
 	public void setOwner(String owner) {
 		this.owner = owner;

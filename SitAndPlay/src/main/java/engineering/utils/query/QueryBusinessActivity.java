@@ -33,6 +33,7 @@ public class QueryBusinessActivity {
 		try {
 			pstmt.setBlob(1, newLogo);
 			pstmt.setString(2, activity);
+			
 			pstmt.executeUpdate();
 		} finally {
 			pstmt.close();

@@ -121,7 +121,7 @@ public class GuiJoinTournamentController extends GuiBasicInternalPageController{
 						sponsor ="\"" + sponsorBean.getName() + "\"";
 						//TODO: only png format for now
 						imgType ="\"" + "png" + "\"";
-						logo = convertToByteArray(sponsorBean.getLogo());
+						logo = sponsorBean.getLogo()!=null ? convertToByteArray(sponsorBean.getLogo()) : "\"" + "null" + "\"";
 						
 					}else {
 						sponsor = "\"" + "null" + "\"";

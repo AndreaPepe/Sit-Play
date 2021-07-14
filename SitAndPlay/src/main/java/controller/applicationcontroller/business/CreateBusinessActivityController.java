@@ -19,7 +19,7 @@ public class CreateBusinessActivityController {
 		try {
 			BusinessActivityDAO.insertActivity(bean.getName(), bean.getLogo(), bean.getOwner());
 		} catch (SQLException e) {
-			// tranform in DAOException 
+			// transform in DAOException 
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 	}
