@@ -18,6 +18,7 @@ public class ListElementFactory {
 		return instance;
 	}
 
+	// factory method
 	public ListElement createElement(ListElementType type, VBox container, Object obj) {
 		ListElement elem = null;
 		switch (type) {

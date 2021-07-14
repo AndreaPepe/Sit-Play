@@ -8,9 +8,11 @@ import main.java.engineering.bean.businessactivity.BusinessActivityBean;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.dao.BusinessActivityDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DeleteActivityException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.model.BusinessActivity;
+import main.java.model.Tournament;
 import main.java.model.UserType;
 
 public class ManageActivitiesController {
@@ -23,12 +25,12 @@ public class ManageActivitiesController {
 		}
 		return true;
 	}
-	
-	public List<BusinessActivityBean> retrieveActivities(BeanUser user) throws WrongUserTypeException, DAOException{
+
+	public List<BusinessActivityBean> retrieveActivities(BeanUser user) throws WrongUserTypeException, DAOException {
 		if (user.getUserType() != UserType.BUSINESSMAN) {
 			throw new WrongUserTypeException(CommonStrings.getNotBusinessmanErrMsg());
 		}
-		
+
 		List<BusinessActivityBean> ret = new ArrayList<>();
 		try {
 			List<BusinessActivity> activities = BusinessActivityDAO.retrieveActivitiesByOwner(user.getUsername());
@@ -42,8 +44,22 @@ public class ManageActivitiesController {
 		}
 		return ret;
 	}
-	
-	public void deleteBusinessActivity(BusinessActivityBean bean) {
-		// TODO: controllare se non sta sponsorizzando prima di rimuovere
+
+	public void deleteBusinessActivity(BusinessActivityBean bean) throws DAOException, DeleteActivityException {
+		try {
+			List<Tournament> sponsorizedTournaments = BusinessActivityDAO
+					.retrieveOpenSponsorizedTournaments(bean.getName());
+
+			// if the activity is sponsoring tournaments, it can't be deleted
+			if (!sponsorizedTournaments.isEmpty()) {
+				throw new DeleteActivityException(
+						"This activity is currently used to sponsorize one or more tournaments and can't be deleted");
+			}
+			
+			BusinessActivityDAO.deleteBusinessActivity(bean.getName());
+			
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
 	}
 }

@@ -11,8 +11,13 @@ import java.util.List;
 
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.utils.DBConnector;
+import main.java.engineering.utils.DatetimeUtil;
 import main.java.engineering.utils.query.QueryBusinessActivity;
 import main.java.model.BusinessActivity;
+import main.java.model.CardGame;
+import main.java.model.ParticipationInfo;
+import main.java.model.Place;
+import main.java.model.Tournament;
 
 public class BusinessActivityDAO {
 
@@ -73,5 +78,59 @@ public class BusinessActivityDAO {
 		}
 
 		return list;
+	}
+	
+	public static List<Tournament> retrieveOpenSponsorizedTournaments(String activityName) throws SQLException{
+		Connection conn = null;
+		Statement stmt = null;
+		List<Tournament> list = new ArrayList<>();
+		
+		conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryBusinessActivity.retrieveOpenSponosrizedTournaments(stmt, activityName);
+			while (rs.next()) {
+				var name = rs.getString("name");
+				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
+				var cardGame = CardGame.getConstant(rs.getString("cardGame"));
+				var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
+				var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
+						rs.getFloat("award"));
+				var sponsorRequested = rs.getBoolean("requestedSponsor");
+				var organizer = rs.getString("organizer");
+				BusinessActivity sponsorActivity = null;
+				var activity = rs.getString("sponsor");
+				if (activity != null) {
+					sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"),
+							rs.getString("businessman"));
+				}
+				var tournament = new Tournament(name, place, cardGame, datetime, organizer, sponsorRequested, pInfo);
+				tournament.setSponsor(sponsorActivity);
+				list.add(tournament);	
+			}
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
+	}
+	
+	
+	public static void deleteBusinessActivity(String name) throws SQLException {
+		Connection conn = null;
+		Statement stmt = null;
+		
+		conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement();
+			QueryBusinessActivity.deleteActivity(stmt, name);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		
 	}
 }

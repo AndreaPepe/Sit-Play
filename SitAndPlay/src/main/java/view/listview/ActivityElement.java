@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -19,6 +21,7 @@ import main.java.controller.applicationcontroller.business.ManageActivitiesContr
 import main.java.engineering.bean.businessactivity.BusinessActivityBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DeleteActivityException;
 
 public class ActivityElement extends ListElement {
 
@@ -39,20 +42,19 @@ public class ActivityElement extends ListElement {
 		anchor.setPrefWidth(590d);
 		anchor.setPrefHeight(100d);
 		anchor.setStyle("-fx-background-color: #abcdef");
-		
+
 		Image image;
 		if (bean.getLogo() == null) {
 			image = new Image(getClass().getResourceAsStream("../../../resources/upload_img.png"), 80d, 80d, false,
 					false);
 		} else {
-			image = new Image(bean.getLogo(), 80d, 80d, false,
-					false);
+			image = new Image(bean.getLogo(), 80d, 80d, false, false);
 		}
 		logo = new ImageView(image);
 		logo.setFitHeight(80);
 		logo.setFitWidth(80);
 		logo.setStyle("-fx-cursor: hand");
-		
+
 		description = new Label();
 		description.setFont(Font.font(16));
 		description.setText(bean.getName());
@@ -139,8 +141,8 @@ public class ActivityElement extends ListElement {
 
 				var ctrl = new ManageActivitiesController();
 				if (Boolean.TRUE.equals(ctrl.modifyLogo(bean))) {
-					AlertFactory.getInstance().createAlert("The logo has been successfully updated!", AlertType.INFORMATION)
-					.show();
+					AlertFactory.getInstance()
+							.createAlert("The logo has been successfully updated!", AlertType.INFORMATION).show();
 				}
 			} catch (IOException e) {
 				AlertFactory.getInstance()
@@ -155,8 +157,22 @@ public class ActivityElement extends ListElement {
 	}
 
 	private void deleteActivity() {
-		// TODO call the delete, wait to do that
-
+		var alert = AlertFactory.getInstance().createAlert("Are you sure?", AlertType.CONFIRMATION);
+		var btnYes = new ButtonType("Yes", ButtonData.YES);
+		var btnNo = new ButtonType("No", ButtonData.NO);
+		alert.getButtonTypes().setAll(btnYes, btnNo);
+		alert.showAndWait().ifPresent(type -> {
+			if (type == btnYes) {
+				var thisBean = (BusinessActivityBean) super.obj;
+				var ctrl = new ManageActivitiesController();
+				try {
+					ctrl.deleteBusinessActivity(thisBean);
+					getContainer().getChildren().remove(getAnchor());
+				} catch (DAOException | DeleteActivityException e) {
+					AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+				}
+			}
+		});
 	}
 
 }

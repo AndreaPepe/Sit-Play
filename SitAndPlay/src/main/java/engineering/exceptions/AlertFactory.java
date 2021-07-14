@@ -49,6 +49,12 @@ public class AlertFactory {
 				alert = new Alert(AlertType.INFORMATION);
 				break;
 				}
+			case CONFIRMATION: {
+				url = new File(WARN_IMG).toURI().toURL();
+				headerText = "CONFIRM";
+				alert = new Alert(AlertType.CONFIRMATION);
+				break;
+			}
 			default:{
 				url = new File(ERR_IMG).toURI().toURL();
 				headerText = "ERROR";
