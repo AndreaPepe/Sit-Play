@@ -16,7 +16,9 @@ import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
 import main.java.controller.guicontroller.tournaments.GuiJoinTournamentController;
 import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
+import main.java.engineering.exceptions.WindowNotFoundException;
 import main.java.engineering.utils.Session;
+import main.java.view.PopupFxFactory;
 
 public class GuiHomePagePlayerController extends GuiBasicController {
 
@@ -79,6 +81,7 @@ public class GuiHomePagePlayerController extends GuiBasicController {
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
+			
 		} else if (event.getSource() == btnTables) {
 			lblMiniStatus.setText("Tables");
 			lblStatus.setText("Tables");
@@ -87,6 +90,14 @@ public class GuiHomePagePlayerController extends GuiBasicController {
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
+			
+			var factory = PopupFxFactory.getInstance();
+			try {
+				factory.showPopup("Welcome to Sit&Play");
+			} catch (WindowNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} else if (event.getSource() == btnTournaments) {
 			lblMiniStatus.setText("Tournaments");

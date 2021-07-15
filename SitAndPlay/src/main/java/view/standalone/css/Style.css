@@ -42,5 +42,15 @@
 .toggle:selected{
 	-fx-background-color: #4CA1D8;
 	background-color: #4CA1D8;
+}
+
+.popup{
+	-fx-background-color: #CCE1E9;
+	background-color: #CCE1E9;
 	
+	-fx-border-color: #4CA1D8;
+	border-color: #4CA1D8;
+	
+	-fx-border-width: 3px;
+	border-width: 3px;	
 }
