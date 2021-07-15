@@ -1,6 +1,8 @@
 package main.java.controller.applicationcontroller;
 
 import java.sql.SQLException;
+
+import main.java.controller.applicationcontroller.notifications.NotificationPollingThread;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.dao.LoginDAO;
 import main.java.engineering.exceptions.DAOException;
@@ -16,6 +18,11 @@ public class LoginController {
 			user = LoginDAO.login(beanUser.getUsername(), beanUser.getPassword());
 			beanUser.setUsername(user.getUsername());
 			beanUser.setUserType(user.getUserType());
+			
+			// launch the polling thread for notifications
+			var pollingThread = new NotificationPollingThread(user.getUsername());
+			pollingThread.start();
+			
 			
 			// TODO: set stuff
 			

@@ -12,10 +12,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
 import main.java.controller.guicontroller.tournaments.GuiJoinTournamentController;
 import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
+import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.WindowNotFoundException;
 import main.java.engineering.utils.Session;
 import main.java.view.PopupFxFactory;
@@ -90,13 +92,12 @@ public class GuiHomePagePlayerController extends GuiBasicController {
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
-			
+			//TODO: remove this; it's only for testing
 			var factory = PopupFxFactory.getInstance();
 			try {
 				factory.showPopup("Welcome to Sit&Play");
 			} catch (WindowNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.WARNING).show();
 			}
 
 		} else if (event.getSource() == btnTournaments) {
