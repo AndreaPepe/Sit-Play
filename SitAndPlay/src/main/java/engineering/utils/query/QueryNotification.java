@@ -41,9 +41,14 @@ public class QueryNotification {
 	public static void updateNotificationStatus(Connection conn, int id, Boolean status) throws SQLException {
 		var sql = "UPDATE Notifications SET shown = ? WHERE id = ?;";
 		var pstmt = conn.prepareStatement(sql);
-		pstmt.setBoolean(1, status);
-		pstmt.setInt(2, id);
+		try {
+			pstmt.setBoolean(1, status);
+			pstmt.setInt(2, id);
+			
+			pstmt.executeUpdate();
+		} finally {
+			pstmt.close();
+		}
 		
-		pstmt.executeUpdate();
 	}
 }
