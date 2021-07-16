@@ -7,11 +7,13 @@ import java.util.List;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.bean.tournaments.TournamentBeanFactory;
+import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.dao.TournamentDAO;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.MaxParticipantsException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.CommonStrings;
+import main.java.model.Notification;
 import main.java.model.Tournament;
 import main.java.model.UserType;
 
@@ -50,6 +52,9 @@ public class ReserveTournamentSeatController {
 						"The number of participants for this tournament has already been reached");
 			} else {
 				TournamentDAO.addParticipant(bean.getName(), user.getUsername());
+				var notificationContent = String.format(CommonStrings.getTournamentReservedNotif(), user.getUsername(), bean.getName());
+				var notif = new Notification(-1, user.getUsername(), bean.getOrganizer(), notificationContent, false);
+				NotificationDAO.insertNotification(notif);
 			}
 		} catch (SQLException e) {
 			// Change the exception type, so the graphic controller

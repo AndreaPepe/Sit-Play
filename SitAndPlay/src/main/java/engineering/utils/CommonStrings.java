@@ -11,6 +11,7 @@ public class CommonStrings {
 	private static final String WRONG_USER_ERR_MSG = "Only users of type PLAYER can join tables and tournaments";
 	private static final String NOT_BUSINESSMAN_ERR_MSG = "Only users of type BUSINESSMAN can perform this action";
 	private static final String TABLE_RESERVED_NOTIF = "The user '%s' has reserved a seat at your table '%s'";
+	private static final String TOURNAMENT_RESERVED_NOTIF = "The user '%s' has reserved a seat at your tournament '%s'";
 	
 	public static String getDatabaseErrorMsg() {
 		return DATABASE_ERROR_MSG;
@@ -26,6 +27,10 @@ public class CommonStrings {
 
 	public static String getTableReservedNotif() {
 		return TABLE_RESERVED_NOTIF;
+	}
+
+	public static String getTournamentReservedNotif() {
+		return TOURNAMENT_RESERVED_NOTIF;
 	}
 
 }
