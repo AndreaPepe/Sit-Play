@@ -1,11 +1,9 @@
 package main.java.controller.applicationcontroller.notifications;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ArrayBlockingQueue;
+
 import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.exceptions.WindowNotFoundException;
 import main.java.model.Notification;
@@ -14,14 +12,13 @@ import main.java.view.PopupFxFactory;
 public class NotificationController {
 
 	private static final int SPAMMING_INTERVAL = 7000;
-	private List<Notification> notificationToPopup;
-	private ScheduledExecutorService executor;
+	// thread safe
+	private ArrayBlockingQueue<Notification> notificationToPopup;
 
 	private static NotificationController instance = null;
 
 	private NotificationController() {
-		notificationToPopup = new ArrayList<>();
-		executor = Executors.newSingleThreadScheduledExecutor();
+		notificationToPopup = new ArrayBlockingQueue<>(20, true);
 		spamNotifications();
 	}
 
@@ -33,30 +30,38 @@ public class NotificationController {
 	}
 
 	private void spamNotifications() {
+		
 		// runnable task executed periodically
 		Runnable periodicTask = (() -> {
-			System.out.println(notificationToPopup.size());
-			if (!notificationToPopup.isEmpty()) {
-				var notif = notificationToPopup.get(0);
+			while(true) {
 				try {
+					var notif = notificationToPopup.take();
 					PopupFxFactory.getInstance().showPopup(notif.getContent());
 					NotificationDAO.setNotificationAsShown(notif.getId());
-					notificationToPopup.remove(notif);
+					Thread.sleep(SPAMMING_INTERVAL);
+					
 				} catch (WindowNotFoundException | SQLException e) {
 					e.printStackTrace();
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
 				}
 			}
-
 		});
-		executor.scheduleAtFixedRate(periodicTask, 0, SPAMMING_INTERVAL, TimeUnit.MILLISECONDS);
+
+		var spammingThread = new Thread(periodicTask);
+		spammingThread.start();
 	}
 
 	public synchronized void addNotifications(List<Notification> newNotifs) {
 		for (Notification n : newNotifs) {
-			if (! notificationToPopup.contains(n)) {
-				notificationToPopup.add(n);
+			if (!notificationToPopup.contains(n) || Boolean.TRUE.equals(n.getAlreadyPopupped())) {
+				try {
+					notificationToPopup.put(n);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
 			}
-			
+
 		}
 	}
 }

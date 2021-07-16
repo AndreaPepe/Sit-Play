@@ -28,7 +28,7 @@ public class QueryNotification {
 
 	public static ResultSet retrieveNewNotifications(Statement stmt, String username) throws SQLException {
 		var query = String.format(
-				"SELECT * FROM Notifications WHERE receiver = '%s' AND shown = false ORDER BY id DESC;", username);
+				"SELECT * FROM Notifications WHERE receiver = '%s' AND shown = FALSE ORDER BY id DESC;", username);
 		return stmt.executeQuery(query);
 	}
 

@@ -8,7 +8,7 @@ public class NotificationPollingThread extends Thread {
 
 	private String username;
 	private Boolean isAlive;
-	private static final int POLLING_INTERVAL = 3000;
+	private static final int POLLING_INTERVAL = 7000;
 
 	public NotificationPollingThread(String user) {
 		this.username = user;
@@ -31,7 +31,6 @@ public class NotificationPollingThread extends Thread {
 			} catch (SQLException | InterruptedException e) {
 				e.printStackTrace();
 				Thread.currentThread().interrupt();
-//				this.start();
 			}
 		}
 	}
