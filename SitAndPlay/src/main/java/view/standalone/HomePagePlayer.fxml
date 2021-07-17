@@ -31,7 +31,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnTables" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Tables" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
+                  <ToggleButton fx:id="btnTab" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Tables" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -39,7 +39,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnTournaments" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Tournaments" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
+                  <ToggleButton fx:id="btnTourn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Tournaments" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -47,7 +47,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnNotification" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Notifications" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="195.0">
+                  <ToggleButton fx:id="btnNotif" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Notifications" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="195.0">
                      <font>
                         <Font size="18.0" />
                      </font>

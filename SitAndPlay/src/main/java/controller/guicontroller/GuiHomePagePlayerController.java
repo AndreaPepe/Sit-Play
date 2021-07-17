@@ -29,13 +29,13 @@ public class GuiHomePagePlayerController extends GuiBasicController {
 	private ToggleButton btnUser;
 
 	@FXML
-	private ToggleButton btnTables;
+	private ToggleButton btnTab;
 
 	@FXML
-	private ToggleButton btnTournaments;
+	private ToggleButton btnTourn;
 
 	@FXML
-	private ToggleButton btnNotification;
+	private ToggleButton btnNotif;
 
 	@FXML
 	private Pane pnlStatus;
@@ -51,16 +51,16 @@ public class GuiHomePagePlayerController extends GuiBasicController {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		setToggleSideMenu();
+		setMenu();
 		btnUser.fire();
 	}
 
-	private void setToggleSideMenu() {
+	private void setMenu() {
 		var toggleGroup = new ToggleGroup();
 		btnUser.setToggleGroup(toggleGroup);
-		btnTables.setToggleGroup(toggleGroup);
-		btnTournaments.setToggleGroup(toggleGroup);
-		btnNotification.setToggleGroup(toggleGroup);
+		btnTab.setToggleGroup(toggleGroup);
+		btnTourn.setToggleGroup(toggleGroup);
+		btnNotif.setToggleGroup(toggleGroup);
 
 		// avoid unselected button
 		toggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
@@ -72,73 +72,62 @@ public class GuiHomePagePlayerController extends GuiBasicController {
 
 	@FXML
 	public void handleClicks(ActionEvent event) throws IOException {
+		FXMLLoader fxmlLoader;
 		if (event.getSource() == btnUser) {
 			lblMiniStatus.setText("User");
 			lblStatus.setText("User");
 
-			FXMLLoader loader = getInternalPageLoader(1);
-			Parent root = loader.load();
-			pnPage.getChildren().removeAll();
-			pnPage.getChildren().setAll(root);
-			
-		} else if (event.getSource() == btnTables) {
+			fxmlLoader = getInternalPageLoader(1);
+		} else if (event.getSource() == btnTab) {
 			lblMiniStatus.setText("Tables");
 			lblStatus.setText("Tables");
 
-			FXMLLoader loader = getInternalPageLoader(2);
-			Parent root = loader.load();
-			pnPage.getChildren().removeAll();
-			pnPage.getChildren().setAll(root);
-			
-		} else if (event.getSource() == btnTournaments) {
+			fxmlLoader = getInternalPageLoader(2);
+		} else if (event.getSource() == btnTourn) {
 			lblMiniStatus.setText("Tournaments");
 			lblStatus.setText("Tournaments");
 
-			FXMLLoader loader = getInternalPageLoader(3);
-			Parent root = loader.load();
-			pnPage.getChildren().removeAll();
-			pnPage.getChildren().setAll(root);
-
-		} else if (event.getSource() == btnNotification) {
+			fxmlLoader = getInternalPageLoader(3);
+		} else {
 			lblMiniStatus.setText("Notifications");
 			lblStatus.setText("User's Notifications");
 
-			FXMLLoader loader = getInternalPageLoader(4);
-			Parent root = loader.load();
-			pnPage.getChildren().removeAll();
-			pnPage.getChildren().setAll(root);
-
+			fxmlLoader = getInternalPageLoader(4);
 		}
+
+		var parentRoot = fxmlLoader.load();
+		pnPage.getChildren().removeAll();
+		pnPage.getChildren().setAll((Parent)parentRoot);
 
 	}
 
 	private FXMLLoader getInternalPageLoader(int numberPage) {
-		FXMLLoader loader;
-		String page;
-		GuiBasicInternalPageController ctrl;
-		
+		FXMLLoader fxmlLoader;
+		String internalPage;
+		GuiBasicInternalPageController guiCtrl;
+
 		switch (numberPage) {
 		case 2:
-			page = "/main/java/view/standalone/createtable/CreateTable.fxml";
-			ctrl = new GuiPlayerCreateTableController(ssn);
+			internalPage = "/main/java/view/standalone/createtable/CreateTable.fxml";
+			guiCtrl = new GuiPlayerCreateTableController(ssn);
 			break;
 		case 3:
-			page = "/main/java/view/standalone/tournaments/JoinTournament.fxml";
-			ctrl = new GuiJoinTournamentController(ssn);
+			internalPage = "/main/java/view/standalone/tournaments/JoinTournament.fxml";
+			guiCtrl = new GuiJoinTournamentController(ssn);
 			break;
 		case 4:
-			page = "/main/java/view/standalone/notification/ViewNotifications.fxml";
-			ctrl = new GuiViewNotificationController(ssn);
-			break;	
+			internalPage = "/main/java/view/standalone/notification/ViewNotifications.fxml";
+			guiCtrl = new GuiViewNotificationController(ssn);
+			break;
 		default:
 			// also page number 1
-			page = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
-			ctrl = new GuiPlayerUserPageController(ssn);
+			internalPage = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
+			guiCtrl = new GuiPlayerUserPageController(ssn);
 			break;
 		}
-		
-		loader = new FXMLLoader(getClass().getResource(page));
-		loader.setControllerFactory(c -> ctrl);
-		return loader;
+
+		fxmlLoader = new FXMLLoader(getClass().getResource(internalPage));
+		fxmlLoader.setControllerFactory(c -> guiCtrl);
+		return fxmlLoader;
 	}
 }

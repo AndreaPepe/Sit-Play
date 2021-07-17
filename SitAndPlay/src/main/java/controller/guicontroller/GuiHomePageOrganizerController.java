@@ -68,72 +68,61 @@ public class GuiHomePageOrganizerController extends GuiBasicController {
 
 	@FXML
 	public void handleClicks(ActionEvent event) throws IOException {
+		FXMLLoader loader;
 		if (event.getSource() == btnUser) {
 			lblPathStatus.setText("User");
 			lblMenuStatus.setText("User");
 
-			FXMLLoader loader = getPageLoader(1);
-			Parent root = loader.load();
-			pnPage.getChildren().removeAll();
-			pnPage.getChildren().setAll(root);
+			loader = getPageLoader(1);
 		} else if (event.getSource() == btnTables) {
 			lblPathStatus.setText("Tables");
 			lblMenuStatus.setText("Tables");
 
-			FXMLLoader loader = getPageLoader(2);
-			Parent root = loader.load();
-			pnPage.getChildren().removeAll();
-			pnPage.getChildren().setAll(root);
-
+			loader = getPageLoader(2);
 		} else if (event.getSource() == btnTournaments) {
 			lblPathStatus.setText("Tournaments");
 			lblMenuStatus.setText("Tournaments");
 
-			FXMLLoader loader = getPageLoader(3);
-			Parent root = loader.load();
-			pnPage.getChildren().removeAll();
-			pnPage.getChildren().setAll(root);
-
-		} else if (event.getSource() == btnNotification) {
+			loader = getPageLoader(3);
+		} else {
 			lblPathStatus.setText("Notifications");
 			lblMenuStatus.setText("User's notifications");
 
-			FXMLLoader loader = getPageLoader(4);
-			Parent root = loader.load();
-			pnPage.getChildren().removeAll();
-			pnPage.getChildren().setAll(root);
+			loader = getPageLoader(4);
 		}
-
+		Parent pRoot = loader.load();
+		pnPage.getChildren().removeAll();
+		pnPage.getChildren().setAll(pRoot);
 	}
 
-	private FXMLLoader getPageLoader(int numberPage) {
-		FXMLLoader loader;
-		String page;
-		GuiBasicInternalPageController ctrl;
-		
-		switch (numberPage) {
+	private FXMLLoader getPageLoader(int pageId) {
+		FXMLLoader pageLoader;
+		String pag;
+		GuiBasicInternalPageController controller;
+
+		switch (pageId) {
 		case 2:
-			page = "/main/java/view/standalone/createtable/CreateTable.fxml";
-			ctrl = new GuiPlayerCreateTableController(ssn);
+			pag = "/main/java/view/standalone/createtable/CreateTable.fxml";
+			controller = new GuiPlayerCreateTableController(ssn);
 			break;
 		case 3:
-			page = "/main/java/view/standalone/tournaments/CreateTournament.fxml";
-			ctrl = new GuiCreateTournamentController(ssn);
+			pag = "/main/java/view/standalone/tournaments/CreateTournament.fxml";
+			controller = new GuiCreateTournamentController(ssn);
 			break;
 		case 4:
-			page = "/main/java/view/standalone/notification/ViewNotifications.fxml";
-			ctrl = new GuiViewNotificationController(ssn);
+			pag = "/main/java/view/standalone/notification/ViewNotifications.fxml";
+			controller = new GuiViewNotificationController(ssn);
 			break;
 		default:
 			// also page number 1
-			page = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
-			ctrl = new GuiPlayerUserPageController(ssn);
+			pag = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
+			controller = new GuiPlayerUserPageController(ssn);
 			break;
 		}
-		
-		loader = new FXMLLoader(getClass().getResource(page));
-		loader.setControllerFactory(c -> ctrl);
-		return loader;
+
+		pageLoader = new FXMLLoader(getClass().getResource(pag));
+		pageLoader.setControllerFactory(c -> controller);
+		return pageLoader;
 	}
 
 }
