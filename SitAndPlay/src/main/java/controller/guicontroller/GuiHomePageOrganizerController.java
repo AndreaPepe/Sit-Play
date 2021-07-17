@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -41,13 +40,10 @@ public class GuiHomePageOrganizerController extends GuiBasicController {
 	private Pane pnlStatus;
 
 	@FXML
-	private Label lblStatus;
+	private Label lblMenuStatus;
 
 	@FXML
-	private Label lblMiniStatus;
-
-	@FXML
-	private Button btnClose;
+	private Label lblPathStatus;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -73,36 +69,36 @@ public class GuiHomePageOrganizerController extends GuiBasicController {
 	@FXML
 	public void handleClicks(ActionEvent event) throws IOException {
 		if (event.getSource() == btnUser) {
-			lblMiniStatus.setText("User");
-			lblStatus.setText("User");
+			lblPathStatus.setText("User");
+			lblMenuStatus.setText("User");
 
-			FXMLLoader loader = getInternalPageLoader(1);
+			FXMLLoader loader = getPageLoader(1);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
 		} else if (event.getSource() == btnTables) {
-			lblMiniStatus.setText("Tables");
-			lblStatus.setText("Tables");
+			lblPathStatus.setText("Tables");
+			lblMenuStatus.setText("Tables");
 
-			FXMLLoader loader = getInternalPageLoader(2);
+			FXMLLoader loader = getPageLoader(2);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
 
 		} else if (event.getSource() == btnTournaments) {
-			lblMiniStatus.setText("Tournaments");
-			lblStatus.setText("Tournaments");
+			lblPathStatus.setText("Tournaments");
+			lblMenuStatus.setText("Tournaments");
 
-			FXMLLoader loader = getInternalPageLoader(3);
+			FXMLLoader loader = getPageLoader(3);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
 
 		} else if (event.getSource() == btnNotification) {
-			lblMiniStatus.setText("Notifications");
-			lblStatus.setText("User's notifications");
+			lblPathStatus.setText("Notifications");
+			lblMenuStatus.setText("User's notifications");
 
-			FXMLLoader loader = getInternalPageLoader(4);
+			FXMLLoader loader = getPageLoader(4);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -110,7 +106,7 @@ public class GuiHomePageOrganizerController extends GuiBasicController {
 
 	}
 
-	private FXMLLoader getInternalPageLoader(int numberPage) {
+	private FXMLLoader getPageLoader(int numberPage) {
 		FXMLLoader loader;
 		String page;
 		GuiBasicInternalPageController ctrl;

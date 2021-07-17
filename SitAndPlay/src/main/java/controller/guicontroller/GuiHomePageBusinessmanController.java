@@ -8,11 +8,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.business.GuiManageActivitiesController;
 import main.java.controller.guicontroller.business.GuiSponsorizeTournamentController;
 import main.java.controller.guicontroller.notifications.GuiViewNotificationController;
@@ -26,6 +24,12 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 	}
 
 	@FXML
+	private Label lblStatus;
+
+	@FXML
+	private Label lblMiniStatus;
+	
+	@FXML
 	private ToggleButton btnUser;
 
 	@FXML
@@ -36,18 +40,6 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 
 	@FXML
 	private ToggleButton btnNotification;
-
-	@FXML
-	private Pane pnlStatus;
-
-	@FXML
-	private Label lblStatus;
-
-	@FXML
-	private Label lblMiniStatus;
-
-	@FXML
-	private Button btnClose;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -71,12 +63,12 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 	}
 
 	@FXML
-	public void handleClicks(ActionEvent event) throws IOException {
+	public void handleMenu(ActionEvent event) throws IOException {
 		if (event.getSource() == btnUser) {
 			lblMiniStatus.setText("User");
 			lblStatus.setText("User");
 
-			FXMLLoader loader = getInternalPageLoader(1);
+			FXMLLoader loader = getPageToLoad(1);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -84,7 +76,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 			lblMiniStatus.setText("Tables");
 			lblStatus.setText("Tables");
 
-			FXMLLoader loader = getInternalPageLoader(2);
+			FXMLLoader loader = getPageToLoad(2);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -93,7 +85,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 			lblMiniStatus.setText("Tournaments");
 			lblStatus.setText("Tournaments");
 
-			FXMLLoader loader = getInternalPageLoader(3);
+			FXMLLoader loader = getPageToLoad(3);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -102,7 +94,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 			lblMiniStatus.setText("Notifications");
 			lblStatus.setText("User's Notifications");
 
-			FXMLLoader loader = getInternalPageLoader(4);
+			FXMLLoader loader = getPageToLoad(4);
 			Parent root = loader.load();
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
@@ -110,7 +102,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 
 	}
 
-	private FXMLLoader getInternalPageLoader(int numberPage) {
+	private FXMLLoader getPageToLoad(int numberPage) {
 		FXMLLoader loader;
 		String page;
 		GuiBasicInternalPageController ctrl;
@@ -129,7 +121,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 			ctrl = new GuiViewNotificationController(ssn);
 			break;
 		default:
-			// also page number 1
+			// page number 1
 			page = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
 			ctrl = new GuiPlayerUserPageController(ssn);
 			break;

@@ -4,10 +4,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import main.java.controller.applicationcontroller.notifications.ViewNotificationController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.notifications.NotificationBean;
@@ -63,8 +67,25 @@ public class GuiViewNotificationController extends GuiBasicInternalPageControlle
 		try {
 			var notificationBeans = ctrl.retrieveLastNotification(ssn.getUser(), quantity);
 			vbox.getChildren().clear();
-			for (NotificationBean bean : notificationBeans) {
-				ListElementFactory.getInstance().createElement(ListElementType.NOTIFICATION, vbox, bean);
+			if (notificationBeans.isEmpty()) {
+				var noNotifLbl = new Label("No notifications for you");
+				noNotifLbl.setAlignment(Pos.CENTER);
+				noNotifLbl.setFont(Font.font(16));
+				var anchorPane = new AnchorPane();
+				anchorPane.setPrefHeight(vbox.getMinHeight());
+				anchorPane.getChildren().add(noNotifLbl);
+				
+				AnchorPane.setBottomAnchor(noNotifLbl, 0d);
+				AnchorPane.setTopAnchor(noNotifLbl, 0d);
+				AnchorPane.setLeftAnchor(noNotifLbl, 0d);
+				AnchorPane.setRightAnchor(noNotifLbl, 0d);
+				
+				vbox.getChildren().add(anchorPane);
+			}
+			else {
+				for (NotificationBean bean : notificationBeans) {
+					ListElementFactory.getInstance().createElement(ListElementType.NOTIFICATION, vbox, bean);
+				}
 			}
 		} catch (DAOException e) {
 			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();

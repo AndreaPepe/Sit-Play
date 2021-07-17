@@ -59,7 +59,7 @@ public class BusinessActivityDAO {
 
 			while (rs.next()) {
 				var name = rs.getString("activity");
-				var owner = rs.getString("businessman");
+				var owner = rs.getString(2);
 				var imageBlob = rs.getBlob("logo");
 				InputStream logo;
 				if (imageBlob != null) {
@@ -108,7 +108,7 @@ public class BusinessActivityDAO {
 				throw new DAOException("No business activity found");
 			}
 			var actName = rs.getString("activity");
-			var businessman = rs.getString("businessman");
+			var businessman = rs.getString(2);
 			var blob = rs.getBlob("logo");
 			InputStream logo;
 			if (blob != null) {

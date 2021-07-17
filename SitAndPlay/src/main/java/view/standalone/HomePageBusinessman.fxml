@@ -23,7 +23,7 @@
             </Pane>
             <AnchorPane>
                <children>
-                  <ToggleButton fx:id="btnUser" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="User" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ToggleButton fx:id="btnUser" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleMenu" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="User" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -31,7 +31,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnActivities" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Activities" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
+                  <ToggleButton fx:id="btnActivities" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleMenu" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Activities" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -39,7 +39,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnTournaments" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Tournaments" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
+                  <ToggleButton fx:id="btnTournaments" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleMenu" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Tournaments" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -47,7 +47,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnNotification" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Notifications" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="195.0">
+                  <ToggleButton fx:id="btnNotification" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleMenu" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Notifications" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="195.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -59,14 +59,14 @@
             </AnchorPane>
          </children>
       </VBox>
-      <Pane fx:id="pnlStatus" layoutX="250.0" layoutY="50.0" maxWidth="1.7976931348623157E308" prefHeight="120.0" prefWidth="650.0" style="-fx-background-color: #296581;" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <Pane layoutX="250.0" layoutY="50.0" maxWidth="1.7976931348623157E308" prefHeight="120.0" prefWidth="650.0" style="-fx-background-color: #296581;" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <Label fx:id="lblStatus" alignment="BASELINE_LEFT" layoutX="36.0" layoutY="63.0" prefHeight="28.0" prefWidth="110.0" text="User" textFill="WHITE">
+            <Label fx:id="lblStatus" alignment="BASELINE_LEFT" layoutX="36.0" layoutY="63.0" prefHeight="28.0" prefWidth="500.0" text="User" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lblMiniStatus" alignment="BOTTOM_LEFT" layoutX="36.0" layoutY="28.0" prefHeight="28.0" prefWidth="385.0" text="User/HomePage" textFill="WHITE" />
+            <Label fx:id="lblMiniStatus" alignment="BOTTOM_LEFT" layoutX="36.0" layoutY="28.0" prefHeight="28.0" prefWidth="500.0" text="User/HomePage" textFill="WHITE" />
          </children>
       </Pane>
       <AnchorPane layoutX="250.0" prefHeight="50.0" prefWidth="650.0" style="-fx-background-color: #ffffff;" />

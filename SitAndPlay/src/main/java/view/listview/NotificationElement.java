@@ -11,7 +11,6 @@ import main.java.engineering.bean.notifications.NotificationBean;
 public class NotificationElement extends ListElement {
 
 	private HBox hbox;
-	private Label description;
 	
 	public NotificationElement(VBox vbox, Object obj) {
 		super(vbox, obj);
@@ -29,7 +28,7 @@ public class NotificationElement extends ListElement {
 		hbox.setStyle("-fx-border-color: #296581; -fx-border-width: 2px; -fx-border-radius: 5;");
 		hbox.setAlignment(Pos.CENTER);
 		
-		description = new Label(notifBean.getMsg());
+		var description = new Label(notifBean.getMsg());
 		description.setPrefHeight(60);
 		description.setPrefWidth(500);
 		description.setWrapText(true);
