@@ -7,7 +7,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
@@ -19,7 +19,7 @@ import main.java.engineering.exceptions.WindowNotFoundException;
 public class PopupFxFactory {
 	private static PopupFxFactory instance = null;
 	// 5 second duration
-	private static final int POPUP_DURATION = 5000;
+	private static final int POPUP_DURATION = 3500;
 	private static final String SOUND_URL_STRING = "src/main/resources/notification_sound.mp3";
 
 	private PopupFxFactory() {
@@ -36,18 +36,24 @@ public class PopupFxFactory {
 	private Popup generatePopup(String message) {
 		var popup = new Popup();
 		popup.setAutoFix(true);
-		var pane = new Pane();
+		var pane = new AnchorPane();
 		pane.setMinWidth(400);
 		pane.setMinHeight(80);
 		var msg = new Label(message);
-		msg.setPrefHeight(80);
-		msg.setPrefWidth(400);
+		msg.setPrefHeight(60);
+		msg.setPrefWidth(380);
 		msg.setFont(Font.font(14));
 		msg.setAlignment(Pos.CENTER);
 		msg.setWrapText(true);
 		msg.getStylesheets().add("/main/java/view/standalone/css/Style.css");
 		msg.getStyleClass().add("popup");
 		pane.getChildren().add(msg);
+		
+		AnchorPane.setTopAnchor(msg, 10d);
+		AnchorPane.setBottomAnchor(msg, 10d);
+		AnchorPane.setLeftAnchor(msg, 10d);
+		AnchorPane.setRightAnchor(msg, 10d);
+		
 		popup.getContent().add(pane);
 
 		return popup;

@@ -14,7 +14,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import main.java.controller.guicontroller.business.GuiManageActivitiesController;
-import main.java.controller.guicontroller.tournaments.GuiJoinTournamentController;
+import main.java.controller.guicontroller.business.GuiSponsorizeTournamentController;
+import main.java.controller.guicontroller.notifications.GuiViewNotificationController;
 import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
 import main.java.engineering.utils.Session;
 
@@ -34,7 +35,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 	private ToggleButton btnTournaments;
 
 	@FXML
-	private ToggleButton btnSettings;
+	private ToggleButton btnNotification;
 
 	@FXML
 	private Pane pnlStatus;
@@ -59,7 +60,7 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 		btnUser.setToggleGroup(toggleGroup);
 		btnActivities.setToggleGroup(toggleGroup);
 		btnTournaments.setToggleGroup(toggleGroup);
-		btnSettings.setToggleGroup(toggleGroup);
+		btnNotification.setToggleGroup(toggleGroup);
 
 		// avoid unselected button
 		toggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
@@ -97,10 +98,14 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 			pnPage.getChildren().removeAll();
 			pnPage.getChildren().setAll(root);
 
-		} else if (event.getSource() == btnSettings) {
-			lblMiniStatus.setText("Settings");
-			lblStatus.setText("User Settings");
+		} else if (event.getSource() == btnNotification) {
+			lblMiniStatus.setText("Notifications");
+			lblStatus.setText("User's Notifications");
 
+			FXMLLoader loader = getInternalPageLoader(4);
+			Parent root = loader.load();
+			pnPage.getChildren().removeAll();
+			pnPage.getChildren().setAll(root);
 		}
 
 	}
@@ -110,15 +115,18 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 		String page;
 		GuiBasicInternalPageController ctrl;
 		
-		//TODO: for now are the same pages of player; remember to change also controllers
 		switch (numberPage) {
 		case 2:
 			page = "/main/java/view/standalone/businessactivity/CreateBusinessActivity.fxml";
 			ctrl = new GuiManageActivitiesController(ssn);
 			break;
 		case 3:
-			page = "/main/java/view/standalone/tournaments/JoinTournament.fxml";
-			ctrl = new GuiJoinTournamentController(ssn);
+			page = "/main/java/view/standalone/tournaments/SendSponsorization.fxml";
+			ctrl = new GuiSponsorizeTournamentController(ssn);
+			break;
+		case 4:
+			page = "/main/java/view/standalone/notification/ViewNotifications.fxml";
+			ctrl = new GuiViewNotificationController(ssn);
 			break;
 		default:
 			// also page number 1

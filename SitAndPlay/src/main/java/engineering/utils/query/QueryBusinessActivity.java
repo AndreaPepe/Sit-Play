@@ -56,4 +56,9 @@ public class QueryBusinessActivity {
 		var query = String.format("DELETE FROM BusinessActivity WHERE activity = '%s';", name);
 		stmt.executeUpdate(query);
 	}
+	
+	public static ResultSet retrieveActivityByName(Statement stmt, String name) throws SQLException {
+		var query = String.format("SELECT * FROM BusinessActivity WHERE activity = '%s'", name);
+		return stmt.executeQuery(query);
+	}
 }

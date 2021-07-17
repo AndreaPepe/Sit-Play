@@ -79,7 +79,10 @@ public class TournamentDAO {
 				tournament.setWinner(winner);
 			}
 			if (sponsor != null) {
-				// TODO: build businessActivity class
+				var activitySponsor = BusinessActivityDAO.retrieveActivityByName(sponsor);
+				if (activitySponsor != null) {
+					tournament.setSponsor(activitySponsor);
+				}
 			}
 
 			// retrieve list of participants
@@ -127,7 +130,7 @@ public class TournamentDAO {
 	public static List<Tournament> retrieveOpenTournaments() throws SQLException {
 		Statement stmt = null;
 		Connection conn = null;
-		List<Tournament> tournaments = new ArrayList<>();
+		List<Tournament> list = new ArrayList<>();
 
 		conn = DBConnector.getInstance().getConnection();
 		try {
@@ -135,33 +138,18 @@ public class TournamentDAO {
 			ResultSet rs = QueryTournament.retrieveOpenTournaments(stmt);
 			if (!rs.first()) {
 				// empty list
-				return tournaments;
+				return list;
 			}
 			if (!rs.isBeforeFirst())
 				rs.previous();
 
 			while (rs.next()) {
-				var name = rs.getString("name");
-				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
-				var cardGame = CardGame.getConstant(rs.getString("cardGame"));
-				var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
-				var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
-						rs.getFloat("award"));
-				var sponsorRequested = rs.getBoolean("requestedSponsor");
-				var organizer = rs.getString("organizer");
-				BusinessActivity sponsorActivity = null;
-				var activity = rs.getString("sponsor");
-				if (activity != null) {
-					sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"),
-							rs.getString("businessman"));
-				}
-				var tournament = new Tournament(name, place, cardGame, datetime, organizer, sponsorRequested, pInfo);
-				tournament.setSponsor(sponsorActivity);
-				tournaments.add(tournament);
+				var t = buildTournamentFromResultSet(rs);
+				list.add(t);
 			}
 			rs.close();
 
-			return tournaments;
+			return list;
 		} finally {
 			if (stmt != null) {
 				stmt.close();
@@ -219,31 +207,12 @@ public class TournamentDAO {
 		conn = DBConnector.getInstance().getConnection();
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = QueryTournament.retrieveOpenTournaments(stmt);
-			if (!rs.first()) {
-				// empty list
-				return tournaments;
-			}
-			if (!rs.isBeforeFirst())
-				rs.previous();
-
-			while (rs.next()) {
-				var name = rs.getString("name");
-				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
-				var cardGame = CardGame.getConstant(rs.getString("cardGame"));
-				var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
-				var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
-						rs.getFloat("award"));
-				var sponsorRequested = rs.getBoolean("requestedSponsor");
-				var organizer = rs.getString("organizer");
-				// might be always null
-				var activity = rs.getString("sponsor");
-				if (activity != null) {
-					throw new DAOException("The tournament already has a sponsor");
+			ResultSet rs = QueryTournament.retrieveSponsorizableTournaments(stmt);
+			while (rs.next()) {				
+				var tournament = buildTournamentFromResultSet(rs);
+				if (tournament.getSponsor() != null) {
+					throw new DAOException("Some tournaments already have a sponsor");
 				}
-				
-				var tournament = new Tournament(name, place, cardGame, datetime, organizer, sponsorRequested, pInfo);
-				tournament.setSponsor(null);
 				tournaments.add(tournament);
 			}
 			rs.close();
@@ -255,4 +224,37 @@ public class TournamentDAO {
 			}
 		}
 	}
+	
+	
+	// private method to avoid duplications
+	private static Tournament buildTournamentFromResultSet(ResultSet rs) throws SQLException {
+		var name = rs.getString("name");
+		var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
+		var cardGame = CardGame.getConstant(rs.getString("cardGame"));
+		var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
+		var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
+				rs.getFloat("award"));
+		var sponsorRequested = rs.getBoolean("requestedSponsor");
+		var organizer = rs.getString("organizer");
+		BusinessActivity sponsorActivity = null;
+		var activity = rs.getString("sponsor");
+		if (activity != null) {
+			sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"),
+					rs.getString("businessman"));
+		}
+		var tournament = new Tournament(name, place, cardGame, datetime, organizer, sponsorRequested, pInfo);
+		tournament.setSponsor(sponsorActivity);
+		return tournament;
+	}
+	
+	
+	
+	
+	public static void updateSponsor(String tournamentName, String activityName) throws SQLException {
+		var conn = DBConnector.getInstance().getConnection();
+		QueryTournament.updateSponsor(conn, tournamentName, activityName);
+	}
+	
+	
+	
 }

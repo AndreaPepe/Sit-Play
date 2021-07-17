@@ -2,15 +2,10 @@ package main.java.controller.guicontroller.tournaments;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Base64;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import org.apache.commons.io.IOUtils;
-
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +23,7 @@ import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.MaxParticipantsException;
 import main.java.engineering.exceptions.WrongUserTypeException;
+import main.java.engineering.utils.MapMarkersUtil;
 import main.java.engineering.utils.Session;
 
 public class GuiJoinTournamentController extends GuiBasicInternalPageController{
@@ -99,40 +95,8 @@ public class GuiJoinTournamentController extends GuiBasicInternalPageController{
 				lblMsg.setVisible(true);
 			}else {
 				for (TournamentBean bean : activeTournaments){
-					var lat = bean.getLatitude();
-					var lng = bean.getLongitude();
-					var sponsorBean = bean.getSponsor();
-					var icon = "\"" + "star" + "\"";
-					var color = "\"" + "green" + "\"";
-					var idname = "\"" + bean.getName() + "\"";
-					var cardGame = "\"" + bean.getCardGame() + "\"";
-					var address = "\"" + bean.getAddress() + "\"";
-					var date = "\"" + bean.getDate() + "\"";
-					var time = "\"" + bean.getTime() + "\"";
-					var organizer = "\"" + bean.getOrganizer() + "\"";
-					
-					var maxParticipants = "\"" + bean.getMaxParticipants() +"\"";
-					var price = "\"" + String.format("€ %.2f", bean.getPrice()) + "\"";
-					var award = "\"" + String.format("€ %.2f", bean.getAward()) + "\"";
-					String sponsor;
-					String imgType;
-					String logo;
-					if(sponsorBean != null) {
-						sponsor ="\"" + sponsorBean.getName() + "\"";
-						//TODO: only png format for now
-						imgType ="\"" + "png" + "\"";
-						logo = sponsorBean.getLogo()!=null ? convertToByteArray(sponsorBean.getLogo()) : "\"" + "null" + "\"";
-						
-					}else {
-						sponsor = "\"" + "null" + "\"";
-						imgType = "\"" + "null" + "\"";
-						logo = "\"" + "null" + "\"";
-					}
-					
-					engine.executeScript("addMarker("+lat+"," + lng + "," + icon
-							+ "," + color + "," + idname + "," + cardGame + "," + address + "," + date + "," + time	+ "," + organizer
-							+ "," + maxParticipants + "," + price + "," + award + "," + sponsor + "," + imgType + "," + logo 
-							+");");
+					var script = MapMarkersUtil.buildLoadTournamentMarkersScript(bean);
+					engine.executeScript(script);
 				}
 				
 			}
@@ -143,11 +107,6 @@ public class GuiJoinTournamentController extends GuiBasicInternalPageController{
 			AlertFactory.getInstance().createAlert("Unable to parse sponsor's logo", AlertType.ERROR).show();
 		}
 		
-	}
-	
-	private String convertToByteArray(InputStream logo) throws IOException {
-		byte[] byteArray = IOUtils.toByteArray(logo);
-		return Base64.getEncoder().encodeToString(byteArray);
 	}
 
 	@FXML

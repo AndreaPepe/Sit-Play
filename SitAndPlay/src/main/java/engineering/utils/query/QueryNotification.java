@@ -33,7 +33,7 @@ public class QueryNotification {
 	}
 
 	public static ResultSet selectNotificationsWithLimit(Statement stmt, String username, int limit) throws SQLException {
-		var query = String.format("SELECT * FROM Notifications WHERE receiver = '%s' LIMIT %d ORDER BY id DESC;",
+		var query = String.format("SELECT * FROM Notifications WHERE receiver = '%s' ORDER BY id DESC LIMIT %d;",
 				username, limit);
 		return stmt.executeQuery(query);
 	}

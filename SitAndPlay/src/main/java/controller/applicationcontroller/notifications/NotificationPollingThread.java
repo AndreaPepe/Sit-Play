@@ -8,7 +8,7 @@ public class NotificationPollingThread extends Thread {
 
 	private String username;
 	private Boolean isAlive;
-	private static final int POLLING_INTERVAL = 7000;
+	private static final int POLLING_INTERVAL = 5000;
 
 	public NotificationPollingThread(String user) {
 		this.username = user;
@@ -27,7 +27,9 @@ public class NotificationPollingThread extends Thread {
 			try {
 				var newNotifications = NotificationDAO.getNewNotifications(username);
 				controller.addNotifications(newNotifications);
-				Thread.sleep(POLLING_INTERVAL);
+				
+				// if a lot of notifications have been retrieved, give the time to process them
+				Thread.sleep(POLLING_INTERVAL * newNotifications.size() + 1000l);
 			} catch (SQLException | InterruptedException e) {
 				e.printStackTrace();
 				Thread.currentThread().interrupt();

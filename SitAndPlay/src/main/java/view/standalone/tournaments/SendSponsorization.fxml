@@ -12,17 +12,21 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="430.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="430.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.business.GuiSponsorizeTournamentController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="650.0" styleClass="top-bar" stylesheets="@../createtable/StandardStyle.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
             <HBox prefHeight="30.0" prefWidth="600.0" spacing="20.0">
                <children>
-                  <ToggleButton fx:id="toggleSponsorize" mnemonicParsing="false" onAction="#openPage" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Sponsorize" textFill="WHITE">
+                  <ToggleButton fx:id="toggleSponsorize" mnemonicParsing="false" onAction="#openPage" prefWidth="120.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Sponsorize" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </ToggleButton>
+                  <Label fx:id="lblMsg" prefHeight="31.0" prefWidth="274.0" text="Label" textFill="RED" visible="false" wrapText="true">
+                     <HBox.margin>
+                        <Insets left="170.0" />
+                     </HBox.margin></Label>
                </children>
                <padding>
                   <Insets left="15.0" />
@@ -40,7 +44,6 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Label fx:id="lblMsg" layoutX="20.0" layoutY="362.0" prefHeight="17.0" prefWidth="417.0" text="Label" textFill="GREEN" visible="false" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="213.0" />
                   <ComboBox fx:id="cbSelectActivity" layoutX="33.0" layoutY="356.0" prefHeight="30.0" prefWidth="250.0" promptText="Select activity" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="30.0" />
                </children>
             </AnchorPane>

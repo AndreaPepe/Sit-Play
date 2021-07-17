@@ -47,7 +47,7 @@
                         <Insets left="40.0" />
                      </padding>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnSettings" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Settings" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="195.0">
+                  <ToggleButton fx:id="btnNotification" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="65.0" styleClass="toggle" stylesheets="@styleHomePage.css" text="Notifications" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="195.0">
                      <font>
                         <Font size="18.0" />
                      </font>

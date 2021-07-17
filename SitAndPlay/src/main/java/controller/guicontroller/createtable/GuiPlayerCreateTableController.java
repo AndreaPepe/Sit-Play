@@ -208,6 +208,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 				}
 			} catch (BeanCheckException e1) {
 				AlertFactory.getInstance().createAlert(e1.getMessage(), AlertType.ERROR).showAndWait();
+				return;
 			}
 
 			var ctrl = new CreateTableController();

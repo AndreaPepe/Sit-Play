@@ -89,7 +89,22 @@ public class QueryTournament {
 	public static ResultSet retrieveSponsorizableTournaments(Statement stmt) throws SQLException {
 		var query = "SELECT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor "
 				+ "FROM tournaments JOIN OrganizedTournaments " + "ON name=tournament "
-				+ "WHERE datetime > ADDTIME(current_timestamp(), '3:00:00') AND requestedSponsor = TRUE AND sponsor = NULL;";
+				+ "WHERE datetime > ADDTIME(current_timestamp(), '3:00:00') AND requestedSponsor = TRUE AND sponsor IS NULL;";
 		return stmt.executeQuery(query);
+	}
+	
+	
+	public static void updateSponsor(Connection conn, String tournament, String activity) throws SQLException {
+		var sql = "UPDATE Tournaments SET sponsor = ? WHERE name = ?;";
+		var pstmt = conn.prepareStatement(sql);
+		try {
+			
+			pstmt.setString(1, activity);
+			pstmt.setString(2, tournament);
+			
+			pstmt.executeUpdate();
+		} finally {
+			pstmt.close();
+		}
 	}
 }

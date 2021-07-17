@@ -25,6 +25,9 @@ public class ListElementFactory {
 		case ACTIVITY:
 			elem = new ActivityElement(container, obj);
 			break;
+		case NOTIFICATION:
+			elem = new NotificationElement(container, obj);
+			break;
 		// TODO: add other cases
 		default:
 			break;

@@ -166,7 +166,7 @@ public class ActivityElement extends ListElement {
 				var ctrl = new ManageActivitiesController();
 				try {
 					ctrl.deleteBusinessActivity(thisBean);
-					getContainer().getChildren().remove(getAnchor());
+					super.detach();
 				} catch (DAOException | DeleteActivityException e) {
 					AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 				}

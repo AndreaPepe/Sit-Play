@@ -11,7 +11,7 @@ import main.java.view.PopupFxFactory;
 
 public class NotificationController {
 
-	private static final int SPAMMING_INTERVAL = 7000;
+	private static final int SPAMMING_INTERVAL = 5000;
 	// thread safe
 	private ArrayBlockingQueue<Notification> notificationToPopup;
 
@@ -37,7 +37,7 @@ public class NotificationController {
 				try {
 					var notif = notificationToPopup.take();
 					PopupFxFactory.getInstance().showPopup(notif.getContent());
-					NotificationDAO.setNotificationAsShown(notif.getId());
+					NotificationDAO.setNotificationAsShown(notif.getId());				
 					Thread.sleep(SPAMMING_INTERVAL);
 					
 				} catch (WindowNotFoundException | SQLException e) {
@@ -54,7 +54,7 @@ public class NotificationController {
 
 	public synchronized void addNotifications(List<Notification> newNotifs) {
 		for (Notification n : newNotifs) {
-			if (!notificationToPopup.contains(n) || Boolean.TRUE.equals(n.getAlreadyPopupped())) {
+			if (!notificationToPopup.contains(n)) {
 				try {
 					notificationToPopup.put(n);
 				} catch (InterruptedException e) {

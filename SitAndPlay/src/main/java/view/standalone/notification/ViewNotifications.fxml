@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="430.0" prefWidth="650.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.notifications.GuiViewNotificationController">
+   <children>
+      <Label alignment="CENTER" layoutX="145.0" layoutY="30.0" text="How many notifications do you want to see?" textFill="#296581" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font name="Papyrus" size="20.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" layoutX="79.0" layoutY="80.0" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+         <children>
+            <RadioButton fx:id="rbTen" mnemonicParsing="false" text="Last 10" />
+            <RadioButton fx:id="rbTwenty" mnemonicParsing="false" text="Last 20" />
+            <RadioButton fx:id="rbForty" mnemonicParsing="false" text="Last 40" />
+         </children>
+      </HBox>
+      <ScrollPane fitToWidth="true" layoutX="52.0" layoutY="103.0" prefHeight="310.0" prefWidth="590.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0">
+         <content>
+            <VBox fx:id="vbox" minHeight="310.0" prefWidth="590.0" spacing="10.0" style="-fx-background-color: white;">
+               <children>
+                  <AnchorPane prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #CCE1E9;">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: #296581; -fx-border-width: 2px; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="60.0" prefWidth="500.0" text="Label" wrapText="true">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children></HBox>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

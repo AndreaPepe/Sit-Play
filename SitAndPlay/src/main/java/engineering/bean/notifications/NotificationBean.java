@@ -18,6 +18,15 @@ public class NotificationBean {
 		this.shown = notification.getAlreadyPopupped();
 	}
 
+	public NotificationBean(int number, String generator, String userToNotify, String msg, Boolean shown) {
+		super();
+		this.number = number;
+		this.generator = generator;
+		this.userToNotify = userToNotify;
+		this.msg = msg;
+		this.shown = shown;
+	}
+
 	public int getNumber() {
 		return number;
 	}

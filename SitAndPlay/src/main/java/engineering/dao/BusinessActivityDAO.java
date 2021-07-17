@@ -80,6 +80,53 @@ public class BusinessActivityDAO {
 		return list;
 	}
 	
+	
+	public static void deleteBusinessActivity(String name) throws SQLException {
+		Connection conn = null;
+		Statement stmt = null;
+		
+		conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement();
+			QueryBusinessActivity.deleteActivity(stmt, name);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		
+	}
+	
+	public static BusinessActivity retrieveActivityByName(String name) throws SQLException, DAOException {
+		Statement stmt = null;
+		BusinessActivity ret = null;
+		var conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryBusinessActivity.retrieveActivityByName(stmt, name);
+			if (!rs.first()) {
+				throw new DAOException("No business activity found");
+			}
+			var actName = rs.getString("activity");
+			var businessman = rs.getString("businessman");
+			var blob = rs.getBlob("logo");
+			InputStream logo;
+			if (blob != null) {
+				logo = blob.getBinaryStream(1, blob.length());
+			} else {
+				logo = null;
+			}
+			
+			ret = new BusinessActivity(actName, logo, businessman);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
+	
+	
 	public static List<Tournament> retrieveOpenSponsorizedTournaments(String activityName) throws SQLException{
 		Connection conn = null;
 		Statement stmt = null;
@@ -116,21 +163,8 @@ public class BusinessActivityDAO {
 		}
 		return list;
 	}
+
 	
 	
-	public static void deleteBusinessActivity(String name) throws SQLException {
-		Connection conn = null;
-		Statement stmt = null;
-		
-		conn = DBConnector.getInstance().getConnection();
-		try {
-			stmt = conn.createStatement();
-			QueryBusinessActivity.deleteActivity(stmt, name);
-		} finally {
-			if (stmt != null) {
-				stmt.close();
-			}
-		}
-		
-	}
 }
+

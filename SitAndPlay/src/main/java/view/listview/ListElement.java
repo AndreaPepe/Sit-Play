@@ -35,6 +35,10 @@ public abstract class ListElement {
 	public void attach() {
 		container.getChildren().add(anchor);
 	}
+	
+	public void detach() {
+		container.getChildren().remove(anchor);
+	}
 
 	public abstract void buildGraphic();
 }

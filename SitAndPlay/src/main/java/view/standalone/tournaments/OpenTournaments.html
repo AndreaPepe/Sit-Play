@@ -55,12 +55,11 @@
 			
 			if(sponsor != "null"){
 				popupHtml += `
-				<p style="text-align:center;"> Sponsored by ` + sponsor + `</p>
+				<p style="text-align:center;"> Sponsored by ` + sponsor + `</p> 
 				`;
-				if(imgType == "png"){
-					popupHtml += `<p style="text-align:center;"><img id="logoImg" class="center" src="data:image/png;base64,"` + logo + ` width="80" height="80"></p>`;
-				}else if(imgType == "jpeg"){
-					popupHtml += `<p style="text-align:center;"><img id="logoImg" class="center" src="data:image/png;base64,"` + logo + ` width="80" height="80"></p>`;
+				var source =  "data:image/*;base64," + logo;
+				if(imgType == "*"){
+					popupHtml += `<p style="text-align:center;"><img src=${source} width="80" height="80"></p>`;
 				}else{
 					// no image
 					popupHtml += `<p style="text-align:center;"><img src="../../../../resources/no_image.png" width="80" height="80"></p>`;
