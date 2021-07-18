@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DatetimeUtil {
 	public static final String DATETIME_FORMAT = "dd/MM/yyyy HH:mm";
@@ -30,7 +31,7 @@ public class DatetimeUtil {
 	
 	public static Date getCurrentDatetime() {
 		var formatter = DateTimeFormatter.ofPattern(DATETIME_FORMAT);
-		var format = new SimpleDateFormat(DATETIME_FORMAT);
+		var format = new SimpleDateFormat(DATETIME_FORMAT, Locale.getDefault());
 		var currentDateTime = LocalDateTime.now();
 		String now = formatter.format(currentDateTime);
 		try {
@@ -66,12 +67,12 @@ public class DatetimeUtil {
 		return  (builtDate!= null && current!= null && current.before(limitDatetime));
 	}
 	public static String getDate(Date date) {
-		var format = new SimpleDateFormat(DATE_STRING_FORMAT);
+		var format = new SimpleDateFormat(DATE_STRING_FORMAT, Locale.getDefault());
 		return format.format(date);
 	}
 	
 	public static String getTime(Date date) {
-		var format = new SimpleDateFormat(TIME_STRING_FORMAT);
+		var format = new SimpleDateFormat(TIME_STRING_FORMAT, Locale.getDefault());
 		return format.format(date);
 	}
 	
@@ -80,9 +81,11 @@ public class DatetimeUtil {
 	}
 	
 	public static Date fromMysqlTimestampToDate(java.sql.Timestamp mysql) {
-		var format = new SimpleDateFormat(DATETIME_FORMAT);
+		System.out.println(mysql);
+		var format = new SimpleDateFormat(DATETIME_FORMAT, Locale.getDefault());
 		var string = format.format(mysql);
 		try {
+			System.out.println(format.parse(string));
 			return format.parse(string);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

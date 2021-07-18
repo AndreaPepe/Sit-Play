@@ -6,7 +6,9 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.utils.DBConnector;
@@ -45,7 +47,8 @@ public class TournamentDAO {
 			var lat = rs.getDouble("lat");
 			var lng = rs.getDouble("lng");
 			var cardGame = CardGame.getConstant(rs.getString("cardGame"));
-			var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
+			var datetime = DatetimeUtil
+					.fromMysqlTimestampToDate(rs.getTimestamp("datetime", Calendar.getInstance(Locale.getDefault())));
 			if (datetime == null) {
 				throw new DAOException("Parsing of datetime from database did not work");
 			}
@@ -198,7 +201,7 @@ public class TournamentDAO {
 			}
 		}
 	}
-	
+
 	public static List<Tournament> retrieveSponsorizableTournaments() throws SQLException, DAOException {
 		Statement stmt = null;
 		Connection conn = null;
@@ -208,7 +211,7 @@ public class TournamentDAO {
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet rs = QueryTournament.retrieveSponsorizableTournaments(stmt);
-			while (rs.next()) {				
+			while (rs.next()) {
 				var tournament = buildTournamentFromResultSet(rs);
 				if (tournament.getSponsor() != null) {
 					throw new DAOException("Some tournaments already have a sponsor");
@@ -224,43 +227,37 @@ public class TournamentDAO {
 			}
 		}
 	}
-	
-	
+
 	// private method to avoid duplications
 	private static Tournament buildTournamentFromResultSet(ResultSet rs) throws SQLException {
 		var name = rs.getString("name");
 		var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
 		var cardGame = CardGame.getConstant(rs.getString("cardGame"));
-		var datetime = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
-		var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
-				rs.getFloat("award"));
+		var datetime = DatetimeUtil
+				.fromMysqlTimestampToDate(rs.getTimestamp("datetime", Calendar.getInstance(Locale.getDefault())));
+		var pInfo = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"), rs.getFloat("award"));
 		var sponsorRequested = rs.getBoolean("requestedSponsor");
 		var organizer = rs.getString("organizer");
 		BusinessActivity sponsorActivity = null;
 		var activity = rs.getString("sponsor");
 		if (activity != null) {
-			sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"),
-					rs.getString("businessman"));
+			sponsorActivity = new BusinessActivity(activity, rs.getBinaryStream("logo"), rs.getString("businessman"));
 		}
 		var tournament = new Tournament(name, place, cardGame, datetime, organizer, sponsorRequested, pInfo);
 		tournament.setSponsor(sponsorActivity);
 		return tournament;
 	}
-	
-	
-	
-	
+
 	public static void updateSponsor(String tournamentName, String activityName) throws SQLException {
 		var conn = DBConnector.getInstance().getConnection();
 		QueryTournament.updateSponsor(conn, tournamentName, activityName);
 	}
-	
-	
-	public static List<Tournament> retrieveActiveTournamentsByParticipant(String participant) throws SQLException{
+
+	public static List<Tournament> retrieveActiveTournamentsByParticipant(String participant) throws SQLException {
 		Statement stmt = null;
 		List<Tournament> ret = new ArrayList<>();
 		var conn = DBConnector.getInstance().getConnection();
-		
+
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet rs = QueryTournament.getActiveTournamentsByParticipant(stmt, participant);
@@ -275,11 +272,11 @@ public class TournamentDAO {
 		}
 		return ret;
 	}
-	
+
 	public static void removeParticipant(String tournamentName, String participant) throws SQLException {
 		Statement stmt = null;
 		var conn = DBConnector.getInstance().getConnection();
-		
+
 		try {
 			stmt = conn.createStatement();
 			QueryTournament.removeParticipant(stmt, tournamentName, participant);
@@ -289,7 +286,5 @@ public class TournamentDAO {
 			}
 		}
 	}
-	
-	
-	
+
 }
