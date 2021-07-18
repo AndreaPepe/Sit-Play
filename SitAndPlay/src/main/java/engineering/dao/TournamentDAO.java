@@ -256,5 +256,40 @@ public class TournamentDAO {
 	}
 	
 	
+	public static List<Tournament> retrieveActiveTournamentsByParticipant(String participant) throws SQLException{
+		Statement stmt = null;
+		List<Tournament> ret = new ArrayList<>();
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.getActiveTournamentsByParticipant(stmt, participant);
+			while (rs.next()) {
+				var t = buildTournamentFromResultSet(rs);
+				ret.add(t);
+			}
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
+	
+	public static void removeParticipant(String tournamentName, String participant) throws SQLException {
+		Statement stmt = null;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement();
+			QueryTournament.removeParticipant(stmt, tournamentName, participant);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	}
+	
+	
 	
 }

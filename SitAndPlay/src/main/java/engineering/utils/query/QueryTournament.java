@@ -80,7 +80,7 @@ public class QueryTournament {
 	// tournament
 	public static ResultSet retrieveOpenTournaments(Statement stmt) throws SQLException {
 		var query = "SELECT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo "
-				+ "FROM tournaments JOIN OrganizedTournaments " + "ON name=tournament "
+				+ "FROM tournaments JOIN OrganizedTournaments ON name=tournament "
 				+ "LEFT JOIN businessactivity on sponsor = activity "
 				+ "WHERE datetime > ADDTIME(current_timestamp(), '3:00:00');";
 		return stmt.executeQuery(query);
@@ -92,19 +92,29 @@ public class QueryTournament {
 				+ "WHERE datetime > ADDTIME(current_timestamp(), '3:00:00') AND requestedSponsor = TRUE AND sponsor IS NULL;";
 		return stmt.executeQuery(query);
 	}
-	
-	
+
 	public static void updateSponsor(Connection conn, String tournament, String activity) throws SQLException {
 		var sql = "UPDATE Tournaments SET sponsor = ? WHERE name = ?;";
 		var pstmt = conn.prepareStatement(sql);
 		try {
-			
+
 			pstmt.setString(1, activity);
 			pstmt.setString(2, tournament);
-			
+
 			pstmt.executeUpdate();
 		} finally {
 			pstmt.close();
 		}
+	}
+
+	public static ResultSet getActiveTournamentsByParticipant(Statement stmt, String participant) throws SQLException {
+		var query = String.format(
+				"SELECT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo "
+						+ "FROM tournaments JOIN OrganizedTournaments ON name=tournament "
+						+ "JOIN TournamentsParticipants P on name= P.tournament "
+						+ "LEFT JOIN businessactivity on sponsor = activity "
+						+ "WHERE datetime > ADDTIME(current_timestamp(), '3:00:00') " + "AND participant = '%s';",
+				participant);
+		return stmt.executeQuery(query);
 	}
 }

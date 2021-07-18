@@ -28,6 +28,9 @@ public class ListElementFactory {
 		case NOTIFICATION:
 			elem = new NotificationElement(container, obj);
 			break;
+		case OPEN_TOURNAMENT:
+			elem = new TournamentElement(container, obj);
+			break;
 		// TODO: add other cases
 		default:
 			break;

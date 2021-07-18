@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
@@ -12,6 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="apnBackground" minHeight="430.0" minWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.userspage.GuiPlayerUserPageController">
@@ -23,12 +25,12 @@
                   <Insets left="20.0" />
                </padding>
                <children>
-                  <ToggleButton fx:id="btnProfile" mnemonicParsing="false" onAction="#profilePressed" prefWidth="120.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Profile" textFill="WHITE">
+                  <ToggleButton fx:id="btnProfile" mnemonicParsing="false" onAction="#profilePressed" prefWidth="150.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Profile" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnNotifications" mnemonicParsing="false" onAction="#notificationsPressed" prefWidth="120.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Notifications" textFill="WHITE">
+                  <ToggleButton fx:id="btnSeats" mnemonicParsing="false" onAction="#displayReservedSeats" prefWidth="150.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="My Reserved Seats" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -39,11 +41,6 @@
       </ToolBar>
       <Pane fx:id="pnBase" layoutY="40.0" prefHeight="390.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
-            <AnchorPane fx:id="apnNotifications" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
-               <children>
-                  <ProgressIndicator layoutX="268.0" layoutY="155.0" progress="0.0" />
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="apnProfile" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
                <children>
                   <Separator layoutX="250.0" orientation="VERTICAL" prefHeight="354.0" prefWidth="0.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="15.0" />
@@ -73,6 +70,49 @@
                         <Label layoutX="44.0" layoutY="82.0" text="Tournaments played: #" />
                      </children>
                   </AnchorPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="apnSeats" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                  <Label layoutX="25.0" layoutY="14.0" text="Tables" textFill="#296581" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font name="Papyrus" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="30.0" layoutY="195.0" text="Tournaments" textFill="#296581" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="188.0">
+                     <font>
+                        <Font name="Papyrus" size="16.0" />
+                     </font>
+                  </Label>
+                  <ScrollPane fitToWidth="true" layoutX="25.0" layoutY="48.0" prefHeight="150.0" prefWidth="590.0" style="-fx-background-color: #ffffff;" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="35.0">
+                     <content>
+                        <VBox fx:id="vboxTables" minHeight="150.0" prefWidth="590.0" spacing="10.0" style="-fx-background-color: #ffffff;" />
+                     </content>
+                  </ScrollPane>
+                  <ScrollPane fitToWidth="true" layoutX="25.0" layoutY="249.0" prefHeight="150.0" prefWidth="590.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                     <content>
+                        <VBox fx:id="vboxTournaments" minHeight="150.0" prefWidth="590.0" spacing="10.0" style="-fx-background-color: #ffffff;">
+                           <children>
+                              <AnchorPane prefHeight="150.0" prefWidth="200.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="163.0" layoutY="4.0" prefWidth="250.0" text="Tournament's name" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="14.0" layoutY="24.0" prefHeight="17.0" prefWidth="550.0" text="Address" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="35.0" />
+                                    <Label layoutX="14.0" layoutY="62.0" prefHeight="17.0" prefWidth="120.0" text="Date" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="60.0" />
+                                    <Label layoutX="149.0" layoutY="62.0" prefHeight="17.0" prefWidth="60.0" text="Time" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="60.0" />
+                                    <Label layoutX="231.0" layoutY="62.0" prefHeight="17.0" prefWidth="310.0" text="Organized by Organizer" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="60.0" />
+                                    <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="261.0" layoutY="89.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="260.0" />
+                                    <Label layoutX="14.0" layoutY="90.0" prefHeight="17.0" prefWidth="130.0" text="Sponsorized by" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="85.0" />
+                                    <Label layoutX="14.0" layoutY="111.0" prefHeight="40.0" prefWidth="220.0" text="Sponsor" wrapText="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="105.0" />
+                                    <Button layoutX="505.0" layoutY="107.0" mnemonicParsing="false" prefWidth="80.0" styleClass="btn" stylesheets="@../css/Style.css" text="Leave" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="15.0" />
+                                 </children>
+                              </AnchorPane>
+                           </children></VBox>
+                     </content>
+                  </ScrollPane>
                </children>
             </AnchorPane>
          </children>

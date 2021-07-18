@@ -13,6 +13,8 @@ public class CommonStrings {
 	private static final String TABLE_RESERVED_NOTIF = "The user '%s' has reserved a seat at your table '%s'";
 	private static final String TOURNAMENT_RESERVED_NOTIF = "The user '%s' has reserved a seat at your tournament '%s'";
 	private static final String TOURNAMENT_SPONSORIZATION_NOTIF = "Your tournament '%s' has been sponsorized by the user '%s' with the activity '%s'";
+	private static final String TOURNAMENT_SEAT_LEAVED = "The user '%s' has left the tournament '%s'";
+	private static final String TABLE_SEAT_LEAVED = "The user '%s' has left the table '%s'";
 	
 	public static String getDatabaseErrorMsg() {
 		return DATABASE_ERROR_MSG;
@@ -36,6 +38,14 @@ public class CommonStrings {
 
 	public static String getTournamentSponsorizationNotif() {
 		return TOURNAMENT_SPONSORIZATION_NOTIF;
+	}
+
+	public static String getTournamentSeatLeaved() {
+		return TOURNAMENT_SEAT_LEAVED;
+	}
+
+	public static String getTableSeatLeaved() {
+		return TABLE_SEAT_LEAVED;
 	}
 
 }

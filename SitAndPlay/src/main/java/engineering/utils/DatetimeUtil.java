@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DatetimeUtil {
@@ -52,6 +53,18 @@ public class DatetimeUtil {
 		return (builtDate != null && builtDate.after(current));
 	}
 	
+	
+	public static Boolean isValidDateWithMargin(String date, String time, int marginHours) {
+		var builtDate = stringToDate(date, time);
+		var calendar = Calendar.getInstance();
+		calendar.setTime(builtDate);
+		calendar.add(Calendar.HOUR_OF_DAY, - marginHours);
+		var limitDatetime = calendar.getTime();
+		var current = getCurrentDatetime();
+		
+		// return true if the current time is before the built date - the hours of margin
+		return  (builtDate!= null && current!= null && current.before(limitDatetime));
+	}
 	public static String getDate(Date date) {
 		var format = new SimpleDateFormat(DATE_STRING_FORMAT);
 		return format.format(date);
