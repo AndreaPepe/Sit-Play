@@ -5,27 +5,34 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
 <AnchorPane prefHeight="430.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="650.0" styleClass="top-bar" stylesheets="@../usersPage/InternalPage.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ToolBar prefHeight="40.0" prefWidth="650.0" styleClass="top-bar" stylesheets="@../css/Style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
             <HBox prefHeight="30.0" prefWidth="589.0" spacing="20.0">
                <children>
-                  <ToggleButton fx:id="btnCreateMenu" mnemonicParsing="false" onAction="#handleCreateMenu" prefWidth="120.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Create Table" textFill="WHITE">
+                  <ToggleButton fx:id="btnCreateMenu" mnemonicParsing="false" onAction="#handleCreateMenu" prefWidth="120.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Create Table" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnReserveMenu" mnemonicParsing="false" onAction="#handleReserveMenu" prefWidth="120.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Reserve A Seat" textFill="WHITE">
+                  <ToggleButton fx:id="btnReserveMenu" mnemonicParsing="false" onAction="#handleReserveMenu" prefWidth="120.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Reserve A Seat" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </ToggleButton>
+                  <ToggleButton fx:id="toggleMyTables" mnemonicParsing="false" onAction="#loadThirdPage" prefWidth="120.0" styleClass="toggle" stylesheets="@../css/Style.css" text="My Tables" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -52,9 +59,9 @@
             </AnchorPane>
             <AnchorPane fx:id="apnCreate" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
                <children>
-                  <DatePicker fx:id="datePicker" layoutX="115.0" layoutY="181.0" prefHeight="25.0" prefWidth="200.0" />
+                  <DatePicker fx:id="datePicker" editable="false" layoutX="115.0" layoutY="181.0" prefHeight="25.0" prefWidth="200.0" />
                   <ComboBox fx:id="cbCardGame" layoutX="115.0" layoutY="125.0" prefWidth="200.0" />
-                  <Button fx:id="btnCreateTable" layoutX="80.0" layoutY="304.0" mnemonicParsing="false" onAction="#handleCreateTable" prefHeight="30.0" prefWidth="180.0" styleClass="btn" stylesheets="@StandardStyle.css" text="Create Table" AnchorPane.leftAnchor="80.0">
+                  <Button fx:id="btnCreateTable" layoutX="80.0" layoutY="304.0" mnemonicParsing="false" onAction="#handleCreateTable" prefHeight="30.0" prefWidth="180.0" styleClass="btn" stylesheets="@../css/Style.css" text="Create Table" AnchorPane.leftAnchor="80.0">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -88,7 +95,36 @@
                   <Label layoutX="25.0" layoutY="235.0" text="Time:" />
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="apnMyTables" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Separator layoutX="241.0" layoutY="14.0" orientation="VERTICAL" prefHeight="350.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="20.0" />
+                  <VBox layoutX="275.0" layoutY="28.0" prefHeight="200.0" prefWidth="100.0" spacing="40.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
+                     <children>
+                        <ComboBox fx:id="cbTable" prefHeight="25.0" prefWidth="320.0" promptText="Select organized table" />
+                        <ComboBox fx:id="cbWinner" prefWidth="320.0" promptText="Select winner" />
+                     </children>
+                     <padding>
+                        <Insets top="40.0" />
+                     </padding>
+                  </VBox>
+                  <Label alignment="TOP_CENTER" layoutX="29.0" layoutY="30.0" prefHeight="160.0" prefWidth="240.0" text="Here you can declare the winner of a table you have organized" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                     <font>
+                        <Font name="Papyrus" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_CENTER" layoutX="39.0" layoutY="199.0" prefHeight="160.0" prefWidth="240.0" text="First select a table and then the participant that will be the winner!" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                     <font>
+                        <Font name="Papyrus" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </children>
       </Pane>
+      <Button fx:id="btnDeclareWinner" mnemonicParsing="false" onAction="#declareWinner" prefWidth="150.0" styleClass="btn" stylesheets="@../css/Style.css" text="Declare Winner" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="100.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

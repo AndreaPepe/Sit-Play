@@ -29,7 +29,7 @@ public class QueryLogin {
 		default:
 			throw new SQLException("User type unsupported");
 		}
-		String query = String.format("INSERT INTO Users (username, password, userType) VALUES ('%s', '%s', '%s');",
+		var query = String.format("INSERT INTO Users (username, password, userType) VALUES ('%s', '%s', '%s');",
 				user.getUsername(), user.getPassword(), type);
 		stmt.executeUpdate(query);
 	}

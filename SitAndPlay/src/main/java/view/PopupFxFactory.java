@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -44,6 +45,7 @@ public class PopupFxFactory {
 		msg.setPrefWidth(380);
 		msg.setFont(Font.font(14));
 		msg.setAlignment(Pos.CENTER);
+		msg.setTextAlignment(TextAlignment.CENTER);
 		msg.setWrapText(true);
 		msg.getStylesheets().add("/main/java/view/standalone/css/Style.css");
 		msg.getStyleClass().add("popup");

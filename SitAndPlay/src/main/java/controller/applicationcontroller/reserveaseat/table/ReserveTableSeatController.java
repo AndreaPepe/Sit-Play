@@ -96,4 +96,33 @@ public class ReserveTableSeatController {
 		} 
 		return beanList;
 	}
+	
+	public List<TableBean> retrieveTablesToDeclareWinnerTo(BeanUser user) throws DateParsingException, DAOException{
+		List<TableBean> beans = new ArrayList<>();
+		try {
+			var tables = TableDAO.getTablesToDeclareWinner(user.getUsername());
+			for (Table table: tables) {
+				var bean = buildBean(table);
+				// we also need the list of participants
+				var participants = TableDAO.retrieveParticipants(table.getName());
+				bean.setParticipants(participants);
+				beans.add(bean);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
+		return beans;
+	}
+	
+	public void declareWinner(TableBean tableBean, BeanUser organizer) throws DAOException {
+		try {
+			TableDAO.addWinner(tableBean.getName(), tableBean.getWinner());
+			var msg = String.format(CommonStrings.getTableWinnerString(), tableBean.getName(), organizer.getUsername());
+			var notif = new Notification(-1, organizer.getUsername(), tableBean.getWinner(), msg, false);
+			NotificationDAO.insertNotification(notif);
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
+		
+	}
 }

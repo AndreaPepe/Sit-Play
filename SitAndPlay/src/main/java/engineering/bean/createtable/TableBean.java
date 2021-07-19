@@ -22,6 +22,7 @@ public class TableBean {
 	private String time;
 	private String organizer;
 	private List<String> participants;
+	private String winner;
 
 	public TableBean(String name, PlaceBean place, String cardGame, String date, String time, String organizer) {
 		super();
@@ -34,6 +35,7 @@ public class TableBean {
 		this.time = time;
 		this.organizer = organizer;
 		this.participants = null;
+		this.winner = null;
 	}
 
 	public TableBean(String name, PlaceBean place, String cardGame, String date, String time, String organizer,
@@ -48,6 +50,7 @@ public class TableBean {
 		this.time = time;
 		this.organizer = organizer;
 		this.participants = new ArrayList<>(participants);
+		this.winner = null;
 	}
 
 	public String getName() {
@@ -122,6 +125,16 @@ public class TableBean {
 		this.participants = new ArrayList<>(participants);
 	}
 
+	public String getWinner() {
+		return winner;
+	}
+
+	public void setWinner(String winner) {
+		this.winner = winner;
+	}
+	
+	
+	// checks
 	private Boolean checkFutureDate() throws DateParsingException {
 		return DatetimeUtil.isFutureDatetime(this.getDate(), this.getTime());
 	}
@@ -148,5 +161,7 @@ public class TableBean {
 		}
 		return true;
 	}
+
+	
 
 }

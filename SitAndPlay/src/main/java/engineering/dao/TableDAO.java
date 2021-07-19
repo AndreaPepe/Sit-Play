@@ -47,6 +47,7 @@ public class TableDAO {
 			var lng = rs.getDouble("lng");
 			var cardGame = CardGame.getConstant(rs.getString("cardGame"));
 			var mysqlDatetime = rs.getTimestamp("datetime", Calendar.getInstance(Locale.getDefault()));
+			rs.getString("winner");
 
 			rs.close();
 			stmt.close();
@@ -208,5 +209,50 @@ public class TableDAO {
 		var organizer = rs.getString("organizer");
 
 		return new Table(name, place, cardGame, datetime, organizer);
+	}
+	
+	public static List<Table> getTablesToDeclareWinner(String organizer) throws SQLException, DateParsingException{
+		Statement stmt = null;
+		List<Table> tables = new ArrayList<>();
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTable.getTablesWithNoWinnerByOrganizer(stmt, organizer);
+			while(rs.next()) {
+				var table = buildTableFromResultSet(rs);
+				tables.add(table);
+			}
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return tables;
+	}
+	
+	public static void addWinner(String tableName, String winnerUsername) throws SQLException {
+		var conn = DBConnector.getInstance().getConnection();
+		QueryTable.updateWinner(conn, tableName, winnerUsername);
+	}
+	
+	public static List<String> retrieveParticipants(String tablename) throws SQLException{
+		Statement stmt = null;
+		List<String> participants = new ArrayList<>();
+		var conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTable.retrieveParticipants(stmt, tablename);
+			while(rs.next()) {
+				participants.add(rs.getString("participant"));
+			}
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return participants;
 	}
 }

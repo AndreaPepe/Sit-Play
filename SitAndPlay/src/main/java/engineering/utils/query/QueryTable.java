@@ -16,6 +16,8 @@ public class QueryTable {
 
 	}
 
+	private static final String SELECT_HEADER = "SELECT name, address, lat, lng, cardGame, datetime, organizer ";
+
 	public static ResultSet retrieveTable(Statement stmt, String name) throws SQLException {
 		String query = "SELECT * FROM Tables WHERE name = '" + name + "';";
 		return stmt.executeQuery(query);
@@ -79,19 +81,37 @@ public class QueryTable {
 	}
 
 	public static ResultSet retrieveOpenTables(Statement stmt) throws SQLException {
-		var query = "SELECT name, address, lat, lng, cardGame, datetime, organizer "
-				+ "FROM tables JOIN organizedtables " + "WHERE name=tablename "
+		var query = SELECT_HEADER + "FROM tables JOIN organizedtables " + "WHERE name=tablename "
 				+ "AND datetime > ADDTIME(current_timestamp(), '01:00:00');";
 		return stmt.executeQuery(query);
 	}
 
 	public static ResultSet retrieveOpenTablesByParticipant(Statement stmt, String participant) throws SQLException {
 		var query = String.format(
-				"SELECT name, address, lat, lng, cardGame, datetime, organizer "
-						+ "FROM tables JOIN organizedtables ON name=tablename "
+				SELECT_HEADER + "FROM tables JOIN organizedtables ON name=tablename "
 						+ "JOIN TablesParticipants P on name = P.tablename "
 						+ "WHERE datetime > ADDTIME(current_timestamp(), '01:00:00') AND P.participant = '%s';",
 				participant);
 		return stmt.executeQuery(query);
+	}
+
+	public static ResultSet getTablesWithNoWinnerByOrganizer(Statement stmt, String organizer) throws SQLException {
+		var query = String.format(SELECT_HEADER + "FROM tables JOIN organizedtables ON name=tablename "
+				+ "JOIN TablesParticipants P on name = P.tablename "
+				+ "WHERE datetime < current_timestamp() AND organizer = '%s' AND winner IS NULL;", organizer);
+		return stmt.executeQuery(query);
+	}
+
+	public static void updateWinner(Connection conn, String tableName, String winner) throws SQLException {
+		var sql = "UPDATE Tables SET winner = ? WHERE name = ?";
+		var pstmt = conn.prepareCall(sql);
+		try {
+			pstmt.setString(1, winner);
+			pstmt.setString(2, tableName);
+
+			pstmt.executeUpdate();
+		} finally {
+			pstmt.close();
+		}
 	}
 }

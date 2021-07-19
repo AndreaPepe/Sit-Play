@@ -43,12 +43,18 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 	@FXML
 	private AnchorPane apnCreate;
+	
+	@FXML
+	private AnchorPane apnMyTables;
 
 	@FXML
 	private ToggleButton btnCreateMenu;
 
 	@FXML
 	private ToggleButton btnReserveMenu;
+	
+	@FXML
+	private ToggleButton toggleMyTables;
 
 	@FXML
 	private TextField tfTableName;
@@ -96,6 +102,20 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	private static final String MAP_WITH_MARKERS = "src/main/java/view/standalone/createtable/BigMapWithMarkers.html";
 
 	private List<TableBean> beanList;
+	
+	// third page attributes
+	@FXML
+	private ComboBox<String> cbTable;
+	
+	@FXML
+	private ComboBox<String> cbWinner;
+	
+	@FXML
+	private Button btnDeclareWinner;
+	
+	private List<TableBean> tableBeansWinner;
+	
+	
 
 	public GuiPlayerCreateTableController(Session ssn) {
 		super(ssn);
@@ -107,6 +127,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		var topBarToggleGroup = new ToggleGroup();
 		btnCreateMenu.setToggleGroup(topBarToggleGroup);
 		btnReserveMenu.setToggleGroup(topBarToggleGroup);
+		toggleMyTables.setToggleGroup(topBarToggleGroup);
 		// avoid unselected button
 		topBarToggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
 			if (newVal == null) {
@@ -162,6 +183,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	@FXML
 	public void handleCreateMenu(ActionEvent event) {
 		apnReserve.toBack();
+		apnMyTables.toBack();
 		apnCreate.toFront();
 		loadMapbox();
 		setUpAutocompleteTextField();
@@ -176,6 +198,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 		loadSecondPage();
 		apnCreate.toBack();
+		apnMyTables.toBack();
 		apnReserve.toFront();
 	}
 
@@ -341,5 +364,83 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	public String getSelectedTable() {
 		var script = "getSelectedTable();";
 		return (String) allEngine.executeScript(script);
+	}
+	
+	
+	// third page controls
+	@FXML 
+	public void loadThirdPage(ActionEvent event){
+		loadMyTables();
+		setUIElements();
+	}
+	
+	@FXML
+	public void declareWinner(ActionEvent event) {
+		var selectedParticipant = cbWinner.getValue();
+		var ctrl = new ReserveTableSeatController();
+		var tableBean = getSelectedTableToDeclareWinner();
+		if (tableBean != null) {
+			tableBean.setWinner(selectedParticipant);
+			try {
+				ctrl.declareWinner(tableBean, ssn.getUser());
+			} catch (DAOException e) {
+				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+			}
+		}
+	}
+	
+	private void loadMyTables() {
+		var ctrl = new ReserveTableSeatController();
+		try {
+			tableBeansWinner = ctrl.retrieveTablesToDeclareWinnerTo(ssn.getUser());
+			cbTable.getItems().clear();
+			for (TableBean bean : tableBeansWinner) {
+				cbTable.getItems().add(bean.getName());
+			}
+			
+		} catch (DateParsingException | DAOException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+		}
+	}
+	
+	private void setUIElements() {
+		cbWinner.setDisable(true);
+		btnDeclareWinner.setDisable(true);
+		
+		cbTable.valueProperty().addListener((obs, oldVal, newVal) -> {
+			if (newVal != null) {
+				cbWinner.getItems().clear();
+				var bean = getSelectedTableToDeclareWinner();
+				if (bean != null) {
+					bean.getParticipants().forEach(it -> cbWinner.getItems().add(it));
+				}
+				cbWinner.setDisable(false);
+			}else {
+				cbWinner.setDisable(true);
+				btnDeclareWinner.setDisable(true);
+			}
+		});
+		
+		cbWinner.valueProperty().addListener((obs, oldVal, newVal) -> {
+			if(newVal != null) {
+				btnDeclareWinner.setDisable(false);
+			}else {
+				btnDeclareWinner.setDisable(true);
+			}
+		});
+	}
+	private TableBean getSelectedTableToDeclareWinner() {
+		var name = cbTable.getValue();
+		if (name == null) {
+			AlertFactory.getInstance().createAlert("Select a table first", AlertType.WARNING).show();
+			
+		}else {
+			for (TableBean bean : tableBeansWinner) {
+				if (bean.getName().equals(name)) {
+					return bean;
+				}
+			}
+		}
+		return null;
 	}
 }
