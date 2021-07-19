@@ -11,7 +11,7 @@ public class TableBean {
 
 	// A table can be created only if there is at least 1 hour of time to reserve a
 	// seat
-	private static final int HOURS_OF_MARGIN_FOR_CREATION = 2;
+	private static final int HOURS_OF_MARGIN = 2;
 
 	private String name;
 	private String address;
@@ -122,7 +122,7 @@ public class TableBean {
 		this.participants = new ArrayList<>(participants);
 	}
 
-	public Boolean checkDateTime() throws DateParsingException {
+	private Boolean checkFutureDate() throws DateParsingException {
 		return DatetimeUtil.isFutureDatetime(this.getDate(), this.getTime());
 	}
 
@@ -136,12 +136,12 @@ public class TableBean {
 		if (cardGame == null) {
 			throw new BeanCheckException("Card game has not been selected");
 		}
-		if (Boolean.FALSE.equals(checkDateTime())) {
+		if (Boolean.FALSE.equals(checkFutureDate())) {
 			throw new BeanCheckException("Impossible to create a table in the past");
 		}
-		if (Boolean.FALSE.equals(DatetimeUtil.isValidDateWithMargin(date, time, HOURS_OF_MARGIN_FOR_CREATION))) {
+		if (Boolean.FALSE.equals(DatetimeUtil.isValidDateWithMargin(date, time, HOURS_OF_MARGIN))) {
 			throw new BeanCheckException(String.format(
-					"A table must be created within at least %d hours from the start", HOURS_OF_MARGIN_FOR_CREATION));
+					"A table must be created within at least %d hours from the start", HOURS_OF_MARGIN));
 		}
 		if (organizer == null || organizer.isBlank()) {
 			throw new BeanCheckException("Something didn't work. Organizer blank");
