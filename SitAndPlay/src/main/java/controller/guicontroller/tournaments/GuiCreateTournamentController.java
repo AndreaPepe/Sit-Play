@@ -27,6 +27,7 @@ import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.Session;
 import main.java.engineering.utils.map.MapPlace;
 import main.java.model.CardGame;
@@ -36,7 +37,6 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 
 	public GuiCreateTournamentController(Session ssn) {
 		super(ssn);
-		// TODO Auto-generated constructor stub
 	}
 
 	@FXML
@@ -192,7 +192,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 		if (tournamentBean != null) {
 			try {
 				tournamentBean.checkRulesForInsert();
-			} catch (BeanCheckException e) {
+			} catch (BeanCheckException | DateParsingException e) {
 				AlertFactory.getInstance()
 					.createAlert(e.getMessage(), AlertType.ERROR).show();
 				return;
@@ -203,7 +203,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 					AlertFactory.getInstance()
 					.createAlert("Tournament succesfully created", AlertType.INFORMATION).show();
 				}
-			} catch (DAOException e) {
+			} catch (DAOException | DateParsingException e) {
 				AlertFactory.getInstance()
 				.createAlert(e.getMessage(), AlertType.ERROR).show();
 			}

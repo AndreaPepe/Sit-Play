@@ -8,6 +8,7 @@ import main.java.engineering.bean.businessactivity.BusinessActivityBean;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.dao.BusinessActivityDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteActivityException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.CommonStrings;
@@ -45,7 +46,7 @@ public class ManageActivitiesController {
 		return ret;
 	}
 
-	public void deleteBusinessActivity(BusinessActivityBean bean) throws DAOException, DeleteActivityException {
+	public void deleteBusinessActivity(BusinessActivityBean bean) throws DAOException, DeleteActivityException, DateParsingException {
 		try {
 			List<Tournament> sponsorizedTournaments = BusinessActivityDAO
 					.retrieveOpenSponsorizedTournaments(bean.getName());

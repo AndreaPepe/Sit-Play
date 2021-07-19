@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,6 +29,7 @@ import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.Session;
 import main.java.engineering.utils.map.MapPlace;
@@ -206,7 +206,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 				if (Boolean.FALSE.equals(tableBean.checkCreateTable())) {
 					return;
 				}
-			} catch (BeanCheckException e1) {
+			} catch (BeanCheckException | DateParsingException e1) {
 				AlertFactory.getInstance().createAlert(e1.getMessage(), AlertType.ERROR).showAndWait();
 				return;
 			}
@@ -217,7 +217,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 					// table created successfully
 					AlertFactory.getInstance().createAlert("Table created succesfully", AlertType.INFORMATION).show();
 				}
-			} catch (DAOException e) {
+			} catch (DAOException | DateParsingException e) {
 				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 			}
 		} else {
@@ -300,7 +300,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 				}
 
 			}
-		} catch (DAOException e) {
+		} catch (DAOException | DateParsingException e) {
 			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		}
 	}

@@ -31,6 +31,9 @@ public class ListElementFactory {
 		case OPEN_TOURNAMENT:
 			elem = new TournamentElement(container, obj);
 			break;
+		case OPEN_TABLE:
+			elem = new TableElement(container, obj);
+			break;
 		// TODO: add other cases
 		default:
 			break;

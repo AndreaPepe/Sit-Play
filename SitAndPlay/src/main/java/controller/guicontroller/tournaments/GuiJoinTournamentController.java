@@ -21,6 +21,7 @@ import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.MaxParticipantsException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.MapMarkersUtil;
@@ -100,9 +101,8 @@ public class GuiJoinTournamentController extends GuiBasicInternalPageController{
 				}
 				
 			}
-		} catch (DAOException e) {
-			lblMsg.setText(e.getMessage());
-			lblMsg.setVisible(true);
+		} catch (DAOException | DateParsingException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		} catch (IOException e) {
 			AlertFactory.getInstance().createAlert("Unable to parse sponsor's logo", AlertType.ERROR).show();
 		}

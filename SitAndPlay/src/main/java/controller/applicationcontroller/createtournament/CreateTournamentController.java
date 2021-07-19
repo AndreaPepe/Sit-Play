@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.dao.TournamentDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.model.CardGame;
@@ -13,7 +14,7 @@ import main.java.model.Tournament;
 
 public class CreateTournamentController {
 
-	public Boolean createTournament(TournamentBean bean) throws DAOException {
+	public Boolean createTournament(TournamentBean bean) throws DAOException, DateParsingException {
 		var tournament = tournamentFromBean(bean);
 		try {
 			TournamentDAO.insertTournament(tournament);
@@ -26,7 +27,7 @@ public class CreateTournamentController {
 		}
 	}
 
-	private Tournament tournamentFromBean(TournamentBean bean) {
+	private Tournament tournamentFromBean(TournamentBean bean) throws DateParsingException {
 		String name = bean.getName();
 		var place = new Place(bean.getAddress(), bean.getLatitude(), bean.getLongitude());
 		var datetime = DatetimeUtil.stringToDate(bean.getDate(), bean.getTime());

@@ -7,9 +7,12 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.DBConnector;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.engineering.utils.query.QueryBusinessActivity;
@@ -79,12 +82,11 @@ public class BusinessActivityDAO {
 
 		return list;
 	}
-	
-	
+
 	public static void deleteBusinessActivity(String name) throws SQLException {
 		Connection conn = null;
 		Statement stmt = null;
-		
+
 		conn = DBConnector.getInstance().getConnection();
 		try {
 			stmt = conn.createStatement();
@@ -94,9 +96,9 @@ public class BusinessActivityDAO {
 				stmt.close();
 			}
 		}
-		
+
 	}
-	
+
 	public static BusinessActivity retrieveActivityByName(String name) throws SQLException, DAOException {
 		Statement stmt = null;
 		BusinessActivity ret = null;
@@ -116,7 +118,7 @@ public class BusinessActivityDAO {
 			} else {
 				logo = null;
 			}
-			
+
 			ret = new BusinessActivity(actName, logo, businessman);
 		} finally {
 			if (stmt != null) {
@@ -125,13 +127,12 @@ public class BusinessActivityDAO {
 		}
 		return ret;
 	}
-	
-	
-	public static List<Tournament> retrieveOpenSponsorizedTournaments(String activityName) throws SQLException{
+
+	public static List<Tournament> retrieveOpenSponsorizedTournaments(String activityName) throws SQLException, DateParsingException {
 		Connection conn = null;
 		Statement stmt = null;
 		List<Tournament> list = new ArrayList<>();
-		
+
 		conn = DBConnector.getInstance().getConnection();
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -140,7 +141,8 @@ public class BusinessActivityDAO {
 				var tournamentName = rs.getString("name");
 				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
 				var game = CardGame.getConstant(rs.getString("cardGame"));
-				var date = DatetimeUtil.fromMysqlTimestampToDate(rs.getTimestamp("datetime"));
+				var date = DatetimeUtil.fromMysqlTimestampToDate(
+						rs.getTimestamp("datetime", Calendar.getInstance(Locale.getDefault())));
 				var partInformation = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
 						rs.getFloat("award"));
 				var requested = rs.getBoolean("requestedSponsor");
@@ -153,7 +155,7 @@ public class BusinessActivityDAO {
 				}
 				var t = new Tournament(tournamentName, place, game, date, org, requested, partInformation);
 				t.setSponsor(busActivity);
-				list.add(t);	
+				list.add(t);
 			}
 			rs.close();
 		} finally {
@@ -164,7 +166,4 @@ public class BusinessActivityDAO {
 		return list;
 	}
 
-	
-	
 }
-

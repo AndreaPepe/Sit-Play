@@ -20,6 +20,7 @@ import main.java.controller.applicationcontroller.business.ManageActivitiesContr
 import main.java.engineering.bean.businessactivity.BusinessActivityBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteActivityException;
 
 public class ActivityElement extends ListElement {
@@ -167,7 +168,7 @@ public class ActivityElement extends ListElement {
 				try {
 					ctrl.deleteBusinessActivity(thisBean);
 					super.detach();
-				} catch (DAOException | DeleteActivityException e) {
+				} catch (DAOException | DeleteActivityException | DateParsingException e) {
 					AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 				}
 			}

@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import main.java.engineering.exceptions.DateParsingException;
+
 public class DatetimeUtil {
 	public static final String DATETIME_FORMAT = "dd/MM/yyyy HH:mm";
 	public static final String MYSQL_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -17,19 +19,17 @@ public class DatetimeUtil {
 	// private constructor to avoid instances; only static methods
 	private DatetimeUtil() {}
 	
-	public static Date stringToDate(String date, String time) {
+	public static Date stringToDate(String date, String time) throws DateParsingException {
 		try {
 			var format = new SimpleDateFormat(DATETIME_FORMAT);
 
 			return format.parse(date + " " + time);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DateParsingException("Impossible to parse date and time, please review your inputs");
 		}
-		return null;
 	}
 	
-	public static Date getCurrentDatetime() {
+	public static Date getCurrentDatetime() throws DateParsingException {
 		var formatter = DateTimeFormatter.ofPattern(DATETIME_FORMAT);
 		var format = new SimpleDateFormat(DATETIME_FORMAT, Locale.getDefault());
 		var currentDateTime = LocalDateTime.now();
@@ -37,34 +37,34 @@ public class DatetimeUtil {
 		try {
 			return format.parse(now);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DateParsingException("Unable to build current timestamp. Please retry later");
 		}
-		return null;
 	}
 	
-	public static Boolean isFutureDatetime(Date date) {
+	public static Boolean isFutureDatetime(Date date) throws DateParsingException {
 		var current = getCurrentDatetime();
 		return (date != null && date.after(current));
 	}
 	
-	public static Boolean isFutureDatetime(String date, String time) {
+	public static Boolean isFutureDatetime(String date, String time) throws DateParsingException {
 		var builtDate = stringToDate(date, time);
 		var current = getCurrentDatetime();
 		return (builtDate != null && builtDate.after(current));
 	}
 	
 	
-	public static Boolean isValidDateWithMargin(String date, String time, int marginHours) {
+	public static Boolean isValidDateWithMargin(String date, String time, int marginHours) throws DateParsingException {
 		var builtDate = stringToDate(date, time);
 		var calendar = Calendar.getInstance();
 		calendar.setTime(builtDate);
 		calendar.add(Calendar.HOUR_OF_DAY, - marginHours);
 		var limitDatetime = calendar.getTime();
 		var current = getCurrentDatetime();
-		
 		// return true if the current time is before the built date - the hours of margin
-		return  (builtDate!= null && current!= null && current.before(limitDatetime));
+		if (builtDate == null || current == null) {
+			throw new DateParsingException("Something went wrong parsing timestamps, please retry later.");
+		}
+		return  (current.before(limitDatetime));
 	}
 	public static String getDate(Date date) {
 		var format = new SimpleDateFormat(DATE_STRING_FORMAT, Locale.getDefault());
@@ -80,17 +80,13 @@ public class DatetimeUtil {
 		return new java.sql.Timestamp(date.getTime());
 	}
 	
-	public static Date fromMysqlTimestampToDate(java.sql.Timestamp mysql) {
-		System.out.println(mysql);
+	public static Date fromMysqlTimestampToDate(java.sql.Timestamp mysql) throws DateParsingException {
 		var format = new SimpleDateFormat(DATETIME_FORMAT, Locale.getDefault());
 		var string = format.format(mysql);
 		try {
-			System.out.println(format.parse(string));
 			return format.parse(string);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new DateParsingException("Unable to parse date retrieved from database. Please retry later.");
 		}
-		return null;
 	}
 }

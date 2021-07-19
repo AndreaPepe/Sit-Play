@@ -10,6 +10,7 @@ import main.java.engineering.bean.tournaments.TournamentBeanFactory;
 import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.dao.TournamentDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteSeatException;
 import main.java.engineering.exceptions.MaxParticipantsException;
 import main.java.engineering.exceptions.WrongUserTypeException;
@@ -21,7 +22,7 @@ import main.java.model.UserType;
 
 public class ReserveTournamentSeatController {
 
-	public List<TournamentBean> retrieveOpenTournaments() throws DAOException {
+	public List<TournamentBean> retrieveOpenTournaments() throws DAOException, DateParsingException {
 		List<TournamentBean> beans = new ArrayList<>();
 		try {
 			var tournaments = TournamentDAO.retrieveOpenTournaments();
@@ -67,9 +68,11 @@ public class ReserveTournamentSeatController {
 		}
 	}
 
-	public void removeParticipant(TournamentBean tournament, BeanUser participant) throws DAOException, DeleteSeatException {
+	public void removeParticipant(TournamentBean tournament, BeanUser participant) throws DAOException, DeleteSeatException, DateParsingException {
+		
+		// tournament reservations are closed 3 hours before the beginning of the tournament
 		if (Boolean.FALSE.equals(DatetimeUtil.isValidDateWithMargin(tournament.getDate(), tournament.getTime(), 3))) {
-			throw new DeleteSeatException("The tournament has already started. You can not leave the tournament now");
+			throw new DeleteSeatException("Reservations for the tournament have been closed. You can not leave the tournament now");
 		}
 		try {
 			TournamentDAO.removeParticipant(tournament.getName(), participant.getUsername());
@@ -82,7 +85,7 @@ public class ReserveTournamentSeatController {
 		}
 	}
 
-	public List<TournamentBean> retrieveActiveJoinedTournaments(BeanUser usr) throws DAOException {
+	public List<TournamentBean> retrieveActiveJoinedTournaments(BeanUser usr) throws DAOException, DateParsingException {
 		List<TournamentBean> list = new ArrayList<>();
 
 		try {

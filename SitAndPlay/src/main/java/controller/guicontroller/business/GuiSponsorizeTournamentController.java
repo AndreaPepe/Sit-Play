@@ -25,6 +25,7 @@ import main.java.engineering.bean.businessactivity.BusinessActivityBean;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.MapMarkersUtil;
 import main.java.engineering.utils.Session;
 
@@ -102,9 +103,8 @@ public class GuiSponsorizeTournamentController extends GuiBasicInternalPageContr
 					engine.executeScript(script);
 				}
 			}
-		} catch (DAOException e) {
-			lblMsg.setText(e.getMessage());
-			lblMsg.setVisible(true);
+		} catch (DAOException | DateParsingException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		} catch (IOException e) {
 			AlertFactory.getInstance().createAlert("Unable to parse sponsor's logo", AlertType.ERROR).show();
 		}

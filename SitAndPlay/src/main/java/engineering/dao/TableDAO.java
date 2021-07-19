@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.DBConnector;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.engineering.utils.query.QueryTable;
@@ -25,7 +26,7 @@ public class TableDAO {
 
 	}
 
-	public static Table retrieveTable(String tableName) throws SQLException, DAOException {
+	public static Table retrieveTable(String tableName) throws SQLException, DAOException, DateParsingException {
 		Statement stmt = null;
 		Connection conn = null;
 		Table table = null;
@@ -132,7 +133,7 @@ public class TableDAO {
 		}
 	}
 
-	public static List<Table> retrieveOpenTables() throws SQLException {
+	public static List<Table> retrieveOpenTables() throws SQLException, DateParsingException {
 		Statement stmt = null;
 		Connection conn = null;
 		List<Table> tables = new ArrayList<>();
@@ -148,17 +149,10 @@ public class TableDAO {
 			if (!rs.isBeforeFirst())
 				rs.previous();
 			while (rs.next()) {
-				var name = rs.getString("name");
-				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
-				var cardGame = CardGame.getConstant(rs.getString("cardGame"));
-				var datetime = DatetimeUtil.fromMysqlTimestampToDate(
-						rs.getTimestamp("datetime", Calendar.getInstance(Locale.getDefault())));
-				var organizer = rs.getString("organizer");
-
-				var table = new Table(name, place, cardGame, datetime, organizer);
+				var table = buildTableFromResultSet(rs);
 				tables.add(table);
 			}
-
+			rs.close();
 			return tables;
 
 		} finally {
@@ -167,5 +161,52 @@ public class TableDAO {
 			}
 		}
 	}
+	
+	public static void removeParticipant(String tableName, String participant) throws SQLException {
+		Statement stmt = null;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement();
+			QueryTable.removeParticipant(stmt, tableName, participant);
+			
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	}
+	
+	public static List<Table> getOpenJoinedTablesByParticipant(String username) throws SQLException, DateParsingException{
+		Statement stmt = null;
+		List<Table> list = new ArrayList<>();
+		
+		var conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTable.retrieveOpenTablesByParticipant(stmt, username);
+			while (rs.next()) {
+				var tab = buildTableFromResultSet(rs);
+				list.add(tab);
+			}
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
+	}
 
+	
+	private static Table buildTableFromResultSet(ResultSet rs) throws SQLException, DateParsingException {
+		var name = rs.getString("name");
+		var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
+		var cardGame = CardGame.getConstant(rs.getString("cardGame"));
+		var datetime = DatetimeUtil.fromMysqlTimestampToDate(
+				rs.getTimestamp("datetime", Calendar.getInstance(Locale.getDefault())));
+		var organizer = rs.getString("organizer");
+
+		return new Table(name, place, cardGame, datetime, organizer);
+	}
 }

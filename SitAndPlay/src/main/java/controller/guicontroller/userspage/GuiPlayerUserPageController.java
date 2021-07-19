@@ -11,11 +11,14 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTableSeatController;
 import main.java.controller.applicationcontroller.reserveaseat.tournament.ReserveTournamentSeatController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
+import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.Session;
 import main.java.view.listview.BeanContainer;
 import main.java.view.listview.ListElementFactory;
@@ -91,14 +94,24 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
 				ListElementFactory.getInstance().createElement(ListElementType.OPEN_TOURNAMENT,
 						vboxTournaments, beanContainer);
 			}
-		} catch (DAOException e) {
+		} catch (DAOException | DateParsingException e) {
 			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		}
 
 	}
 
 	private void loadTables() {
-		// TODO Auto-generated method stub
+		var controller = new ReserveTableSeatController();
+		try {
+			vboxTables.getChildren().clear();
+			var tableBeans = controller.retrieveActiveJoinedTables(ssn.getUser());
+			for(TableBean bean : tableBeans) {
+				var beanContainer = new BeanContainer(bean, ssn.getUser());
+				ListElementFactory.getInstance().createElement(ListElementType.OPEN_TABLE, vboxTables, beanContainer);
+			}
+		} catch (DateParsingException | DAOException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+		}
 
 	}
 

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.DBConnector;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.engineering.utils.query.QueryTournament;
@@ -26,7 +27,7 @@ public class TournamentDAO {
 
 	}
 
-	public static Tournament retrieveTournament(String name) throws DAOException, SQLException {
+	public static Tournament retrieveTournament(String name) throws DAOException, SQLException, DateParsingException {
 		Statement stmt = null;
 		Connection conn = null;
 		Tournament tournament = null;
@@ -130,7 +131,7 @@ public class TournamentDAO {
 
 	}
 
-	public static List<Tournament> retrieveOpenTournaments() throws SQLException {
+	public static List<Tournament> retrieveOpenTournaments() throws SQLException, DateParsingException {
 		Statement stmt = null;
 		Connection conn = null;
 		List<Tournament> list = new ArrayList<>();
@@ -202,7 +203,7 @@ public class TournamentDAO {
 		}
 	}
 
-	public static List<Tournament> retrieveSponsorizableTournaments() throws SQLException, DAOException {
+	public static List<Tournament> retrieveSponsorizableTournaments() throws SQLException, DAOException, DateParsingException {
 		Statement stmt = null;
 		Connection conn = null;
 		List<Tournament> tournaments = new ArrayList<>();
@@ -229,7 +230,7 @@ public class TournamentDAO {
 	}
 
 	// private method to avoid duplications
-	private static Tournament buildTournamentFromResultSet(ResultSet rs) throws SQLException {
+	private static Tournament buildTournamentFromResultSet(ResultSet rs) throws SQLException, DateParsingException {
 		var name = rs.getString("name");
 		var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
 		var cardGame = CardGame.getConstant(rs.getString("cardGame"));
@@ -253,7 +254,7 @@ public class TournamentDAO {
 		QueryTournament.updateSponsor(conn, tournamentName, activityName);
 	}
 
-	public static List<Tournament> retrieveActiveTournamentsByParticipant(String participant) throws SQLException {
+	public static List<Tournament> retrieveActiveTournamentsByParticipant(String participant) throws SQLException, DateParsingException {
 		Statement stmt = null;
 		List<Tournament> ret = new ArrayList<>();
 		var conn = DBConnector.getInstance().getConnection();

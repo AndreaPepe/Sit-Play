@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.dao.TableDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
 import main.java.model.Place;
@@ -17,8 +18,9 @@ public class CreateTableController {
 	 * @param TableBean bean
 	 * @return
 	 * @throws DAOException   
+	 * @throws DateParsingException 
 	 */
-	public boolean createTable(TableBean bean) throws DAOException {
+	public boolean createTable(TableBean bean) throws DAOException, DateParsingException {
 		String name = bean.getName();
 		var place = new Place(bean.getAddress(), bean.getLatitude(), bean.getLongitude());
 		String cardGame = bean.getCardGame();

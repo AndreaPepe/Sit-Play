@@ -12,6 +12,7 @@ import main.java.engineering.dao.BusinessActivityDAO;
 import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.dao.TournamentDAO;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.model.BusinessActivity;
 import main.java.model.Notification;
@@ -19,7 +20,7 @@ import main.java.model.Tournament;
 
 public class SponsorizeTournamentController {
 
-	public List<TournamentBean> getTournamentsToSponsorize() throws DAOException {
+	public List<TournamentBean> getTournamentsToSponsorize() throws DAOException, DateParsingException {
 		List<TournamentBean> beans = new ArrayList<>();
 		try {
 			var list = TournamentDAO.retrieveSponsorizableTournaments();

@@ -16,6 +16,7 @@ import main.java.controller.applicationcontroller.reserveaseat.tournament.Reserv
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteSeatException;
 
 public class TournamentElement extends ListElement {
@@ -43,7 +44,7 @@ public class TournamentElement extends ListElement {
 		anchor.setPrefHeight(150d);
 		anchor.setStyle("-fx-background-color: #CCE1E9");
 
-		title = new Label(tBean.getName());
+		title = new Label(tBean.getName() + " - " + tBean.getCardGame());
 		title.setAlignment(Pos.CENTER);
 		title.setFont(Font.font("System", FontWeight.BOLD, 14));
 
@@ -68,7 +69,7 @@ public class TournamentElement extends ListElement {
 			sponsoredBy = new Label("Sponsored by");
 			sponsor = new Label(tBean.getSponsor().getName());
 			sponsor.setPrefHeight(35);
-			sponsor.setPrefWidth(140);
+			sponsor.setPrefWidth(100);
 			sponsor.setWrapText(true);
 
 			if (tBean.getSponsor().getLogo() != null) {
@@ -104,22 +105,23 @@ public class TournamentElement extends ListElement {
 			var btnNo = new ButtonType("No", ButtonData.NO);
 			confirmationAlert.getButtonTypes().setAll(btnYes, btnNo);
 			confirmationAlert.showAndWait().ifPresent(type -> {
-				var ctrl = new ReserveTournamentSeatController();
-				try {
-					var tBean = (TournamentBean) ((BeanContainer) obj).getCarriedBean();
-					var userBean = ((BeanContainer) obj).getUserBean();
-					ctrl.removeParticipant(tBean, userBean);
+				if (type == btnYes) {
+					var ctrl = new ReserveTournamentSeatController();
+					try {
+						var tBean = (TournamentBean) ((BeanContainer) obj).getCarriedBean();
+						var userBean = ((BeanContainer) obj).getUserBean();
+						ctrl.removeParticipant(tBean, userBean);
 
-					AlertFactory.getInstance()
-							.createAlert("You have successfully left the tournament " + tBean.getName(),
-									AlertType.INFORMATION)
-							.show();
-					// remove this element from the list
-					super.detach();
-					detach();
-				} catch (DAOException | DeleteSeatException e) {
-					AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
-					return;
+						AlertFactory.getInstance()
+								.createAlert("You have successfully left the tournament " + tBean.getName(),
+										AlertType.INFORMATION)
+								.show();
+						// remove this element from the list
+						super.detach();
+					} catch (DAOException | DeleteSeatException | DateParsingException e) {
+						AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+						return;
+					}
 				}
 			});
 		});
@@ -147,14 +149,14 @@ public class TournamentElement extends ListElement {
 		AnchorPane.setRightAnchor(btnLeave, 15d);
 
 		if (hasSponsor) {
-			AnchorPane.setTopAnchor(sponsoredBy, 85d);
+			AnchorPane.setTopAnchor(sponsoredBy, 95d);
 			AnchorPane.setLeftAnchor(sponsoredBy, 15d);
 
 			AnchorPane.setTopAnchor(sponsor, 105d);
 			AnchorPane.setLeftAnchor(sponsor, 15d);
 			if (sponsorHasLogo) {
-				AnchorPane.setLeftAnchor(ivSponsor, 180d);
-				AnchorPane.setBottomAnchor(ivSponsor, 5d);
+				AnchorPane.setLeftAnchor(ivSponsor, 150d);
+				AnchorPane.setBottomAnchor(ivSponsor, 10d);
 			}
 		}
 	}

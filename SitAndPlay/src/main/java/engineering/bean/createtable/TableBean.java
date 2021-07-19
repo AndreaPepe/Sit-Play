@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.engineering.exceptions.BeanCheckException;
+import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.DatetimeUtil;
 
 public class TableBean {
+
+	// A table can be created only if there is at least 1 hour of time to reserve a
+	// seat
+	private static final int HOURS_OF_MARGIN_FOR_CREATION = 2;
 
 	private String name;
 	private String address;
@@ -17,7 +22,7 @@ public class TableBean {
 	private String time;
 	private String organizer;
 	private List<String> participants;
-	
+
 	public TableBean(String name, PlaceBean place, String cardGame, String date, String time, String organizer) {
 		super();
 		this.name = name;
@@ -30,7 +35,7 @@ public class TableBean {
 		this.organizer = organizer;
 		this.participants = null;
 	}
-	
+
 	public TableBean(String name, PlaceBean place, String cardGame, String date, String time, String organizer,
 			List<String> participants) {
 		super();
@@ -44,13 +49,15 @@ public class TableBean {
 		this.organizer = organizer;
 		this.participants = new ArrayList<>(participants);
 	}
-	
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getAddress() {
 		return address;
 	}
@@ -73,7 +80,8 @@ public class TableBean {
 
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
-	}	
+	}
+
 	public String getCardGame() {
 		return cardGame;
 	}
@@ -85,34 +93,40 @@ public class TableBean {
 	public String getDate() {
 		return date;
 	}
+
 	public void setDate(String date) {
 		this.date = date;
 	}
+
 	public String getTime() {
 		return time;
 	}
+
 	public void setTime(String time) {
 		this.time = time;
 	}
+
 	public String getOrganizer() {
 		return organizer;
 	}
+
 	public void setOrganizer(String organizer) {
 		this.organizer = organizer;
 	}
+
 	public List<String> getParticipants() {
 		return participants;
 	}
+
 	public void setParticipants(List<String> participants) {
 		this.participants = new ArrayList<>(participants);
 	}
-	
-	public Boolean checkDateTime() {
+
+	public Boolean checkDateTime() throws DateParsingException {
 		return DatetimeUtil.isFutureDatetime(this.getDate(), this.getTime());
 	}
-	
-	
-	public Boolean checkCreateTable() throws BeanCheckException {
+
+	public Boolean checkCreateTable() throws BeanCheckException, DateParsingException {
 		if (name == null || name.isBlank()) {
 			throw new BeanCheckException("Table name is blank");
 		}
@@ -125,10 +139,14 @@ public class TableBean {
 		if (Boolean.FALSE.equals(checkDateTime())) {
 			throw new BeanCheckException("Impossible to create a table in the past");
 		}
+		if (Boolean.FALSE.equals(DatetimeUtil.isValidDateWithMargin(date, time, HOURS_OF_MARGIN_FOR_CREATION))) {
+			throw new BeanCheckException(String.format(
+					"A table must be created within at least %d hours from the start", HOURS_OF_MARGIN_FOR_CREATION));
+		}
 		if (organizer == null || organizer.isBlank()) {
 			throw new BeanCheckException("Something didn't work. Organizer blank");
 		}
 		return true;
 	}
-	
+
 }

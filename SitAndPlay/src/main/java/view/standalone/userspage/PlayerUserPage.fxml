@@ -84,12 +84,23 @@
                         <Font name="Papyrus" size="16.0" />
                      </font>
                   </Label>
-                  <ScrollPane fitToWidth="true" layoutX="25.0" layoutY="48.0" prefHeight="150.0" prefWidth="590.0" style="-fx-background-color: #ffffff;" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="35.0">
+                  <ScrollPane fitToWidth="true" layoutX="25.0" layoutY="48.0" prefHeight="150.0" prefWidth="590.0" style="-fx-background-color: #ffffff; -fx-border-color: #296581;" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="35.0">
                      <content>
-                        <VBox fx:id="vboxTables" minHeight="150.0" prefWidth="590.0" spacing="10.0" style="-fx-background-color: #ffffff;" />
+                        <VBox fx:id="vboxTables" minHeight="150.0" prefWidth="590.0" spacing="10.0" style="-fx-background-color: #ffffff;">
+                           <children>
+                              <AnchorPane prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="238.0" layoutY="14.0" prefWidth="250.0" text="Table's name" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                           </children></VBox>
                      </content>
                   </ScrollPane>
-                  <ScrollPane fitToWidth="true" layoutX="25.0" layoutY="249.0" prefHeight="150.0" prefWidth="590.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                  <ScrollPane fitToWidth="true" layoutX="25.0" layoutY="249.0" prefHeight="150.0" prefWidth="590.0" style="-fx-background-color: #ffffff; -fx-border-color: #296581;" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
                      <content>
                         <VBox fx:id="vboxTournaments" minHeight="150.0" prefWidth="590.0" spacing="10.0" style="-fx-background-color: #ffffff;">
                            <children>
