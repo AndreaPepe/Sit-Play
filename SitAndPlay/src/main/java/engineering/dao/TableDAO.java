@@ -47,7 +47,7 @@ public class TableDAO {
 			var lng = rs.getDouble("lng");
 			var cardGame = CardGame.getConstant(rs.getString("cardGame"));
 			var mysqlDatetime = rs.getTimestamp("datetime", Calendar.getInstance(Locale.getDefault()));
-			rs.getString("winner");
+			var winner = rs.getString("winner");
 
 			rs.close();
 			stmt.close();
@@ -68,6 +68,7 @@ public class TableDAO {
 				throw new DAOException("Parsing of datetime from database did not work");
 			}
 			table = new Table(name, place, cardGame, datetime, organizer);
+			table.setWinner(winner);
 			rs2.close();
 			stmt.close();
 

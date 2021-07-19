@@ -8,6 +8,7 @@ public class Table extends Organizable {
 
 	private CardGame cardGame;
 	private List<String> participants;
+	private String winner;
 	
 	public Table(String name, Place place, CardGame cardGame, Date datetime, String organizer) {
 		this.name = name;
@@ -16,6 +17,7 @@ public class Table extends Organizable {
 		this.datetime = datetime;
 		this.organizer = organizer;
 		this.participants = new ArrayList<>();
+		this.winner = null;
 	}
 	
 	public CardGame getCardGame() {
@@ -40,6 +42,14 @@ public class Table extends Organizable {
 	
 	public void removeParticipant(String username) {
 		this.participants.remove(username);
+	}
+
+	public String getWinner() {
+		return winner;
+	}
+
+	public void setWinner(String winner) {
+		this.winner = winner;
 	}
 
 	

@@ -16,7 +16,7 @@ public class QueryTable {
 
 	}
 
-	private static final String SELECT_HEADER = "SELECT name, address, lat, lng, cardGame, datetime, organizer ";
+	private static final String SELECT_HEADER = "SELECT DISTINCT name, address, lat, lng, cardGame, datetime, organizer ";
 
 	public static ResultSet retrieveTable(Statement stmt, String name) throws SQLException {
 		String query = "SELECT * FROM Tables WHERE name = '" + name + "';";

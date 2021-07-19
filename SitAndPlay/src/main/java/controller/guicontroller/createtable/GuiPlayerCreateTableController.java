@@ -27,6 +27,7 @@ import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.createtable.PlaceBean;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.exceptions.AlertFactory;
+import main.java.engineering.exceptions.AlreadyExistingWinnerException;
 import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.DateParsingException;
@@ -43,7 +44,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 	@FXML
 	private AnchorPane apnCreate;
-	
+
 	@FXML
 	private AnchorPane apnMyTables;
 
@@ -52,7 +53,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 	@FXML
 	private ToggleButton btnReserveMenu;
-	
+
 	@FXML
 	private ToggleButton toggleMyTables;
 
@@ -102,20 +103,18 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	private static final String MAP_WITH_MARKERS = "src/main/java/view/standalone/createtable/BigMapWithMarkers.html";
 
 	private List<TableBean> beanList;
-	
+
 	// third page attributes
 	@FXML
 	private ComboBox<String> cbTable;
-	
+
 	@FXML
 	private ComboBox<String> cbWinner;
-	
+
 	@FXML
 	private Button btnDeclareWinner;
-	
+
 	private List<TableBean> tableBeansWinner;
-	
-	
 
 	public GuiPlayerCreateTableController(Session ssn) {
 		super(ssn);
@@ -306,7 +305,8 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		try {
 			beanList = ctrl.retrieveOpenTables();
 			if (beanList.isEmpty()) {
-				AlertFactory.getInstance().createAlert("No open table has been found; retry later", AlertType.WARNING).show();
+				AlertFactory.getInstance().createAlert("No open table has been found; retry later", AlertType.WARNING)
+						.show();
 			} else {
 				for (TableBean bean : beanList) {
 					var lat = bean.getLatitude();
@@ -365,15 +365,17 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		var script = "getSelectedTable();";
 		return (String) allEngine.executeScript(script);
 	}
-	
-	
+
 	// third page controls
-	@FXML 
-	public void loadThirdPage(ActionEvent event){
+	@FXML
+	public void loadThirdPage(ActionEvent event) {
+		apnCreate.toBack();
+		apnReserve.toBack();
+		apnMyTables.toFront();
 		loadMyTables();
 		setUIElements();
 	}
-	
+
 	@FXML
 	public void declareWinner(ActionEvent event) {
 		var selectedParticipant = cbWinner.getValue();
@@ -383,30 +385,36 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 			tableBean.setWinner(selectedParticipant);
 			try {
 				ctrl.declareWinner(tableBean, ssn.getUser());
-			} catch (DAOException e) {
+				AlertFactory.getInstance().createAlert("Winner declared with success", AlertType.INFORMATION).show();
+				// reload the page
+				toggleMyTables.fire();
+			} catch (DAOException | DateParsingException | AlreadyExistingWinnerException e) {
 				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 			}
 		}
 	}
-	
+
 	private void loadMyTables() {
 		var ctrl = new ReserveTableSeatController();
 		try {
 			tableBeansWinner = ctrl.retrieveTablesToDeclareWinnerTo(ssn.getUser());
 			cbTable.getItems().clear();
+			cbWinner.getItems().clear();
+			cbTable.setPromptText("Select table");
+			cbWinner.setPromptText("Select winner");
 			for (TableBean bean : tableBeansWinner) {
 				cbTable.getItems().add(bean.getName());
 			}
-			
+
 		} catch (DateParsingException | DAOException e) {
 			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		}
 	}
-	
+
 	private void setUIElements() {
 		cbWinner.setDisable(true);
 		btnDeclareWinner.setDisable(true);
-		
+
 		cbTable.valueProperty().addListener((obs, oldVal, newVal) -> {
 			if (newVal != null) {
 				cbWinner.getItems().clear();
@@ -415,26 +423,22 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 					bean.getParticipants().forEach(it -> cbWinner.getItems().add(it));
 				}
 				cbWinner.setDisable(false);
-			}else {
+			} else {
 				cbWinner.setDisable(true);
 				btnDeclareWinner.setDisable(true);
 			}
 		});
+
+		cbWinner.valueProperty().addListener((obs, oldVal, newVal) -> btnDeclareWinner.setDisable((newVal == null)));
 		
-		cbWinner.valueProperty().addListener((obs, oldVal, newVal) -> {
-			if(newVal != null) {
-				btnDeclareWinner.setDisable(false);
-			}else {
-				btnDeclareWinner.setDisable(true);
-			}
-		});
 	}
+
 	private TableBean getSelectedTableToDeclareWinner() {
 		var name = cbTable.getValue();
 		if (name == null) {
 			AlertFactory.getInstance().createAlert("Select a table first", AlertType.WARNING).show();
-			
-		}else {
+
+		} else {
 			for (TableBean bean : tableBeansWinner) {
 				if (bean.getName().equals(name)) {
 					return bean;

@@ -9,6 +9,7 @@ import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.dao.TableDAO;
+import main.java.engineering.exceptions.AlreadyExistingWinnerException;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteSeatException;
@@ -114,8 +115,12 @@ public class ReserveTableSeatController {
 		return beans;
 	}
 	
-	public void declareWinner(TableBean tableBean, BeanUser organizer) throws DAOException {
+	public void declareWinner(TableBean tableBean, BeanUser organizer) throws DAOException, DateParsingException, AlreadyExistingWinnerException {
 		try {
+			var tableCheck = TableDAO.retrieveTable(tableBean.getName());
+			if (tableCheck.getWinner() != null) {
+				throw new AlreadyExistingWinnerException("ERROR! This table already has a winner!");
+			}
 			TableDAO.addWinner(tableBean.getName(), tableBean.getWinner());
 			var msg = String.format(CommonStrings.getTableWinnerString(), tableBean.getName(), organizer.getUsername());
 			var notif = new Notification(-1, organizer.getUsername(), tableBean.getWinner(), msg, false);

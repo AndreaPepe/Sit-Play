@@ -117,14 +117,14 @@
                         <Font name="Papyrus" size="18.0" />
                      </font>
                   </Label>
+                  <Button fx:id="btnDeclareWinner" mnemonicParsing="false" onAction="#declareWinner" prefWidth="150.0" styleClass="btn" stylesheets="@../css/Style.css" text="Declare Winner" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="100.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
          </children>
       </Pane>
-      <Button fx:id="btnDeclareWinner" mnemonicParsing="false" onAction="#declareWinner" prefWidth="150.0" styleClass="btn" stylesheets="@../css/Style.css" text="Declare Winner" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="100.0">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>
