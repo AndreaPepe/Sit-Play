@@ -3,8 +3,8 @@ package main.java.view.listview;
 public enum ListElementType {
 	ACTIVITY,
 	NOTIFICATION,
-	CLOSED_TABLE,
+	DELETABLE_TABLE,
 	OPEN_TABLE,
-	CLOSED_TOURNAMENT,
+	DELETABLE_TOURNAMENT,
 	OPEN_TOURNAMENT
 }

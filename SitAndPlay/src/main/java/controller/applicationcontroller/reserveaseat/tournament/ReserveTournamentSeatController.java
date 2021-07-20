@@ -9,6 +9,7 @@ import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.bean.tournaments.TournamentBeanFactory;
 import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.dao.TournamentDAO;
+import main.java.engineering.exceptions.AlreadyExistingWinnerException;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteSeatException;
@@ -99,6 +100,40 @@ public class ReserveTournamentSeatController {
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 		return list;
+	}
+	
+	public List<TournamentBean> retrieveTournamentsToDeclareWinnerTo(BeanUser organizer) throws DAOException, DateParsingException{
+		List<TournamentBean> ret = new ArrayList<>();
+		try {
+			var tmts = TournamentDAO.getTournamentsToDeclareWinnerByOrganizer(organizer.getUsername());
+			for(Tournament t : tmts) {
+				var bean = TournamentBeanFactory.createBean(t);
+				// we also need the list of participants
+				var participants = TournamentDAO.retrieveParticipants(t.getName());
+				bean.setParticipants(participants);
+				ret.add(bean);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
+		return ret;
+	}
+	
+	public void setWinner (TournamentBean tournament, BeanUser userOrg) throws DAOException, DateParsingException, AlreadyExistingWinnerException {
+		try {
+			var tournamentCheck = TournamentDAO.retrieveTournament(tournament.getName());
+			if (tournamentCheck.getWinner() != null) {
+				throw new AlreadyExistingWinnerException("ERROR! This tournament already has a winner!");
+			}else {
+				TournamentDAO.setWinner(tournament.getName(), tournament.getWinner());
+				var message = String.format(CommonStrings.getTournamentWinnerString(), tournament.getName(), userOrg.getUsername());
+				var notif = new Notification(-1, userOrg.getUsername(), tournament.getWinner(), message, false);
+				NotificationDAO.insertNotification(notif);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
+		
 	}
 
 }

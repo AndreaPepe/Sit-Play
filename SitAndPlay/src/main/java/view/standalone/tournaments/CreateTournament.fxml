@@ -6,12 +6,14 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
@@ -34,13 +36,17 @@
                         <Font size="14.0" />
                      </font>
                   </ToggleButton>
+                  <ToggleButton fx:id="toggleDeclareWinner" mnemonicParsing="false" onAction="#handleDeclareWinner" prefWidth="150.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Declare Winner" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </ToggleButton>
                </children>
             </HBox>
          </items>
       </ToolBar>
       <Pane layoutY="40.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
-            <AnchorPane fx:id="apHandle" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: white;" />
             <AnchorPane fx:id="apCreateTournament" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: white;">
                <children>
                   <WebView fx:id="webViewCreate" layoutX="295.0" layoutY="14.0" prefHeight="365.0" prefWidth="350.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
@@ -67,6 +73,36 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="apHandle" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: white;" />
+            <AnchorPane fx:id="apDeclareWinner" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Label alignment="TOP_CENTER" layoutX="41.0" layoutY="180.0" prefHeight="160.0" prefWidth="225.0" text="First select one of the available tournaments and then the participant that will be declared winner!" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                     <font>
+                        <Font name="Papyrus" size="18.0" />
+                     </font>
+                  </Label>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="20.0" />
+                  <VBox layoutX="325.0" layoutY="40.0" prefHeight="200.0" prefWidth="100.0" spacing="40.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+                     <padding>
+                        <Insets top="40.0" />
+                     </padding>
+                     <children>
+                        <ComboBox fx:id="cbTournament" prefWidth="280.0" promptText="Select tournament" />
+                        <ComboBox fx:id="cbSelectWinner" prefWidth="280.0" promptText="Select winner" />
+                     </children>
+                  </VBox>
+                  <Button fx:id="btnWinner" layoutX="454.0" layoutY="287.0" mnemonicParsing="false" onAction="#setWinner" styleClass="btn" stylesheets="@../css/Style.css" text="Declare Winner" textFill="WHITE" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="100.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Label alignment="TOP_CENTER" layoutX="34.0" layoutY="20.0" prefHeight="160.0" prefWidth="240.0" text="Here you can declare the winner of a tournament you have organized" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                     <font>
+                        <Font name="Papyrus" size="18.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </children>

@@ -287,5 +287,31 @@ public class TournamentDAO {
 			}
 		}
 	}
+	
+	public static List<Tournament> getTournamentsToDeclareWinnerByOrganizer(String organizer) throws SQLException, DateParsingException{
+		Statement stmt = null;
+		List<Tournament> list = new ArrayList<>();
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.getTournamentToDeclareWinnerByOrganizer(stmt, organizer);
+			while(rs.next()) {
+				var tmt = buildTournamentFromResultSet(rs);
+				list.add(tmt);
+			}
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
+	}
+	
+	public static void setWinner (String tournament, String winner) throws SQLException {
+		var conn = DBConnector.getInstance().getConnection();
+		QueryTournament.updateWinner(conn, tournament, winner);
+	}
 
 }

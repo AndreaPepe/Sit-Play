@@ -130,4 +130,13 @@ public class ReserveTableSeatController {
 		}
 		
 	}
+	
+	public void deleteTable(TableBean bean) throws DAOException, DateParsingException {
+		try {
+			var tableCheck = TableDAO.retrieveTable(bean.getName());
+			// TODO check if the current timestamp is at least 2 hours before the beginning of the game 
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
+	}
 }

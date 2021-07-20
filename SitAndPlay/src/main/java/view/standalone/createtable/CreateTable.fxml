@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
@@ -20,19 +21,24 @@
    <children>
       <ToolBar prefHeight="40.0" prefWidth="650.0" styleClass="top-bar" stylesheets="@../css/Style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-            <HBox prefHeight="30.0" prefWidth="589.0" spacing="20.0">
+            <HBox prefHeight="30.0" prefWidth="620.0" spacing="20.0">
                <children>
-                  <ToggleButton fx:id="btnCreateMenu" mnemonicParsing="false" onAction="#handleCreateMenu" prefWidth="120.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Create Table" textFill="WHITE">
+                  <ToggleButton fx:id="btnCreateMenu" mnemonicParsing="false" onAction="#handleCreateMenu" prefWidth="130.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Create Table" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnReserveMenu" mnemonicParsing="false" onAction="#handleReserveMenu" prefWidth="120.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Reserve A Seat" textFill="WHITE">
+                  <ToggleButton fx:id="btnReserveMenu" mnemonicParsing="false" onAction="#handleReserveMenu" prefWidth="130.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Reserve A Seat" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </ToggleButton>
-                  <ToggleButton fx:id="toggleMyTables" mnemonicParsing="false" onAction="#loadThirdPage" prefWidth="120.0" styleClass="toggle" stylesheets="@../css/Style.css" text="My Tables" textFill="WHITE">
+                  <ToggleButton fx:id="toggleMyTables" mnemonicParsing="false" onAction="#loadThirdPage" prefWidth="130.0" styleClass="toggle" stylesheets="@../css/Style.css" text="My Tables" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </ToggleButton>
+                  <ToggleButton fx:id="toggleMyTables1" mnemonicParsing="false" onAction="#loadThirdPage" prefWidth="130.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Organized Tables" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -100,8 +106,8 @@
                   <Separator layoutX="241.0" layoutY="14.0" orientation="VERTICAL" prefHeight="350.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="20.0" />
                   <VBox layoutX="275.0" layoutY="28.0" prefHeight="200.0" prefWidth="100.0" spacing="40.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
                      <children>
-                        <ComboBox fx:id="cbTable" prefHeight="25.0" prefWidth="320.0" promptText="Select organized table" />
-                        <ComboBox fx:id="cbWinner" prefWidth="320.0" promptText="Select winner" />
+                        <ComboBox fx:id="cbTable" prefHeight="25.0" prefWidth="280.0" promptText="Select organized table" />
+                        <ComboBox fx:id="cbWinner" prefWidth="280.0" promptText="Select winner" />
                      </children>
                      <padding>
                         <Insets top="40.0" />
@@ -122,6 +128,15 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="apOrganizedTables" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <ScrollPane fitToWidth="true" layoutX="29.0" layoutY="35.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #296581;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="40.0">
+                     <content>
+                        <VBox fx:id="vboxTables" minHeight="310.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: #ffffff;" />
+                     </content>
+                  </ScrollPane>
                </children>
             </AnchorPane>
          </children>

@@ -11,7 +11,9 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -378,20 +380,30 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 	@FXML
 	public void declareWinner(ActionEvent event) {
-		var selectedParticipant = cbWinner.getValue();
-		var ctrl = new ReserveTableSeatController();
-		var tableBean = getSelectedTableToDeclareWinner();
-		if (tableBean != null) {
-			tableBean.setWinner(selectedParticipant);
-			try {
-				ctrl.declareWinner(tableBean, ssn.getUser());
-				AlertFactory.getInstance().createAlert("Winner declared with success", AlertType.INFORMATION).show();
-				// reload the page
-				toggleMyTables.fire();
-			} catch (DAOException | DateParsingException | AlreadyExistingWinnerException e) {
-				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+		var yesOrNo = AlertFactory.getInstance().createAlert("Are you sure? This is an irreversible operation",
+				AlertType.CONFIRMATION);
+		var btnYes = new ButtonType("Yes", ButtonData.YES);
+		var btnNo = new ButtonType("No", ButtonData.NO);
+		yesOrNo.getButtonTypes().setAll(btnYes, btnNo);
+		yesOrNo.showAndWait().ifPresent(type -> {
+			if (type == btnYes) {
+				var selectedParticipant = cbWinner.getValue();
+				var ctrl = new ReserveTableSeatController();
+				var tableBean = getSelectedTableToDeclareWinner();
+				if (tableBean != null) {
+					tableBean.setWinner(selectedParticipant);
+					try {
+						ctrl.declareWinner(tableBean, ssn.getUser());
+						AlertFactory.getInstance().createAlert("Winner declared with success", AlertType.INFORMATION)
+								.show();
+						// reload the page
+						toggleMyTables.fire();
+					} catch (DAOException | DateParsingException | AlreadyExistingWinnerException e) {
+						AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+					}
+				}
 			}
-		}
+		});
 	}
 
 	private void loadMyTables() {
@@ -400,7 +412,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 			tableBeansWinner = ctrl.retrieveTablesToDeclareWinnerTo(ssn.getUser());
 			cbTable.getItems().clear();
 			cbWinner.getItems().clear();
-			cbTable.setPromptText("Select table");
+			cbTable.setPromptText("Select organized table");
 			cbWinner.setPromptText("Select winner");
 			for (TableBean bean : tableBeansWinner) {
 				cbTable.getItems().add(bean.getName());
@@ -430,7 +442,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		});
 
 		cbWinner.valueProperty().addListener((obs, oldVal, newVal) -> btnDeclareWinner.setDisable((newVal == null)));
-		
+
 	}
 
 	private TableBean getSelectedTableToDeclareWinner() {

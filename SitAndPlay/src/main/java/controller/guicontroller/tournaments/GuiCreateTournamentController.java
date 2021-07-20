@@ -10,7 +10,9 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -22,9 +24,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.java.controller.applicationcontroller.createtournament.CreateTournamentController;
+import main.java.controller.applicationcontroller.reserveaseat.tournament.ReserveTournamentSeatController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.exceptions.AlertFactory;
+import main.java.engineering.exceptions.AlreadyExistingWinnerException;
 import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.DateParsingException;
@@ -46,10 +50,16 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 	private ToggleButton toggleHandleTournaments;
 
 	@FXML
+	private ToggleButton toggleDeclareWinner;
+
+	@FXML
 	private AnchorPane apHandle;
 
 	@FXML
 	private AnchorPane apCreateTournament;
+
+	@FXML
+	private AnchorPane apDeclareWinner;
 
 	@FXML
 	private WebView webViewCreate;
@@ -88,6 +98,18 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 	@FXML
 	private VBox vbox;
 
+	// page declare winner attributes
+	@FXML
+	private ComboBox<String> cbTournament;
+
+	@FXML
+	private ComboBox<String> cbSelectWinner;
+
+	@FXML
+	private Button btnWinner;
+
+	private List<TournamentBean> winnerBeans;
+
 	private static final String HTML_MAP = "src/main/java/view/standalone/createtable/mapbox.html";
 	private String location;
 	private double latitude;
@@ -112,6 +134,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 	@FXML
 	public void handleToggleCreate(ActionEvent event) {
 		apHandle.toBack();
+		apDeclareWinner.toBack();
 		apCreateTournament.toFront();
 
 		setMap();
@@ -187,25 +210,23 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 
 	@FXML
 	public void createTournament(ActionEvent event) {
-		
+
 		var tournamentBean = buildBeanFromInput();
 		if (tournamentBean != null) {
 			try {
 				tournamentBean.checkRulesForInsert();
 			} catch (BeanCheckException | DateParsingException e) {
-				AlertFactory.getInstance()
-					.createAlert(e.getMessage(), AlertType.ERROR).show();
+				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 				return;
 			}
 			var ctrl = new CreateTournamentController();
 			try {
 				if (Boolean.TRUE.equals(ctrl.createTournament(tournamentBean))) {
-					AlertFactory.getInstance()
-					.createAlert("Tournament succesfully created", AlertType.INFORMATION).show();
+					AlertFactory.getInstance().createAlert("Tournament succesfully created", AlertType.INFORMATION)
+							.show();
 				}
 			} catch (DAOException | DateParsingException e) {
-				AlertFactory.getInstance()
-				.createAlert(e.getMessage(), AlertType.ERROR).show();
+				AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 			}
 		}
 	}
@@ -214,14 +235,15 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 	@FXML
 	public void handleTournaments(ActionEvent event) {
 		apCreateTournament.toBack();
+		apDeclareWinner.toBack();
 		apHandle.toFront();
 
 		setMap();
 		setAutocompleteTextField();
 	}
-	
+
 	private TournamentBean buildBeanFromInput() {
-		
+
 		TournamentBean tournamentBean = null;
 		String name = tfName.getText();
 		String cardGame = cbCardGame.getValue();
@@ -233,8 +255,8 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 			String date = dpDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			String time = cbHours.getValue() + ":" + cbMin.getValue();
 			if (cbHours.getValue() == null || cbMin.getValue() == null) {
-				AlertFactory.getInstance()
-					.createAlert("Insert hours and minutes correctly please", AlertType.ERROR).show();
+				AlertFactory.getInstance().createAlert("Insert hours and minutes correctly please", AlertType.ERROR)
+						.show();
 				return null;
 			}
 
@@ -278,12 +300,101 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 			tournamentBean.setPrice(price);
 			tournamentBean.setAward(award);
 			tournamentBean.setInRequestForSponsor(reqSponsor);
-			
-			
-		}else {
-			AlertFactory.getInstance()
-			.createAlert("You have to select a date!", AlertType.ERROR).show();
+
+		} else {
+			AlertFactory.getInstance().createAlert("You have to select a date!", AlertType.ERROR).show();
 		}
 		return tournamentBean;
+	}
+
+	// declare winner controls
+	@FXML
+	public void handleDeclareWinner(ActionEvent event) {
+		apHandle.toBack();
+		apCreateTournament.toBack();
+		apDeclareWinner.toFront();
+
+		loadWinnerTournaments();
+		setUpUI();
+	}
+
+	@FXML
+	public void setWinner(ActionEvent event) {
+		var confirmationDialog = AlertFactory.getInstance().createAlert("Are you sure? This is an irreversible operation",
+				AlertType.CONFIRMATION);
+		var btnYes = new ButtonType("Yes", ButtonData.YES);
+		var btnNo = new ButtonType("No", ButtonData.NO);
+		confirmationDialog.getButtonTypes().setAll(btnYes, btnNo);
+		confirmationDialog.showAndWait().ifPresent(type -> {
+			if (type == btnYes) {
+				var selectedWinner = cbSelectWinner.getValue();
+				var ctrl = new ReserveTournamentSeatController();
+				var bean = getSelectedTournamentForWinner();
+				if (bean != null) {
+					bean.setWinner(selectedWinner);
+					try {
+						ctrl.setWinner(bean, ssn.getUser());
+						AlertFactory.getInstance().createAlert("Winner declared with success", AlertType.INFORMATION)
+								.show();
+						// reload the page
+						toggleDeclareWinner.fire();
+					} catch (DAOException | DateParsingException | AlreadyExistingWinnerException e) {
+						AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+					}
+				}
+			}
+		});
+	}
+
+	private void loadWinnerTournaments() {
+		var ctrl = new ReserveTournamentSeatController();
+		try {
+			winnerBeans = ctrl.retrieveTournamentsToDeclareWinnerTo(ssn.getUser());
+			cbTournament.getItems().clear();
+			cbTournament.setPromptText("Select tournament");
+			cbSelectWinner.getItems().clear();
+			cbSelectWinner.setPromptText("Select winner");
+			for (TournamentBean bean : winnerBeans) {
+				cbTournament.getItems().add(bean.getName());
+			}
+		} catch (DAOException | DateParsingException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+		}
+	}
+
+	private void setUpUI() {
+		cbSelectWinner.setDisable(true);
+		btnWinner.setDisable(true);
+
+		cbTournament.valueProperty().addListener((obs, oldVal, newVal) -> {
+			if (newVal != null) {
+				// load participants
+				cbSelectWinner.getItems().clear();
+				var selectedTournament = getSelectedTournamentForWinner();
+				if (selectedTournament != null) {
+					selectedTournament.getParticipants().forEach(it -> cbSelectWinner.getItems().add(it));
+				}
+				cbSelectWinner.setDisable(false);
+			} else {
+				cbSelectWinner.setDisable(true);
+				btnWinner.setDisable(true);
+			}
+		});
+
+		cbSelectWinner.valueProperty().addListener((obs, oldVal, newVal) -> btnWinner.setDisable(newVal == null));
+	}
+
+	private TournamentBean getSelectedTournamentForWinner() {
+		var name = cbTournament.getValue();
+		if (name == null) {
+			AlertFactory.getInstance().createAlert("Please select a tournament", AlertType.WARNING).show();
+		} else {
+			for (TournamentBean b : winnerBeans) {
+				if (b.getName().equals(name)) {
+					return b;
+				}
+			}
+		}
+		return null;
 	}
 }
