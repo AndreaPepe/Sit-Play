@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
@@ -75,7 +76,6 @@
                   </Button>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="apHandle" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: white;" />
             <AnchorPane fx:id="apDeclareWinner" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Label alignment="TOP_CENTER" layoutX="41.0" layoutY="180.0" prefHeight="160.0" prefWidth="225.0" text="First select one of the available tournaments and then the participant that will be declared winner!" textAlignment="CENTER" textFill="#296581" wrapText="true">
@@ -105,6 +105,14 @@
                   </Label>
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="apHandle" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: white;">
+               <children>
+                  <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #296581;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="40.0">
+                     <content>
+                        <VBox fx:id="vboxTournaments" minHeight="310.0" prefWidth="100.0" style="-fx-background-color: white;" />
+                     </content>
+                  </ScrollPane>
+               </children></AnchorPane>
          </children>
       </Pane>
    </children>
