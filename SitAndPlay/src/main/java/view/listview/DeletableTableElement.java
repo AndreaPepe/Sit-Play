@@ -10,8 +10,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTableSeatController;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.exceptions.AlertFactory;
+import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
+import main.java.engineering.exceptions.OutOfTimeException;
 
 public class DeletableTableElement extends ListElement {
 
@@ -59,17 +63,31 @@ public class DeletableTableElement extends ListElement {
 	}
 
 	private void setButtonAction() {
-		var confirmation = AlertFactory.getInstance().createAlert(
-				"Are you sure? Once deleted, all participants will be notificated.", AlertType.CONFIRMATION);
-		var btnYes = new ButtonType("Yes", ButtonData.YES);
-		var btnNo = new ButtonType("No", ButtonData.NO);
-		confirmation.getButtonTypes().setAll(btnYes, btnNo);
-		confirmation.showAndWait().ifPresent(type -> {
-			if (type == btnYes) {
-				// TODO call controller to delete table
-			}
-		});
 
+		btnDeleteTable.setOnMouseClicked(event -> {
+			var confirmation = AlertFactory.getInstance().createAlert(
+					"Are you sure? Once deleted, all participants will be notified.", AlertType.CONFIRMATION);
+			var btnYes = new ButtonType("Yes", ButtonData.YES);
+			var btnNo = new ButtonType("No", ButtonData.NO);
+			confirmation.getButtonTypes().setAll(btnYes, btnNo);
+			confirmation.showAndWait().ifPresent(type -> {
+				if (type == btnYes) {
+					var ctrl = new ReserveTableSeatController();
+					try {
+						ctrl.deleteTable((TableBean) super.obj);
+						AlertFactory.getInstance()
+								.createAlert("Table deleted succesfully. All the participants have been notified",
+										AlertType.INFORMATION)
+								.show();
+						// remove the list element from the list
+						super.detach();
+					} catch (DAOException | DateParsingException | OutOfTimeException e) {
+						AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+						return;
+					}
+				}
+			});
+		});
 	}
 
 	private void setUpConstraints() {

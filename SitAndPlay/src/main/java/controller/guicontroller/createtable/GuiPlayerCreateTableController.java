@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.java.controller.applicationcontroller.createtable.CreateTableController;
@@ -37,6 +38,8 @@ import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.Session;
 import main.java.engineering.utils.map.MapPlace;
 import main.java.model.CardGame;
+import main.java.view.listview.ListElementFactory;
+import main.java.view.listview.ListElementType;
 import main.java.view.standalone.SearchMapPlaceTextField;
 
 public class GuiPlayerCreateTableController extends GuiBasicInternalPageController {
@@ -49,6 +52,9 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 	@FXML
 	private AnchorPane apnMyTables;
+	
+	@FXML
+	private AnchorPane apnOrganizedTables;
 
 	@FXML
 	private ToggleButton btnCreateMenu;
@@ -58,6 +64,9 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 
 	@FXML
 	private ToggleButton toggleMyTables;
+	
+	@FXML
+	private ToggleButton toggleOrganizedTables;
 
 	@FXML
 	private TextField tfTableName;
@@ -117,6 +126,10 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	private Button btnDeclareWinner;
 
 	private List<TableBean> tableBeansWinner;
+	
+	//fourth page attributes
+	@FXML
+	private VBox vboxTables;
 
 	public GuiPlayerCreateTableController(Session ssn) {
 		super(ssn);
@@ -129,6 +142,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		btnCreateMenu.setToggleGroup(topBarToggleGroup);
 		btnReserveMenu.setToggleGroup(topBarToggleGroup);
 		toggleMyTables.setToggleGroup(topBarToggleGroup);
+		toggleOrganizedTables.setToggleGroup(topBarToggleGroup);
 		// avoid unselected button
 		topBarToggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
 			if (newVal == null) {
@@ -185,6 +199,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	public void handleCreateMenu(ActionEvent event) {
 		apnReserve.toBack();
 		apnMyTables.toBack();
+		apnOrganizedTables.toBack();
 		apnCreate.toFront();
 		loadMapbox();
 		setUpAutocompleteTextField();
@@ -200,6 +215,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 		loadSecondPage();
 		apnCreate.toBack();
 		apnMyTables.toBack();
+		apnOrganizedTables.toBack();
 		apnReserve.toFront();
 	}
 
@@ -372,6 +388,7 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 	@FXML
 	public void loadThirdPage(ActionEvent event) {
 		apnCreate.toBack();
+		apnOrganizedTables.toBack();
 		apnReserve.toBack();
 		apnMyTables.toFront();
 		loadMyTables();
@@ -458,5 +475,25 @@ public class GuiPlayerCreateTableController extends GuiBasicInternalPageControll
 			}
 		}
 		return null;
+	}
+	
+	// fourth page controls
+	@FXML
+	public void loadFourthPage(ActionEvent event) {
+		apnCreate.toBack();
+		apnReserve.toBack();
+		apnMyTables.toBack();
+		apnOrganizedTables.toFront();
+		
+		var ctrl = new ReserveTableSeatController();
+		try {
+			var tableBeans = ctrl.retrieveDeletableTables(ssn.getUser());
+			vboxTables.getChildren().clear();
+			for (TableBean bean : tableBeans) {
+				ListElementFactory.getInstance().createElement(ListElementType.DELETABLE_TABLE, vboxTables, bean);
+			}
+		} catch (DateParsingException | DAOException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+		}
 	}
 }

@@ -34,6 +34,9 @@ public class ListElementFactory {
 		case OPEN_TABLE:
 			elem = new TableElement(container, obj);
 			break;
+		case DELETABLE_TABLE:
+			elem = new DeletableTableElement(container, obj);
+			break;
 		// TODO: add other cases
 		default:
 			break;

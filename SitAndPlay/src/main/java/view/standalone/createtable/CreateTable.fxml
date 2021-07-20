@@ -38,7 +38,7 @@
                         <Font size="14.0" />
                      </font>
                   </ToggleButton>
-                  <ToggleButton fx:id="toggleMyTables1" mnemonicParsing="false" onAction="#loadThirdPage" prefWidth="130.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Organized Tables" textFill="WHITE">
+                  <ToggleButton fx:id="toggleOrganizedTables" mnemonicParsing="false" onAction="#loadFourthPage" prefWidth="130.0" styleClass="toggle" stylesheets="@../css/Style.css" text="Organized Tables" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -130,7 +130,7 @@
                   </Button>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="apOrganizedTables" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
+            <AnchorPane fx:id="apnOrganizedTables" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
                <children>
                   <ScrollPane fitToWidth="true" layoutX="29.0" layoutY="35.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #296581;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="40.0">
                      <content>

@@ -86,6 +86,12 @@ public class QueryTable {
 		return stmt.executeQuery(query);
 	}
 
+	public static ResultSet retrieveDeletableTables(Statement stmt, String organizer) throws SQLException {
+		var query = SELECT_HEADER + "FROM tables JOIN organizedtables " + "WHERE name=tablename "
+				+ "AND datetime > ADDTIME(current_timestamp(), '02:00:00') AND organizer = '" + organizer + "';";
+		return stmt.executeQuery(query);
+	}
+
 	public static ResultSet retrieveOpenTablesByParticipant(Statement stmt, String participant) throws SQLException {
 		var query = String.format(
 				SELECT_HEADER + "FROM tables JOIN organizedtables ON name=tablename "

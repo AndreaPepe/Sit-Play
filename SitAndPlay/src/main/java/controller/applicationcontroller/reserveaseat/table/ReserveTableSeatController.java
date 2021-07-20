@@ -13,6 +13,7 @@ import main.java.engineering.exceptions.AlreadyExistingWinnerException;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteSeatException;
+import main.java.engineering.exceptions.OutOfTimeException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
@@ -131,12 +132,39 @@ public class ReserveTableSeatController {
 		
 	}
 	
-	public void deleteTable(TableBean bean) throws DAOException, DateParsingException {
+	public void deleteTable(TableBean bean) throws DAOException, DateParsingException, OutOfTimeException {
 		try {
+			// at least 2 hours of margin
+			if (Boolean.FALSE.equals(DatetimeUtil.isValidDateWithMargin(bean.getDate(), bean.getTime(), 2))) {
+				throw new OutOfTimeException("Impossible to delete table. It should be deleted within 2 hours from the beginning");
+			}
+			
 			var tableCheck = TableDAO.retrieveTable(bean.getName());
-			// TODO check if the current timestamp is at least 2 hours before the beginning of the game 
+			var participants = tableCheck.getParticipants();
+			for (String part : participants) {
+				// notify each participant
+				var content = String.format(CommonStrings.getDeletedTableNotif(), tableCheck.getName(), tableCheck.getOrganizer());
+				var notif = new Notification(-1, tableCheck.getOrganizer(), part, content, false);
+				NotificationDAO.insertNotification(notif);
+			}
+			
+			TableDAO.deleteTable(tableCheck.getName());
 		} catch (SQLException e) {
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
+	}
+	
+	public List<TableBean> retrieveDeletableTables(BeanUser organizer) throws DateParsingException, DAOException{
+		List<TableBean> ret = new ArrayList<>();
+		try {
+			var tables = TableDAO.retrieveDeletableTables(organizer.getUsername());
+			for (Table t : tables) {
+				var bean = buildBean(t);
+				ret.add(bean);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
+		return ret;
 	}
 }

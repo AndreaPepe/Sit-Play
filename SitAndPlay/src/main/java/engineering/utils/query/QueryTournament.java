@@ -109,16 +109,16 @@ public class QueryTournament {
 
 	public static ResultSet getActiveTournamentsByParticipant(Statement stmt, String participant) throws SQLException {
 		var query = String.format(
-				"SELECT DISTINCT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo "
-						+ "FROM tournaments JOIN OrganizedTournaments ON name=tournament "
+				"SELECT DISTINCT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo FROM tournaments JOIN OrganizedTournaments ON name=tournament "
 						+ "JOIN TournamentsParticipants P on name= P.tournament "
-						+ "LEFT JOIN businessactivity on sponsor = activity "
+						+ "LEFT JOIN businessactivity on activity = sponsor "
 						+ "WHERE datetime > ADDTIME(current_timestamp(), '3:00:00') " + "AND participant = '%s';",
 				participant);
 		return stmt.executeQuery(query);
 	}
-	
-	public static ResultSet getTournamentToDeclareWinnerByOrganizer(Statement stmt, String organizer) throws SQLException {
+
+	public static ResultSet getTournamentToDeclareWinnerByOrganizer(Statement stmt, String organizer)
+			throws SQLException {
 		var query = String.format(
 				"SELECT DISTINCT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo "
 						+ "FROM tournaments JOIN OrganizedTournaments ON name=tournament "
@@ -127,17 +127,38 @@ public class QueryTournament {
 				organizer);
 		return stmt.executeQuery(query);
 	}
-	
+
 	public static void updateWinner(Connection conn, String tournamentName, String winner) throws SQLException {
 		var sql = "UPDATE Tournaments SET winner = ? WHERE name = ?";
 		var pstmt = conn.prepareCall(sql);
 		try {
 			pstmt.setString(1, winner);
 			pstmt.setString(2, tournamentName);
-			
+
 			pstmt.executeUpdate();
 		} finally {
 			pstmt.close();
 		}
+	}
+
+	public static ResultSet retrieveDeletableTournaments(Statement stmt, String organizer) throws SQLException {
+		var query = String.format(
+				"SELECT DISTINCT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo "
+						+ "FROM tournaments JOIN OrganizedTournaments ON name=tournament "
+						+ "LEFT JOIN businessactivity on sponsor = activity "
+						+ "WHERE datetime > ADDTIME(current_timestamp(), '6:00:00') " + "AND organizer = '%s';",
+				organizer);
+		return stmt.executeQuery(query);
+	}
+	
+	public static void deleteTournament(Statement stmt, String tournamentName) throws SQLException {
+		var query = String.format("DELETE FROM TournamentsParticipants WHERE tournament = '%s';", tournamentName);
+		stmt.executeUpdate(query);
+
+		var query2 = String.format("DELETE FROM OrganizedTournaments WHERE tournament = '%s';", tournamentName);
+		stmt.executeUpdate(query2);
+
+		var query3 = String.format("DELETE FROM Tournaments WHERE name = '%s';", tournamentName);
+		stmt.executeUpdate(query3);
 	}
 }

@@ -313,5 +313,38 @@ public class TournamentDAO {
 		var conn = DBConnector.getInstance().getConnection();
 		QueryTournament.updateWinner(conn, tournament, winner);
 	}
+	
+	public static List<Tournament> retrieveDeletableTournamentsByOrganizer(String organizer) throws SQLException, DateParsingException{
+		Statement stmt = null;
+		List<Tournament> ret = new ArrayList<>();
+		var conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.retrieveDeletableTournaments(stmt, organizer);
+			while (rs.next()) {
+				var tournament = buildTournamentFromResultSet(rs);
+				ret.add(tournament);
+			}
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
+	
+	public static void deleteTournament(String name) throws SQLException {
+		Statement stmt = null;
+		var conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement();
+			QueryTournament.deleteTournament(stmt, name);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	}
 
 }

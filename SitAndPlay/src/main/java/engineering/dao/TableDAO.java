@@ -164,6 +164,29 @@ public class TableDAO {
 		}
 	}
 	
+	public static List<Table> retrieveDeletableTables(String organizer) throws SQLException, DateParsingException {
+		Statement stmt = null;
+		Connection conn = null;
+		List<Table> list = new ArrayList<>();
+
+		conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTable.retrieveDeletableTables(stmt, organizer);
+			while (rs.next()) {
+				var table = buildTableFromResultSet(rs);
+				list.add(table);
+			}
+			rs.close();
+			return list;
+
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	}
+	
 	public static void removeParticipant(String tableName, String participant) throws SQLException {
 		Statement stmt = null;
 		var conn = DBConnector.getInstance().getConnection();
@@ -255,5 +278,18 @@ public class TableDAO {
 			}
 		}
 		return participants;
+	}
+	
+	public static void deleteTable(String tableName) throws SQLException {
+		Statement stmt = null;
+		var conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement();
+			QueryTable.deleteTable(stmt, tableName);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
 	}
 }

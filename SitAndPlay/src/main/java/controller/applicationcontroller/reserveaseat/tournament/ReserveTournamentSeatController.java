@@ -14,6 +14,7 @@ import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteSeatException;
 import main.java.engineering.exceptions.MaxParticipantsException;
+import main.java.engineering.exceptions.OutOfTimeException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
@@ -69,11 +70,14 @@ public class ReserveTournamentSeatController {
 		}
 	}
 
-	public void removeParticipant(TournamentBean tournament, BeanUser participant) throws DAOException, DeleteSeatException, DateParsingException {
-		
-		// tournament reservations are closed 3 hours before the beginning of the tournament
+	public void removeParticipant(TournamentBean tournament, BeanUser participant)
+			throws DAOException, DeleteSeatException, DateParsingException {
+
+		// tournament reservations are closed 3 hours before the beginning of the
+		// tournament
 		if (Boolean.FALSE.equals(DatetimeUtil.isValidDateWithMargin(tournament.getDate(), tournament.getTime(), 3))) {
-			throw new DeleteSeatException("Reservations for the tournament have been closed. You can not leave the tournament now");
+			throw new DeleteSeatException(
+					"Reservations for the tournament have been closed. You can not leave the tournament now");
 		}
 		try {
 			TournamentDAO.removeParticipant(tournament.getName(), participant.getUsername());
@@ -86,7 +90,8 @@ public class ReserveTournamentSeatController {
 		}
 	}
 
-	public List<TournamentBean> retrieveActiveJoinedTournaments(BeanUser usr) throws DAOException, DateParsingException {
+	public List<TournamentBean> retrieveActiveJoinedTournaments(BeanUser usr)
+			throws DAOException, DateParsingException {
 		List<TournamentBean> list = new ArrayList<>();
 
 		try {
@@ -101,12 +106,13 @@ public class ReserveTournamentSeatController {
 		}
 		return list;
 	}
-	
-	public List<TournamentBean> retrieveTournamentsToDeclareWinnerTo(BeanUser organizer) throws DAOException, DateParsingException{
+
+	public List<TournamentBean> retrieveTournamentsToDeclareWinnerTo(BeanUser organizer)
+			throws DAOException, DateParsingException {
 		List<TournamentBean> ret = new ArrayList<>();
 		try {
 			var tmts = TournamentDAO.getTournamentsToDeclareWinnerByOrganizer(organizer.getUsername());
-			for(Tournament t : tmts) {
+			for (Tournament t : tmts) {
 				var bean = TournamentBeanFactory.createBean(t);
 				// we also need the list of participants
 				var participants = TournamentDAO.retrieveParticipants(t.getName());
@@ -118,22 +124,69 @@ public class ReserveTournamentSeatController {
 		}
 		return ret;
 	}
-	
-	public void setWinner (TournamentBean tournament, BeanUser userOrg) throws DAOException, DateParsingException, AlreadyExistingWinnerException {
+
+	public void setWinner(TournamentBean tournament, BeanUser userOrg)
+			throws DAOException, DateParsingException, AlreadyExistingWinnerException {
 		try {
 			var tournamentCheck = TournamentDAO.retrieveTournament(tournament.getName());
 			if (tournamentCheck.getWinner() != null) {
 				throw new AlreadyExistingWinnerException("ERROR! This tournament already has a winner!");
-			}else {
+			} else {
 				TournamentDAO.setWinner(tournament.getName(), tournament.getWinner());
-				var message = String.format(CommonStrings.getTournamentWinnerString(), tournament.getName(), userOrg.getUsername());
+				var message = String.format(CommonStrings.getTournamentWinnerString(), tournament.getName(),
+						userOrg.getUsername());
 				var notif = new Notification(-1, userOrg.getUsername(), tournament.getWinner(), message, false);
 				NotificationDAO.insertNotification(notif);
 			}
 		} catch (SQLException e) {
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
-		
+
+	}
+
+	public List<TournamentBean> getDeletableTournaments(BeanUser organizer) throws DateParsingException, DAOException {
+		List<TournamentBean> retBeans = new ArrayList<>();
+		try {
+			var tmts = TournamentDAO.retrieveDeletableTournamentsByOrganizer(organizer.getUsername());
+			for (Tournament tmt : tmts) {
+				var bean = TournamentBeanFactory.createBean(tmt);
+				retBeans.add(bean);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
+		return retBeans;
+	}
+
+	public void deleteTournament(TournamentBean tournament)
+			throws DAOException, DateParsingException, OutOfTimeException {
+		try {
+			var checkTournament = TournamentDAO.retrieveTournament(tournament.getName());
+			// 6 hours of margin from the start
+			if (Boolean.FALSE
+					.equals(DatetimeUtil.isValidDateWithMargin(tournament.getDate(), tournament.getTime(), 6))) {
+				throw new OutOfTimeException(
+						"Impossible to delete table. It should be deleted within 6 hours from the beginning");
+			} else {
+				var content = String.format(CommonStrings.getDeletedTournamentNotif(), checkTournament.getName(),
+						checkTournament.getOrganizer());
+				if (checkTournament.getSponsor() != null) {
+					var notif = new Notification(-1, checkTournament.getOrganizer(),
+							checkTournament.getSponsor().getBusinessman(), content, false);
+					NotificationDAO.insertNotification(notif);
+				}
+				
+				var participants = checkTournament.getParticipants();
+				for(String part : participants) {
+					var not = new Notification(-1, checkTournament.getOrganizer(), part, content, false);
+					NotificationDAO.insertNotification(not);
+				}
+				
+				TournamentDAO.deleteTournament(checkTournament.getName());
+			}
+		} catch (SQLException e) {
+			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
+		}
 	}
 
 }
