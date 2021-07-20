@@ -4,10 +4,8 @@ import java.io.InputStream;
 
 public class BusinessActivity {
 	private String activityName;
-	//TODO: change with image
 	private InputStream logo;
 	private String businessman;
-	
 
 	public BusinessActivity(String activityName, InputStream logo, String businessman) {
 		this.activityName = activityName;

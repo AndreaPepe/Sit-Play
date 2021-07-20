@@ -23,18 +23,6 @@ public class LoginController {
 			var pollingThread = new NotificationPollingThread(user.getUsername());
 			pollingThread.start();
 			
-			
-			// TODO: set stuff
-			
-//			switch(user.getUserType()) {
-//			case PLAYER:
-//			// doing stuff for each type of user
-//			// remember to do casting on variable user
-//			case ORGANIZER:
-//				
-//			case BUSINESSMAN:
-//			}
-			
 		} catch (SQLException e) {
 			throw new DAOException(e.getMessage());		
 		}
