@@ -18,7 +18,7 @@ public class ListElementFactory {
 		return instance;
 	}
 
-	// factory method
+	// factory method GOF
 	public ListElement createElement(ListElementType type, VBox container, Object obj) {
 		ListElement elem = null;
 		switch (type) {
@@ -37,8 +37,8 @@ public class ListElementFactory {
 		case DELETABLE_TABLE:
 			elem = new DeletableTableElement(container, obj);
 			break;
-		// TODO: add other cases
-		default:
+		case DELETABLE_TOURNAMENT:
+			elem = new DeletableTournamentElement(container, obj);
 			break;
 		}
 		return elem;

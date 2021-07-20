@@ -12,8 +12,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import main.java.controller.applicationcontroller.reserveaseat.tournament.ReserveTournamentSeatController;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.exceptions.AlertFactory;
+import main.java.engineering.exceptions.DAOException;
+import main.java.engineering.exceptions.DateParsingException;
+import main.java.engineering.exceptions.OutOfTimeException;
 
 public class DeletableTournamentElement extends ListElement {
 
@@ -97,7 +101,17 @@ public class DeletableTournamentElement extends ListElement {
 			dialog.getButtonTypes().setAll(btnYes, btnNo);
 			dialog.showAndWait().ifPresent(type -> {
 				if (type == btnYes) {
-					// TODO call ctrl
+					var ctrl = new ReserveTournamentSeatController();
+					try {
+						ctrl.deleteTournament((TournamentBean) super.obj);
+						AlertFactory.getInstance().createAlert("Tournament deleted successfully", AlertType.INFORMATION)
+								.show();
+						// remove the element from the list
+						super.detach();
+					} catch (DAOException | DateParsingException | OutOfTimeException e) {
+						AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+						return;
+					}
 				}
 			});
 		});

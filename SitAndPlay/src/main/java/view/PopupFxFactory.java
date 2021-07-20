@@ -71,7 +71,6 @@ public class PopupFxFactory {
 			popup.setX(window.getX() + window.getWidth() / 2 - popup.getWidth() / 2 + 125);
 			popup.setY(window.getY() + 40);
 		});
-		
 
 		window.yProperty().addListener(
 				(obs, oldVal, newVal) -> popup.setY(window.getY() + 40));

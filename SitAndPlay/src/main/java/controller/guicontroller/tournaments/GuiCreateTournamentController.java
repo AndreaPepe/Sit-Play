@@ -35,6 +35,8 @@ import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.Session;
 import main.java.engineering.utils.map.MapPlace;
 import main.java.model.CardGame;
+import main.java.view.listview.ListElementFactory;
+import main.java.view.listview.ListElementType;
 import main.java.view.standalone.SearchMapPlaceTextField;
 
 public class GuiCreateTournamentController extends GuiBasicInternalPageController {
@@ -114,6 +116,10 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 	private String location;
 	private double latitude;
 	private double longitude;
+
+	// page handle tournaments attributes
+	@FXML
+	private VBox vboxTournaments;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -238,8 +244,18 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 		apDeclareWinner.toBack();
 		apHandle.toFront();
 
-		setMap();
-		setAutocompleteTextField();
+		var ctrl = new ReserveTournamentSeatController();
+		try {
+			var beans = ctrl.getDeletableTournaments(ssn.getUser());
+			vboxTournaments.getChildren().clear();
+			for (TournamentBean bean : beans) {
+				// factory method GOF
+				ListElementFactory.getInstance().createElement(ListElementType.DELETABLE_TOURNAMENT, vboxTournaments,
+						bean);
+			}
+		} catch (DateParsingException | DAOException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+		}
 	}
 
 	private TournamentBean buildBeanFromInput() {
@@ -320,8 +336,8 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 
 	@FXML
 	public void setWinner(ActionEvent event) {
-		var confirmationDialog = AlertFactory.getInstance().createAlert("Are you sure? This is an irreversible operation",
-				AlertType.CONFIRMATION);
+		var confirmationDialog = AlertFactory.getInstance()
+				.createAlert("Are you sure? This is an irreversible operation", AlertType.CONFIRMATION);
 		var btnYes = new ButtonType("Yes", ButtonData.YES);
 		var btnNo = new ButtonType("No", ButtonData.NO);
 		confirmationDialog.getButtonTypes().setAll(btnYes, btnNo);
