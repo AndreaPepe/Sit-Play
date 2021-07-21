@@ -150,7 +150,7 @@ public class QueryTournament {
 				organizer);
 		return stmt.executeQuery(query);
 	}
-	
+
 	public static void deleteTournament(Statement stmt, String tournamentName) throws SQLException {
 		var query = String.format("DELETE FROM TournamentsParticipants WHERE tournament = '%s';", tournamentName);
 		stmt.executeUpdate(query);
@@ -160,5 +160,12 @@ public class QueryTournament {
 
 		var query3 = String.format("DELETE FROM Tournaments WHERE name = '%s';", tournamentName);
 		stmt.executeUpdate(query3);
+	}
+
+	public static ResultSet getNumberOfSponsorizedTournaments(Statement stmt, String businessman) throws SQLException {
+		var query = String.format(
+				"SELECT COUNT(*) FROM Tournaments JOIN BusinessActivity on sponsor = activity WHERE businessman = '%s';",
+				businessman);
+		return stmt.executeQuery(query);
 	}
 }

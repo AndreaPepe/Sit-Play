@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apnBackground" minHeight="430.0" minWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.userspage.GuiPlayerUserPageController">
+<AnchorPane minHeight="430.0" minWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.userspage.GuiPlayerUserPageController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="650.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -22,7 +22,7 @@
                   <Insets left="20.0" />
                </padding>
                <children>
-                  <ToggleButton fx:id="btnProfile" mnemonicParsing="false" onAction="#profilePressed" prefWidth="150.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Profile" textFill="WHITE">
+                  <ToggleButton fx:id="btnProfile" mnemonicParsing="false" onAction="#handleProfile" prefWidth="150.0" styleClass="toggle" stylesheets="@../styleHomePage.css" text="Profile" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -31,35 +31,51 @@
             </HBox>
         </items>
       </ToolBar>
-      <Pane fx:id="pnBase" layoutY="40.0" prefHeight="390.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <Pane layoutY="40.0" prefHeight="390.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <AnchorPane fx:id="apnProfile" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
                <children>
                   <Separator layoutX="250.0" orientation="VERTICAL" prefHeight="354.0" prefWidth="0.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="15.0" />
-                  <StackPane prefHeight="390.0" prefWidth="250.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="390.0" prefWidth="249.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="410.0" AnchorPane.topAnchor="40.0">
                      <children>
-                        <ImageView fitHeight="120.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
-                           <StackPane.margin>
-                              <Insets top="20.0" />
-                           </StackPane.margin>
+                        <ImageView fitHeight="120.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@user-icon.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="lblUsername" text="Username" StackPane.alignment="TOP_CENTER">
-                           <StackPane.margin>
-                              <Insets top="150.0" />
-                           </StackPane.margin>
+                        <Label fx:id="lblUser" text="Username">
                            <font>
                               <Font name="System Bold Italic" size="18.0" />
                            </font>
                         </Label>
+                        <Label alignment="CENTER" prefHeight="20.0" prefWidth="235.0" text="Type of account :" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" prefHeight="20.0" prefWidth="167.0" text="Businessman" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
                      </children>
-                  </StackPane>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                  </VBox>
                   <AnchorPane layoutX="250.0" prefHeight="390.0" prefWidth="401.0">
                      <children>
-                        <Label layoutX="44.0" layoutY="48.0" text="Tables played: #" />
-                        <Label layoutX="44.0" layoutY="82.0" text="Tournaments played: #" />
+                        <Label alignment="TOP_CENTER" layoutX="23.0" layoutY="55.0" prefHeight="159.0" prefWidth="355.0" text="Create your business activities and sponsorize tournaments to promote them!" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                           <font>
+                              <Font name="Papyrus" size="24.0" />
+                           </font></Label>
+                        <Label fx:id="lblSponsorizedTournaments" layoutX="78.0" layoutY="255.0" prefHeight="81.0" prefWidth="245.0" text="You have currently sponsorized %d tournaments!" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
                      </children>
                   </AnchorPane>
                </children>

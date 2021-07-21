@@ -12,7 +12,7 @@ public class CommonStrings {
 	private static final String NOT_BUSINESSMAN_ERR_MSG = "Only users of type BUSINESSMAN can perform this action";
 	private static final String TABLE_RESERVED_NOTIF = "The user '%s' has reserved a seat at your table '%s'";
 	private static final String TOURNAMENT_RESERVED_NOTIF = "The user '%s' has reserved a seat at your tournament '%s'";
-	private static final String TOURNAMENT_SPONSORIZATION_NOTIF = "Your tournament '%s' has been sponsorized by the user '%s' with the activity '%s'";
+	private static final String TOURNAMENT_SPONSORIZATION_NOTIF = "Your tournament '%s' has been sponsored by the user '%s' with the activity '%s'";
 	private static final String TOURNAMENT_SEAT_LEAVED = "The user '%s' has left the tournament '%s'";
 	private static final String TABLE_SEAT_LEAVED = "The user '%s' has left the table '%s'";
 	private static final String TABLE_WINNER_STRING = "You have been declared winner of the table '%s' by the organizer '%s' !";

@@ -14,7 +14,7 @@ import javafx.scene.control.ToggleGroup;
 import main.java.controller.guicontroller.business.GuiManageActivitiesController;
 import main.java.controller.guicontroller.business.GuiSponsorizeTournamentController;
 import main.java.controller.guicontroller.notifications.GuiViewNotificationController;
-import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
+import main.java.controller.guicontroller.userspage.GuiBusinessmanUserPageController;
 import main.java.engineering.utils.Session;
 
 public class GuiHomePageBusinessmanController extends GuiBasicController{
@@ -122,8 +122,8 @@ public class GuiHomePageBusinessmanController extends GuiBasicController{
 			break;
 		default:
 			// page number 1
-			page = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
-			ctrl = new GuiPlayerUserPageController(ssn);
+			page = "/main/java/view/standalone/userspage/BusinessmanUserPage.fxml";
+			ctrl = new GuiBusinessmanUserPageController(ssn);
 			break;
 		}
 		

@@ -8,11 +8,13 @@ public class NotificationPollingThread extends Thread {
 
 	private String username;
 	private Boolean isAlive;
+	private Boolean isFirst;
 	private static final int POLLING_INTERVAL = 5000;
 
 	public NotificationPollingThread(String user) {
 		this.username = user;
 		this.isAlive = true;
+		this.isFirst = true;
 	}
 	
 	public void shutdown() {
@@ -25,6 +27,10 @@ public class NotificationPollingThread extends Thread {
 		var controller = NotificationController.getInstance();
 		while(Boolean.TRUE.equals(isAlive)) {
 			try {
+				if (Boolean.TRUE.equals(isFirst)) {
+					isFirst = false;
+					Thread.sleep(1500);
+				}
 				var newNotifications = NotificationDAO.getNewNotifications(username);
 				controller.addNotifications(newNotifications);
 				

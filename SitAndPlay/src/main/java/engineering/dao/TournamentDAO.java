@@ -346,5 +346,27 @@ public class TournamentDAO {
 			}
 		}
 	}
+	
+	public static int getNumberOfSponsorizedTournamentByBusinessman(String username) throws SQLException {
+		Statement stmt = null;
+		var conn = DBConnector.getInstance().getConnection();
+		var ret = 0;
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.getNumberOfSponsorizedTournaments(stmt, username);
+			if (!rs.first()) {
+				// no sponsored tournaments
+				return ret;
+			}
+			ret = rs.getInt(1);
+			rs.close();
+			
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
 
 }
