@@ -47,45 +47,7 @@
       </ToolBar>
       <Pane fx:id="pnBase" layoutY="40.0" prefHeight="390.0" prefWidth="650.0">
          <children>
-            <AnchorPane fx:id="apnMyTables" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <Separator layoutX="241.0" layoutY="14.0" orientation="VERTICAL" prefHeight="350.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="20.0" />
-                  <VBox layoutX="275.0" layoutY="28.0" prefHeight="200.0" prefWidth="100.0" spacing="40.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
-                     <children>
-                        <ComboBox fx:id="cbTable" prefHeight="25.0" prefWidth="280.0" promptText="Select organized table" />
-                        <ComboBox fx:id="cbWinner" prefWidth="280.0" promptText="Select winner" />
-                     </children>
-                     <padding>
-                        <Insets top="40.0" />
-                     </padding>
-                  </VBox>
-                  <Label alignment="TOP_CENTER" layoutX="29.0" layoutY="30.0" prefHeight="160.0" prefWidth="240.0" text="Here you can declare the winner of a table you have organized" textAlignment="CENTER" textFill="#296581" wrapText="true">
-                     <font>
-                        <Font name="Papyrus" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="TOP_CENTER" layoutX="39.0" layoutY="199.0" prefHeight="160.0" prefWidth="240.0" text="First select a table and then the participant that will be the winner!" textAlignment="CENTER" textFill="#296581" wrapText="true">
-                     <font>
-                        <Font name="Papyrus" size="18.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="btnDeclareWinner" mnemonicParsing="false" onAction="#declareWinner" prefWidth="150.0" styleClass="btn" stylesheets="@../css/Style.css" text="Declare Winner" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="100.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="apnOrganizedTables" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <ScrollPane fitToWidth="true" layoutX="29.0" layoutY="35.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #296581;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="40.0">
-                     <content>
-                        <VBox fx:id="vboxTables" minHeight="310.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: #ffffff;" />
-                     </content>
-                  </ScrollPane>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="apnCreateTable" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
+            <AnchorPane fx:id="apnCreate" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
                <children>
                   <DatePicker fx:id="dpDate" editable="false" layoutX="115.0" layoutY="181.0" prefHeight="25.0" prefWidth="200.0" promptText="Date" AnchorPane.leftAnchor="35.0" />
                   <ComboBox fx:id="cbCardGame" layoutX="30.0" layoutY="125.0" prefWidth="280.0" promptText="Card game" AnchorPane.leftAnchor="35.0" />
@@ -114,6 +76,44 @@
                   </HBox>
                   <TextField fx:id="tfName" layoutX="34.0" layoutY="24.0" prefHeight="25.0" prefWidth="280.0" promptText="Table's name" AnchorPane.leftAnchor="35.0" />
                   <WebView fx:id="webMap" layoutX="318.0" layoutY="21.0" prefHeight="350.0" prefWidth="300.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="apnOrganizedTables" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <ScrollPane fitToWidth="true" layoutX="29.0" layoutY="35.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #296581;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="40.0">
+                     <content>
+                        <VBox fx:id="vboxOrgTables" minHeight="310.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: #ffffff;" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="apnDeclareWinner" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Separator layoutX="241.0" layoutY="14.0" orientation="VERTICAL" prefHeight="350.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="20.0" />
+                  <VBox layoutX="275.0" layoutY="28.0" prefHeight="200.0" prefWidth="100.0" spacing="40.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
+                     <children>
+                        <ComboBox fx:id="cbWinnerTable" prefHeight="25.0" prefWidth="280.0" promptText="Select organized table" />
+                        <ComboBox fx:id="cbSelectWinner" prefWidth="280.0" promptText="Select winner" />
+                     </children>
+                     <padding>
+                        <Insets top="40.0" />
+                     </padding>
+                  </VBox>
+                  <Label alignment="TOP_CENTER" layoutX="29.0" layoutY="30.0" prefHeight="160.0" prefWidth="240.0" text="Here you can declare the winner of a table you have organized" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                     <font>
+                        <Font name="Papyrus" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_CENTER" layoutX="39.0" layoutY="199.0" prefHeight="160.0" prefWidth="240.0" text="First select a table and then the participant that will be the winner!" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                     <font>
+                        <Font name="Papyrus" size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btnDeclareWinner" mnemonicParsing="false" onAction="#declareWinner" prefWidth="150.0" styleClass="btn" stylesheets="@../css/Style.css" text="Declare Winner" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="100.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
          </children>

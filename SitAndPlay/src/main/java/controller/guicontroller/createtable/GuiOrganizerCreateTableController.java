@@ -43,10 +43,10 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 
 	@FXML
-	private AnchorPane apnCreateTable;
+	private AnchorPane apnCreate;
 
 	@FXML
-	private AnchorPane apnMyTables;
+	private AnchorPane apnDeclareWinner;
 	
 	@FXML
 	private AnchorPane apnOrganizedTables;
@@ -89,10 +89,10 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 	// second page attributes
 	@FXML
-	private ComboBox<String> cbTable;
+	private ComboBox<String> cbSelectedWinnerTable;
 
 	@FXML
-	private ComboBox<String> cbWinner;
+	private ComboBox<String> cbSelectedWinner;
 
 	@FXML
 	private Button btnDeclareWinner;
@@ -101,7 +101,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 	
 	//third page attributes
 	@FXML
-	private VBox vboxTables;
+	private VBox vboxOrgTables;
 
 	public GuiOrganizerCreateTableController(Session ssn) {
 		super(ssn);
@@ -136,7 +136,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		tf.setLayoutY(74);
 		tf.setPromptText("Select Place");
 		var autocompletePlace = new SearchMapPlaceTextField(tf);
-		apnCreateTable.getChildren().add(autocompletePlace.getTextField());
+		apnCreate.getChildren().add(autocompletePlace.getTextField());
 		autocompletePlace.getLastSelectedItem().addListener((observable, oldValue, newValue) -> {
 			if (autocompletePlace.getLastSelectedItem().get() != null) {
 
@@ -167,9 +167,9 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 	@FXML
 	public void handleToggleCreate(ActionEvent event) {
-		apnMyTables.toBack();
+		apnDeclareWinner.toBack();
 		apnOrganizedTables.toBack();
-		apnCreateTable.toFront();
+		apnCreate.toFront();
 		loadMapbox();
 		setUpAutocompleteTextField();
 		loadCardGames();
@@ -195,10 +195,10 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 						.show();
 				return;
 			}
-			var placeBean = new PlaceBean(address, lat, lng);
-			var tableBean = new TableBean(name, placeBean, cardGame, date, time, organizer);
+			var place = new PlaceBean(address, lat, lng);
+			var table = new TableBean(name, place, cardGame, date, time, organizer);
 			try {
-				if (Boolean.FALSE.equals(tableBean.checkCreateTable())) {
+				if (Boolean.FALSE.equals(table.checkCreateTable())) {
 					return;
 				}
 			} catch (BeanCheckException | DateParsingException e1) {
@@ -206,9 +206,9 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 				return;
 			}
 
-			var ctrl = new CreateTableController();
+			var controller = new CreateTableController();
 			try {
-				if (ctrl.createTable(tableBean)) {
+				if (controller.createTable(table)) {
 					// table created successfully
 					AlertFactory.getInstance().createAlert("Table created succesfully", AlertType.INFORMATION).show();
 				}
@@ -254,9 +254,9 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 	// second page controls
 	@FXML
 	public void handleToggleWinner(ActionEvent event) {
-		apnCreateTable.toBack();
+		apnCreate.toBack();
 		apnOrganizedTables.toBack();
-		apnMyTables.toFront();
+		apnDeclareWinner.toFront();
 		loadWinnerTables();
 		setUIElements();
 	}
@@ -270,13 +270,13 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		conf.getButtonTypes().setAll(btnYes, btnNo);
 		conf.showAndWait().ifPresent(type -> {
 			if (type == btnYes) {
-				var selectedParticipant = cbWinner.getValue();
-				var ctrl = new ReserveTableSeatController();
+				var newWinner = cbSelectedWinner.getValue();
+				var controller = new ReserveTableSeatController();
 				var tBean = getSelectedWinnerTable();
 				if (tBean != null) {
-					tBean.setWinner(selectedParticipant);
+					tBean.setWinner(newWinner);
 					try {
-						ctrl.declareWinner(tBean, ssn.getUser());
+						controller.declareWinner(tBean, ssn.getUser());
 						AlertFactory.getInstance().createAlert("Winner declared with success", AlertType.INFORMATION)
 								.show();
 						// reload the page
@@ -293,12 +293,13 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		var ctrl = new ReserveTableSeatController();
 		try {
 			winnerBeans = ctrl.retrieveTablesToDeclareWinnerTo(ssn.getUser());
-			cbTable.getItems().clear();
-			cbWinner.getItems().clear();
-			cbTable.setPromptText("Select organized table");
-			cbWinner.setPromptText("Select winner");
+			cbSelectedWinner.getItems().clear();
+			cbSelectedWinner.setPromptText("Select winner");
+			cbSelectedWinnerTable.getItems().clear();
+			cbSelectedWinnerTable.setPromptText("Select organized table");
+			
 			for (TableBean b : winnerBeans) {
-				cbTable.getItems().add(b.getName());
+				cbSelectedWinnerTable.getItems().add(b.getName());
 			}
 
 		} catch (DateParsingException | DAOException e) {
@@ -307,35 +308,35 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 	}
 
 	private void setUIElements() {
-		cbWinner.setDisable(true);
+		cbSelectedWinner.setDisable(true);
 		btnDeclareWinner.setDisable(true);
 
-		cbTable.valueProperty().addListener((obs, oldVal, newVal) -> {
+		cbSelectedWinnerTable.valueProperty().addListener((obs, oldVal, newVal) -> {
 			if (newVal != null) {
-				cbWinner.getItems().clear();
-				var bean = getSelectedWinnerTable();
-				if (bean != null) {
-					bean.getParticipants().forEach(it -> cbWinner.getItems().add(it));
+				cbSelectedWinner.getItems().clear();
+				var tableBean = getSelectedWinnerTable();
+				if (tableBean != null) {
+					tableBean.getParticipants().forEach(it -> cbSelectedWinner.getItems().add(it));
 				}
-				cbWinner.setDisable(false);
+				cbSelectedWinner.setDisable(false);
 			} else {
-				cbWinner.setDisable(true);
+				cbSelectedWinner.setDisable(true);
 				btnDeclareWinner.setDisable(true);
 			}
 		});
 
-		cbWinner.valueProperty().addListener((obs, oldVal, newVal) -> btnDeclareWinner.setDisable((newVal == null)));
+		cbSelectedWinner.valueProperty().addListener((obs, oldVal, newVal) -> btnDeclareWinner.setDisable((newVal == null)));
 
 	}
 
 	private TableBean getSelectedWinnerTable() {
-		var name = cbTable.getValue();
-		if (name == null) {
+		var selectedTableName = cbSelectedWinner.getValue();
+		if (selectedTableName == null) {
 			AlertFactory.getInstance().createAlert("Select a table first", AlertType.WARNING).show();
 
 		} else {
 			for (TableBean b : winnerBeans) {
-				if (b.getName().equals(name)) {
+				if (b.getName().equals(selectedTableName)) {
 					return b;
 				}
 			}
@@ -346,16 +347,16 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 	// third page controls
 	@FXML
 	public void handleToggleOrganized(ActionEvent event) {
-		apnCreateTable.toBack();
-		apnMyTables.toBack();
+		apnCreate.toBack();
+		apnDeclareWinner.toBack();
 		apnOrganizedTables.toFront();
 		
 		var ctrl = new ReserveTableSeatController();
 		try {
 			var tBeans = ctrl.retrieveDeletableTables(ssn.getUser());
-			vboxTables.getChildren().clear();
+			vboxOrgTables.getChildren().clear();
 			for (TableBean bean : tBeans) {
-				ListElementFactory.getInstance().createElement(ListElementType.DELETABLE_TABLE, vboxTables, bean);
+				ListElementFactory.getInstance().createElement(ListElementType.DELETABLE_TABLE, vboxOrgTables, bean);
 			}
 		} catch (DateParsingException | DAOException e) {
 			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
