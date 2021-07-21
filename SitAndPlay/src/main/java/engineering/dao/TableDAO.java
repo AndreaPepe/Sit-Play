@@ -292,4 +292,68 @@ public class TableDAO {
 			}
 		}
 	}
+	
+	
+	public static int getNumberOfOrganizedTables(String orgUsername) throws SQLException {
+		Statement stmt = null;
+		var ret = 0;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTable.selectNumberOfOrganizedTables(stmt, orgUsername);
+			if (!rs.first()) {
+				return ret;
+			}
+			ret = rs.getInt(1);
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
+	
+	public static int getNumberOfJoinedTables(String player) throws SQLException {
+		Statement stmt = null;
+		var ret = 0;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTable.selectNumberOfTablesJoined(stmt, player);
+			if (!rs.first()) {
+				return ret;
+			}
+			ret = rs.getInt(1);
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
+	
+	public static int getNumberOfWonTables(String playerName) throws SQLException {
+		Statement stmt = null;
+		var ret = 0;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTable.selectNumberOfWonTables(stmt, playerName);
+			if (!rs.first()) {
+				return ret;
+			}
+			ret = rs.getInt(1);
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
 }

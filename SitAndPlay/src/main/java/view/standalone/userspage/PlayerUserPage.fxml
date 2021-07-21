@@ -12,11 +12,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apnBackground" minHeight="430.0" minWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.userspage.GuiPlayerUserPageController">
+<AnchorPane minHeight="430.0" minWidth="650.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.guicontroller.userspage.GuiPlayerUserPageController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="650.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -39,39 +38,8 @@
             </HBox>
         </items>
       </ToolBar>
-      <Pane fx:id="pnBase" layoutY="40.0" prefHeight="390.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+      <Pane layoutY="40.0" prefHeight="390.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
-            <AnchorPane fx:id="apnProfile" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
-               <children>
-                  <Separator layoutX="250.0" orientation="VERTICAL" prefHeight="354.0" prefWidth="0.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="15.0" />
-                  <StackPane prefHeight="390.0" prefWidth="250.0">
-                     <children>
-                        <ImageView fitHeight="120.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
-                           <StackPane.margin>
-                              <Insets top="20.0" />
-                           </StackPane.margin>
-                           <image>
-                              <Image url="@user-icon.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="lblUsername" text="Username" StackPane.alignment="TOP_CENTER">
-                           <StackPane.margin>
-                              <Insets top="150.0" />
-                           </StackPane.margin>
-                           <font>
-                              <Font name="System Bold Italic" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </StackPane>
-                  <AnchorPane layoutX="250.0" prefHeight="390.0" prefWidth="401.0">
-                     <children>
-                        <Label layoutX="44.0" layoutY="48.0" text="Tables played: #" />
-                        <Label layoutX="44.0" layoutY="82.0" text="Tournaments played: #" />
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="apnSeats" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
                <children>
                   <Label layoutX="25.0" layoutY="14.0" text="Tables" textFill="#296581" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="5.0">
@@ -124,6 +92,95 @@
                            </children></VBox>
                      </content>
                   </ScrollPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="apnProfile" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                  <Separator layoutX="250.0" orientation="VERTICAL" prefHeight="354.0" prefWidth="0.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="15.0" />
+                  <AnchorPane layoutX="250.0" prefHeight="390.0" prefWidth="401.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" layoutX="15.0" layoutY="60.0" prefWidth="172.0" spacing="15.0">
+                           <children>
+                              <Label fx:id="lblTablesJoined" alignment="CENTER" prefHeight="17.0" prefWidth="175.0" text="Joined tables : %d" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblTablesWon" alignment="CENTER" prefHeight="17.0" prefWidth="172.0" text="Won tables : %d" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblTablesPerc" alignment="CENTER" contentDisplay="CENTER" prefWidth="173.0" text="You have won the %.2f percentage of the joined tables" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="210.0" layoutY="60.0" prefWidth="178.0" spacing="15.0">
+                           <children>
+                              <Label fx:id="lblTournamentsJoined" alignment="CENTER" prefHeight="20.0" prefWidth="177.0" text="Joined tournaments : %d">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblTournamentsWon" alignment="CENTER" prefHeight="17.0" prefWidth="172.0" text="Won tournaments : %d" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblTournamentsPerc" alignment="CENTER" prefWidth="173.0" text="You have won the %.2f percentage of the joined tournaments" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <Label layoutX="168.0" layoutY="14.0" text="Your stats">
+                           <font>
+                              <Font name="System Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblOrgTables" layoutX="23.0" layoutY="298.0" text="You have organized %d tables">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblTotMoney" layoutX="23.0" layoutY="258.0" text="With the tournaments you have won %.2f €">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="410.0" AnchorPane.topAnchor="40.0">
+                     <children>
+                        <ImageView fitHeight="120.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@user-icon.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="lblUsername" text="Username">
+                           <font>
+                              <Font name="System Bold Italic" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" prefHeight="20.0" prefWidth="238.0" text="Type of account :" textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets top="60.0" />
+                           </padding>
+                        </Label>
+                        <Label alignment="CENTER" text="Player" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
                </children>
             </AnchorPane>
          </children>

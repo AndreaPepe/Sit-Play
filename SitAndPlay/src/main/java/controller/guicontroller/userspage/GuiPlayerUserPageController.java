@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import main.java.controller.applicationcontroller.reserveaseat.table.ReserveTableSeatController;
 import main.java.controller.applicationcontroller.reserveaseat.tournament.ReserveTournamentSeatController;
+import main.java.controller.applicationcontroller.userspage.StatisticsController;
 import main.java.controller.guicontroller.GuiBasicInternalPageController;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.bean.tournaments.TournamentBean;
@@ -29,9 +30,6 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
 	public GuiPlayerUserPageController(Session ssn) {
 		super(ssn);
 	}
-
-	@FXML
-	private AnchorPane apnBackground;
 
 	@FXML
 	private ToggleButton btnProfile;
@@ -53,6 +51,39 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
 
 	@FXML
 	private VBox vboxTournaments;
+	
+	@FXML
+    private Label lblTablesJoined;
+
+    @FXML
+    private Label lblTablesWon;
+
+    @FXML
+    private Label lblTablesPerc;
+
+    @FXML
+    private Label lblTournamentsJoined;
+
+    @FXML
+    private Label lblTournamentsWon;
+
+    @FXML
+    private Label lblTournamentsPerc;
+
+    @FXML
+    private Label lblOrgTables;
+    
+    @FXML
+    private Label lblTotMoney;
+    
+    private static final String JOINED_TABLES_STRING = "Joined tables : %d";
+    private static final String WON_TABLES_STRING = "Won tables : %d";
+    private static final String TABLES_PERCENTAGE_STRING = "You have won the %.2f %% of the joined tables";
+    private static final String JOINED_TOURNAMENTS_STRING = "Joined tournaments : %d";
+    private static final String WON_TOURNAMENTS_STRING = "Won tournaments : %d";
+    private static final String TOURNAMENTS_PERCENTAGE_STRING = "You have won the %.2f %% of the joined tournaments";
+    private static final String ORGANIZED_TABLES_STRING = "You have organized %d tables";
+    private static final String TOT_MONEY_STRING = "With the tournaments you have won %.2f €";
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -72,7 +103,25 @@ public class GuiPlayerUserPageController extends GuiBasicInternalPageController 
 	public void profilePressed(ActionEvent event) {
 		apnSeats.toBack();
 		lblUsername.setText(ssn.getUser().getUsername());
+		loadStats();
 		apnProfile.toFront();
+	}
+
+	private void loadStats() {
+		var controller = new StatisticsController();
+		try {
+			var stats = controller.getStats(ssn.getUser());
+			lblTablesJoined.setText(String.format(JOINED_TABLES_STRING, stats.getJoinedTables()));
+			lblTablesWon.setText(String.format(WON_TABLES_STRING, stats.getWonTables()));
+			lblTablesPerc.setText(String.format(TABLES_PERCENTAGE_STRING, stats.getTablesWinningPercentage()));
+			lblTournamentsJoined.setText(String.format(JOINED_TOURNAMENTS_STRING, stats.getJoinedTournaments()));
+			lblTournamentsWon.setText(String.format(WON_TOURNAMENTS_STRING, stats.getWonTournaments()));
+			lblTournamentsPerc.setText(String.format(TOURNAMENTS_PERCENTAGE_STRING, stats.getTournamentWinningPercentage()));
+			lblTotMoney.setText(String.format(TOT_MONEY_STRING, stats.getTotalMoney()));
+			lblOrgTables.setText(String.format(ORGANIZED_TABLES_STRING, stats.getOrgTables()));
+		} catch (DAOException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
+		}
 	}
 
 	@FXML

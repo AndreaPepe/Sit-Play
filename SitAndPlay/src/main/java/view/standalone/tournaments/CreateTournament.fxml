@@ -109,7 +109,7 @@
                <children>
                   <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #296581;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="40.0">
                      <content>
-                        <VBox fx:id="vboxTournaments" minHeight="310.0" prefWidth="100.0" style="-fx-background-color: white;" />
+                        <VBox fx:id="vboxTournaments" minHeight="310.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: white;" />
                      </content>
                   </ScrollPane>
                </children></AnchorPane>

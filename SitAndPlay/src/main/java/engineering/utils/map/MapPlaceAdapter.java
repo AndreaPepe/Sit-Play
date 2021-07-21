@@ -154,7 +154,7 @@ public class MapPlaceAdapter implements MapPlace {
 		if (context != null) {
 			for (var i = 0; i < context.size(); i++) {
 				JSONObject first = (JSONObject)context.get(i);
-				String id = first.get("id").toString();
+				var id = first.get("id").toString();
 				
 				// "poi" stays for "points of interest"
 				if (type.compareTo("poi") == 0 && id.startsWith("postcode")) {

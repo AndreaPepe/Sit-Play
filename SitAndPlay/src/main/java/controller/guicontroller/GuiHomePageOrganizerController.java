@@ -12,10 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
-import main.java.controller.guicontroller.createtable.GuiPlayerCreateTableController;
+import main.java.controller.guicontroller.createtable.GuiOrganizerCreateTableController;
 import main.java.controller.guicontroller.notifications.GuiViewNotificationController;
 import main.java.controller.guicontroller.tournaments.GuiCreateTournamentController;
-import main.java.controller.guicontroller.userspage.GuiPlayerUserPageController;
+import main.java.controller.guicontroller.userspage.GuiOrganizerUserPageController;
 import main.java.engineering.utils.Session;
 
 public class GuiHomePageOrganizerController extends GuiBasicController {
@@ -102,8 +102,8 @@ public class GuiHomePageOrganizerController extends GuiBasicController {
 
 		switch (pageId) {
 		case 2:
-			pag = "/main/java/view/standalone/createtable/CreateTable.fxml";
-			controller = new GuiPlayerCreateTableController(ssn);
+			pag = "/main/java/view/standalone/createtable/OrganizerCreateTable.fxml";
+			controller = new GuiOrganizerCreateTableController(ssn);
 			break;
 		case 3:
 			pag = "/main/java/view/standalone/tournaments/CreateTournament.fxml";
@@ -115,8 +115,8 @@ public class GuiHomePageOrganizerController extends GuiBasicController {
 			break;
 		default:
 			// also page number 1
-			pag = "/main/java/view/standalone/userspage/PlayerUserPage.fxml";
-			controller = new GuiPlayerUserPageController(ssn);
+			pag = "/main/java/view/standalone/userspage/OrganizerUserPage.fxml";
+			controller = new GuiOrganizerUserPageController(ssn);
 			break;
 		}
 

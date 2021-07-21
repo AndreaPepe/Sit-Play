@@ -120,4 +120,19 @@ public class QueryTable {
 			pstmt.close();
 		}
 	}
+	
+	public static ResultSet selectNumberOfOrganizedTables(Statement stmt, String org) throws SQLException {
+		var query = String.format("SELECT COUNT(*) FROM OrganizedTables WHERE organizer = '%s';", org);
+		return stmt.executeQuery(query);
+	}
+	
+	public static ResultSet selectNumberOfTablesJoined(Statement stmt, String participant) throws SQLException {
+		var query = String.format("SELECT COUNT(*) FROM TablesParticipants WHERE participant = '%s';", participant);
+		return stmt.executeQuery(query);
+	}
+	
+	public static ResultSet selectNumberOfWonTables(Statement stmt, String player) throws SQLException {
+		var query = String.format("SELECT COUNT(*) FROM Tables WHERE winner = '%s';", player);
+		return stmt.executeQuery(query);
+	}
 }

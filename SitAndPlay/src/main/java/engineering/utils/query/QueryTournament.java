@@ -168,4 +168,24 @@ public class QueryTournament {
 				businessman);
 		return stmt.executeQuery(query);
 	}
+	
+	public static ResultSet selectNumberOfOrganizedTournaments(Statement stmt, String organizer) throws SQLException {
+		var query = String.format("SELECT COUNT(*) FROM OrganizedTournaments WHERE organizer = '%s';", organizer);
+		return stmt.executeQuery(query);
+	}
+	
+	public static ResultSet selectNumberOfTournamentsJoined(Statement stmt, String participant) throws SQLException {
+		var query = String.format("SELECT COUNT(*) FROM TournamentsParticipants WHERE participant = '%s';", participant);
+		return stmt.executeQuery(query);
+	}
+	
+	public static ResultSet selectNumberOfWonTournaments(Statement stmt, String player) throws SQLException {
+		var query = String.format("SELECT COUNT(*) FROM Tournaments WHERE winner = '%s';", player);
+		return stmt.executeQuery(query);
+	}
+	
+	public static ResultSet getSumOfAwardsWon(Statement stmt, String player) throws SQLException {
+		var query = String.format("SELECT SUM(award) FROM Tournaments WHERE winner = '%s';", player);
+		return stmt.executeQuery(query);
+	}
 }

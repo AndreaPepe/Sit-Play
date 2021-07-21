@@ -368,5 +368,89 @@ public class TournamentDAO {
 		}
 		return ret;
 	}
+	
+	public static int getNumberOfOrganizedTournaments(String orgUsername) throws SQLException {
+		Statement stmt = null;
+		var ret = 0;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.selectNumberOfOrganizedTournaments(stmt, orgUsername);
+			if (!rs.first()) {
+				return ret;
+			}
+			ret = rs.getInt(1);
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
+	
+	public static int getNumberOfJoinedTournaments(String playerUsername) throws SQLException {
+		Statement stmt = null;
+		var ret = 0;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.selectNumberOfTournamentsJoined(stmt, playerUsername);
+			if (!rs.first()) {
+				return ret;
+			}
+			ret = rs.getInt(1);
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
+	
+	public static int getNumberOfWonTournaments(String player) throws SQLException {
+		Statement stmt = null;
+		var ret = 0;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.selectNumberOfWonTournaments(stmt, player);
+			if (!rs.first()) {
+				return ret;
+			}
+			ret = rs.getInt(1);
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return ret;
+	}
+	
+	public static float getAmountOfWonTournamentAwards(String winner) throws SQLException {
+		Statement stmt = null;
+		var sum = 0f;
+		var conn = DBConnector.getInstance().getConnection();
+		
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.getSumOfAwardsWon(stmt, winner);
+			if (!rs.first()) {
+				return sum;
+			}
+			sum = rs.getFloat(1);
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return sum;
+	}
 
 }

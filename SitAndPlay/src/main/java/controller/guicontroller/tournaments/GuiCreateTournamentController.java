@@ -145,8 +145,32 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 
 		setMap();
 		setAutocompleteTextField();
+		setNumericTextFields();
 		loadGames();
 		loadTime();
+	}
+
+	private void setNumericTextFields() {
+		
+		// make sure the user can insert only integers or floating points
+		tfMaxParticipants.textProperty().addListener((obs, oldVal, newVal) -> {
+			if (!newVal.matches("\\d{0,4}")) {
+				tfMaxParticipants.setText(oldVal);
+			}
+		});
+		
+		tfPrice.textProperty().addListener((obd, oldVal, newVal) -> {
+			if (!newVal.matches("\\d{0,4}([\\.]\\d{0,2})?")) {
+				tfPrice.setText(oldVal);
+			}
+		});
+		
+		tfAwards.textProperty().addListener((obd, oldVal, newVal) -> {
+			if (!newVal.matches("\\d{0,7}([\\.]\\d{0,2})?")) {
+				tfAwards.setText(oldVal);
+			}
+		});
+		
 	}
 
 	private void setMap() {

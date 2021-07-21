@@ -37,9 +37,9 @@ public class LoginDAO {
 			}
 			// move the cursor on the first record 
 			rs.first();
-			String uName = rs.getString("username");
-			String pass = rs.getString("password");
-			String uType = rs.getString("userType");
+			var uName = rs.getString("username");
+			var pass = rs.getString("password");
+			var uType = rs.getString("userType");
 			
 			switch (uType) {
 			case "Player": 
