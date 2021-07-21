@@ -80,12 +80,12 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 	@FXML
 	private WebView webMap;
-	private WebEngine engine;
+	private WebEngine webEngine;
 	private static final String HTML_MAP = "src/main/java/view/standalone/createtable/mapbox.html";
 
-	private String location;
-	private double latitude;
-	private double longitude;
+	private String address;
+	private double lat;
+	private double lng;
 
 	// second page attributes
 	@FXML
@@ -110,19 +110,19 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// setting up the toggle group in the top bar of the pane
-		var topBarToggleGroup = new ToggleGroup();
-		toggleCreate.setToggleGroup(topBarToggleGroup);
-		toggleDeclareWinner.setToggleGroup(topBarToggleGroup);
-		toggleOrganizedTables.setToggleGroup(topBarToggleGroup);
+		var toggleGr = new ToggleGroup();
+		toggleCreate.setToggleGroup(toggleGr);
+		toggleDeclareWinner.setToggleGroup(toggleGr);
+		toggleOrganizedTables.setToggleGroup(toggleGr);
 		// avoid unselected button
-		topBarToggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
+		toggleGr.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
 			if (newVal == null) {
 				oldVal.setSelected(true);
 			}
 		});
 
 		// create the web engine for webMap in createTable pane
-		engine = webMap.getEngine();
+		webEngine = webMap.getEngine();
 
 		// start from the create table pane
 		toggleCreate.fire();
@@ -143,11 +143,11 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 				// target interface of Adapter GOF pattern
 				MapPlace place = autocompletePlace.getLastSelectedItem().getValue();
 				// update values to save data of selected place
-				location = place.toString();
-				latitude = place.getCoordinates().get(0);
-				longitude = place.getCoordinates().get(1);
+				address = place.toString();
+				lat = place.getCoordinates().get(0);
+				lng = place.getCoordinates().get(1);
 				var zoom = 9;
-				engine.executeScript("updateMap(" + latitude + "," + longitude + "," + zoom + ");");
+				webEngine.executeScript("updateMap(" + lat + "," + lng + "," + zoom + ");");
 			}
 		});
 	}
@@ -159,7 +159,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 			myUrl = new File(HTML_MAP).toURI().toURL();
 
 			var url = myUrl.toString();
-			engine.load(url);
+			webEngine.load(url);
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
 		}
@@ -195,7 +195,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 						.show();
 				return;
 			}
-			var placeBean = new PlaceBean(location, latitude, longitude);
+			var placeBean = new PlaceBean(address, lat, lng);
 			var tableBean = new TableBean(name, placeBean, cardGame, date, time, organizer);
 			try {
 				if (Boolean.FALSE.equals(tableBean.checkCreateTable())) {
