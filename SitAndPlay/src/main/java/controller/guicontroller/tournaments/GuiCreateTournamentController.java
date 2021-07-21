@@ -112,7 +112,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 
 	private List<TournamentBean> winnerBeans;
 
-	private static final String HTML_MAP = "src/main/java/view/standalone/createtable/mapbox.html";
+	private static final String MAPBOX_RESOURCE = "src/main/java/view/standalone/createtable/mapbox.html";
 	private String location;
 	private double latitude;
 	private double longitude;
@@ -143,11 +143,11 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 		apDeclareWinner.toBack();
 		apCreateTournament.toFront();
 
-		setMap();
-		setAutocompleteTextField();
+		setUpMap();
+		setAutocompletePlaceTextField();
 		setNumericTextFields();
-		loadGames();
 		loadTime();
+		loadGames();
 	}
 
 	private void setNumericTextFields() {
@@ -173,20 +173,20 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 		
 	}
 
-	private void setMap() {
+	private void setUpMap() {
 
-		URL myUrl = null;
+		URL mapboxUrl = null;
 		try {
-			myUrl = new File(HTML_MAP).toURI().toURL();
+			mapboxUrl = new File(MAPBOX_RESOURCE).toURI().toURL();
 
-			var url = myUrl.toString();
+			var url = mapboxUrl.toString();
 			engine.load(url);
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
 		}
 	}
 
-	private void setAutocompleteTextField() {
+	private void setAutocompletePlaceTextField() {
 		var textField = new TextField();
 		textField.setPrefSize(250, 25);
 		textField.setPromptText("Place");

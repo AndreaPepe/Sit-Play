@@ -97,7 +97,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 	@FXML
 	private Button btnDeclareWinner;
 
-	private List<TableBean> tableBeansWinner;
+	private List<TableBean> winnerBeans;
 	
 	//third page attributes
 	@FXML
@@ -172,7 +172,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		apnCreateTable.toFront();
 		loadMapbox();
 		setUpAutocompleteTextField();
-		loadGames();
+		loadCardGames();
 		loadTime();
 	}
 
@@ -221,7 +221,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 	}
 
-	private void loadGames() {
+	private void loadCardGames() {
 
 		// upload the cardGames for combo box
 		cbCardGame.getItems().clear();
@@ -229,8 +229,8 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		List<String> games = new ArrayList<>();
 		CardGame[] enumGames = CardGame.values();
 
-		for (CardGame cardGame : enumGames) {
-			games.add(cardGame.toString());
+		for (CardGame cg : enumGames) {
+			games.add(cg.toString());
 		}
 
 		cbCardGame.getItems().addAll(games);
@@ -257,26 +257,26 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		apnCreateTable.toBack();
 		apnOrganizedTables.toBack();
 		apnMyTables.toFront();
-		loadMyTables();
+		loadWinnerTables();
 		setUIElements();
 	}
 
 	@FXML
 	public void declareWinner(ActionEvent event) {
-		var yesOrNo = AlertFactory.getInstance().createAlert("Are you sure? This is an irreversible operation",
+		var conf = AlertFactory.getInstance().createAlert("Are you sure? This is an irreversible operation",
 				AlertType.CONFIRMATION);
 		var btnYes = new ButtonType("Yes", ButtonData.YES);
 		var btnNo = new ButtonType("No", ButtonData.NO);
-		yesOrNo.getButtonTypes().setAll(btnYes, btnNo);
-		yesOrNo.showAndWait().ifPresent(type -> {
+		conf.getButtonTypes().setAll(btnYes, btnNo);
+		conf.showAndWait().ifPresent(type -> {
 			if (type == btnYes) {
 				var selectedParticipant = cbWinner.getValue();
 				var ctrl = new ReserveTableSeatController();
-				var tableBean = getSelectedTableToDeclareWinner();
-				if (tableBean != null) {
-					tableBean.setWinner(selectedParticipant);
+				var tBean = getSelectedWinnerTable();
+				if (tBean != null) {
+					tBean.setWinner(selectedParticipant);
 					try {
-						ctrl.declareWinner(tableBean, ssn.getUser());
+						ctrl.declareWinner(tBean, ssn.getUser());
 						AlertFactory.getInstance().createAlert("Winner declared with success", AlertType.INFORMATION)
 								.show();
 						// reload the page
@@ -289,16 +289,16 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		});
 	}
 
-	private void loadMyTables() {
+	private void loadWinnerTables() {
 		var ctrl = new ReserveTableSeatController();
 		try {
-			tableBeansWinner = ctrl.retrieveTablesToDeclareWinnerTo(ssn.getUser());
+			winnerBeans = ctrl.retrieveTablesToDeclareWinnerTo(ssn.getUser());
 			cbTable.getItems().clear();
 			cbWinner.getItems().clear();
 			cbTable.setPromptText("Select organized table");
 			cbWinner.setPromptText("Select winner");
-			for (TableBean bean : tableBeansWinner) {
-				cbTable.getItems().add(bean.getName());
+			for (TableBean b : winnerBeans) {
+				cbTable.getItems().add(b.getName());
 			}
 
 		} catch (DateParsingException | DAOException e) {
@@ -313,7 +313,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		cbTable.valueProperty().addListener((obs, oldVal, newVal) -> {
 			if (newVal != null) {
 				cbWinner.getItems().clear();
-				var bean = getSelectedTableToDeclareWinner();
+				var bean = getSelectedWinnerTable();
 				if (bean != null) {
 					bean.getParticipants().forEach(it -> cbWinner.getItems().add(it));
 				}
@@ -328,15 +328,15 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 	}
 
-	private TableBean getSelectedTableToDeclareWinner() {
+	private TableBean getSelectedWinnerTable() {
 		var name = cbTable.getValue();
 		if (name == null) {
 			AlertFactory.getInstance().createAlert("Select a table first", AlertType.WARNING).show();
 
 		} else {
-			for (TableBean bean : tableBeansWinner) {
-				if (bean.getName().equals(name)) {
-					return bean;
+			for (TableBean b : winnerBeans) {
+				if (b.getName().equals(name)) {
+					return b;
 				}
 			}
 		}
@@ -352,9 +352,9 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		
 		var ctrl = new ReserveTableSeatController();
 		try {
-			var tableBeans = ctrl.retrieveDeletableTables(ssn.getUser());
+			var tBeans = ctrl.retrieveDeletableTables(ssn.getUser());
 			vboxTables.getChildren().clear();
-			for (TableBean bean : tableBeans) {
+			for (TableBean bean : tBeans) {
 				ListElementFactory.getInstance().createElement(ListElementType.DELETABLE_TABLE, vboxTables, bean);
 			}
 		} catch (DateParsingException | DAOException e) {
