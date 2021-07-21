@@ -61,22 +61,22 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 	private ToggleButton toggleOrganizedTables;
 
 	@FXML
-	private TextField tfTableName;
+	private TextField tfName;
 
 	@FXML
-	private DatePicker datePicker;
+	private DatePicker dpDate;
 
 	@FXML
 	private ComboBox<String> cbCardGame;
 
 	@FXML
-	private Button btnCreateTable;
+	private Button btnCreate;
 
 	@FXML
 	private ComboBox<String> cbHours;
 
 	@FXML
-	private ComboBox<String> cbMinutes;
+	private ComboBox<String> cbMin;
 
 	@FXML
 	private WebView webMap;
@@ -178,19 +178,19 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 
 	@FXML
-	public void handleCreateTable(ActionEvent event) {
+	public void createTable(ActionEvent event) {
 
-		String name = tfTableName.getText();
+		String name = tfName.getText();
 		String cardGame = cbCardGame.getValue();
 		if (cardGame == null) {
 			AlertFactory.getInstance().createAlert("Please select a card game", AlertType.ERROR).show();
 			return;
 		}
 		String organizer = ssn.getUser().getUsername();
-		if (datePicker.getValue() != null) {
-			String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-			String time = cbHours.getValue() + ":" + cbMinutes.getValue();
-			if (cbHours.getValue() == null || cbMinutes.getValue() == null) {
+		if (dpDate.getValue() != null) {
+			String date = dpDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			String time = cbHours.getValue() + ":" + cbMin.getValue();
+			if (cbHours.getValue() == null || cbMin.getValue() == null) {
 				AlertFactory.getInstance().createAlert("Insert hours and minutes correctly please", AlertType.ERROR)
 						.show();
 				return;
@@ -240,12 +240,12 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 		// upload hours and minutes for time's combo boxes
 		cbHours.getItems().clear();
-		cbMinutes.getItems().clear();
+		cbMin.getItems().clear();
 
 		for (var i = 0; i < 60; i++) {
 			if (i < 24)
 				cbHours.getItems().add(String.format("%02d", i));
-			cbMinutes.getItems().add(String.format("%02d", i));
+			cbMin.getItems().add(String.format("%02d", i));
 		}
 
 	}
