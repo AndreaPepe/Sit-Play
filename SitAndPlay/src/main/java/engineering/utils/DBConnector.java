@@ -24,7 +24,7 @@ public class DBConnector {
 	private static DBConnector instance = null;
 	private Connection conn = null;
 	
-	private static final String CONFIG_FILE = "./src/main/java/engineering/utils/configDB.xml";
+	private static final String CONFIG_FILE = "C:\\Users\\Andrea Pepe\\git\\Sit-Play\\SitAndPlay\\src\\main\\java\\engineering\\utils\\configDB.xml";
 	private static final String TAG_DATABASE = "db";
 	private static final String TAG_DRIVER = "driver";
 	

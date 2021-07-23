@@ -3,7 +3,7 @@ package main.java.engineering.utils;
 public enum HomePage {
 	
 	//TODO: modify these strings to real pages!!!
-	WEB_HOME_PLAYER("HomePagePlayerView.jsp"),
+	WEB_HOME_PLAYER("PlayerHomePage.jsp"),
 	WEB_HOME_ORGANIZER("HomePageOrganizerView.jsp"),
 	WEB_HOME_BUSINESSMAN("HomePageBusinessmanView.jsp"),
 	

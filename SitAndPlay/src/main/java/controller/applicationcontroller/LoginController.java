@@ -12,12 +12,14 @@ import main.java.model.User;
 
 public class LoginController {
 
-	public void login(BeanUser beanUser) throws DAOException, WrongCredentialsExceptions, EmptyDataException {
+	public BeanUser login(BeanUser beanUser, boolean isWeb) throws DAOException, WrongCredentialsExceptions, EmptyDataException {
 		User user;
+		BeanUser newBean;
 		try {
 			user = LoginDAO.login(beanUser.getUsername(), beanUser.getPassword());
-			beanUser.setUsername(user.getUsername());
-			beanUser.setUserType(user.getUserType());
+			newBean = new BeanUser();
+			newBean.setUsername(user.getUsername());
+			newBean.setUserType(user.getUserType());
 			
 			// launch the polling thread for notifications
 			var pollingThread = new NotificationPollingThread(user.getUsername());
@@ -26,7 +28,7 @@ public class LoginController {
 		} catch (SQLException e) {
 			throw new DAOException(e.getMessage());		
 		}
-		
+		return newBean;
 		
 	}
 }

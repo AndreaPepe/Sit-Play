@@ -1,0 +1,94 @@
+@charset "ISO-8859-1";
+
+html, body{
+	height:100%;
+}
+.topBar{
+	background-color: #061A2D;
+	
+}
+
+.appName{
+	font-family: system-bold-italic;
+	font-size: 36px;
+	margin: 2% 0% 2% 0%;
+	color: white;
+	text-align: center;
+	width:100%;
+	display: inline-block;
+}
+
+.lowPageContainer{
+	background-color: #296581;
+	height:100%;
+}
+.container {
+  padding-top: 80px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #296581;
+}
+
+input[type=text], input[type=password] {
+
+  width: 80%;
+  margin-left: 10%;
+  padding: 12px 20px;
+  margin-top: 16px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.labelLink {
+  margin-top: 16px;
+  width: 100%;
+  display: inline-block;
+  color: white;
+  text-align: center;
+}
+
+
+.radioContainer{
+	text-align: center;
+}
+input[type=radio]{
+  margin-left: auto;
+  margin-right: auto;
+  padding: 12px 20px;
+  margin-top: 30px;
+  display: inline-block;
+}
+
+label{
+	color: white;
+	margin: 4px;
+}
+
+#back{
+	margin-left: 8%;
+	margin-top: 80px;
+}
+
+#signup{
+	margin-top: 80px;
+}
+
+input[type=submit] {
+  background-color: #061A2D;
+  font-size: 18px;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  cursor: pointer;
+  width: 240px;
+}
+
+input[type=submit]:hover{
+	background-color: #4CA1D8;
+}
+
+input[type=submit]:active{
+	transform: scale(0.9);
+}

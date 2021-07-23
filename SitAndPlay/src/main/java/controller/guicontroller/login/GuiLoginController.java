@@ -87,13 +87,14 @@ public class GuiLoginController implements Initializable {
 
 			// new instance of application controller
 			var ctrl = new LoginController();
-			ctrl.login(beanUser);
+			
 
 			// create a new desktop Session -> isWeb = false
 			var ssn = new Session(false);
 
+			var loggedBean = ctrl.login(beanUser, ssn.isWeb());
 			// Registration of the user into Session
-			ssn.setUser(beanUser);
+			ssn.setUser(loggedBean);
 			ssn.setHomePage();
 
 			String startPage;
