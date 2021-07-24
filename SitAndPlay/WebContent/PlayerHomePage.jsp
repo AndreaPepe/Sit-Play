@@ -17,7 +17,7 @@
 	}
 
 	function loadTables(){
-		$("#content").load("PlayerUserPage.jsp");
+		$("#content").load("PlayerTablesPage.jsp");
 	}
 	function loadTournaments(){
 		$("#content").load("PlayerUserPage.jsp");
@@ -36,15 +36,17 @@
 		</div>
 	</header>
 	
-	<div class="sidebar">
-		<a onclick="loadUser()"><span>User</span></a>
-		<a onclick="loadTables()"><span>Tables</span></a>
-		<a onclick="loadTournaments()"><span>Tournaments</span></a>
-		<a onclick="loadNotifications()"><span>Notifications</span></a>
-	</div>
+	<div class="container">
+		<div class="sidebar">
+			<a onclick="loadUser()"><span>User</span></a>
+			<a onclick="loadTables()"><span>Tables</span></a>
+			<a onclick="loadTournaments()"><span>Tournaments</span></a>
+			<a onclick="loadNotifications()"><span>Notifications</span></a>
+		</div>
 	
-	<div id="content" class="content">
+		<div id="content" class="content">
 	
+		</div>
 	</div>
 </body>
 </html>

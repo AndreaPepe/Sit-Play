@@ -25,7 +25,7 @@ public class DatetimeUtil {
 
 			return format.parse(date + " " + time);
 		} catch (ParseException e) {
-			throw new DateParsingException("Impossible to parse date and time, please review your inputs");
+			throw new DateParsingException("Impossible to parse date and time, please review your inputs. You have inserted date: "+date +" time: " + time);
 		}
 	}
 	

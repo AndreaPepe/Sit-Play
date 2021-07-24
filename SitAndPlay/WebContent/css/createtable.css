@@ -1,0 +1,50 @@
+@charset "ISO-8859-1";
+
+.left_div{
+	top: 60px;
+	width:33%;
+	height: 90%;
+	left:5%;
+	bottom: 5%;
+	position: absolute;
+	padding-top: 30px;
+}
+
+.left_div input[type=text], select, input[type=date], input[type=time]{
+	width: 100%;
+	line-height: 40px;
+	display: block;
+	margin-top: 20px;
+	height: 30px;
+	font-size: 15px;
+}
+
+.left_div input[type=submit] {
+  background-color:#296581;
+  font-size: 16px;
+  margin-top: 60px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 60%;
+  margin-left: 20%;
+  display: block;
+  line-height: 40px;
+}
+
+.left_div input[type=submit]:hover{
+	background-color: #4CA1D8;
+}
+
+.left_div input[type=submit]:active{
+	transform: scale(0.9);
+}
+.map{
+	margin-left: 45%;
+	margin-top: 15px;
+	top: 60px;
+	bottom: 5%;
+	position:absolute;
+	width: 50%;
+	height: 70%;
+}
