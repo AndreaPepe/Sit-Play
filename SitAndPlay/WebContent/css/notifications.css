@@ -1,0 +1,53 @@
+@charset "ISO-8859-1";
+
+.title-label{
+	font-size: 22px;
+	font-family: "Papyrus", fantasy;
+	color: #296581;
+	text-align: center;
+	display: block;
+	padding-top: 30px;	
+}
+
+.radio-group{
+	margin-top: 20px;
+	text-align: center;
+	display: inline-block;
+	align-content: center;
+	width: 100%;
+}
+
+.radio-group input[type=radio]{
+	display: inline-block;
+}
+
+.scrollPane{
+	border: 2px solid #061A2D;
+	margin-left: 10%;
+	margin-right: 10%;
+	height: 350px;
+	margin-top: 40px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.notif{
+	display:flex;
+	align-items: center;
+	height: 100px;
+	width:100%;
+	background-color: #4CA1D8;
+	text-align: center;
+	border: 2px solid white;
+	vertical-align: middle;
+}
+
+.msg{
+	color: white;
+	font-size: 18px;
+	text-align: center;
+	width: 90%;
+	display:block;
+	margin-left: 5%;
+	
+}

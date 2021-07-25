@@ -27,7 +27,7 @@
 			<a href="PlayerUserPage.jsp"><span>User</span></a>
 			<a href="CreateTable.jsp"><span>Tables</span></a>
 			<a onclick="loadTournaments()"><span>Tournaments</span></a>
-			<a onclick="loadNotifications()"><span>Notifications</span></a>
+			<a href="Notifications.jsp"><span>Notifications</span></a>
 		</div>
 	
 		<div id="content" class="content">

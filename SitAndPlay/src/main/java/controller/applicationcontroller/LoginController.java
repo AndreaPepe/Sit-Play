@@ -22,9 +22,10 @@ public class LoginController {
 			newBean.setUserType(user.getUserType());
 			
 			// launch the polling thread for notifications
-			var pollingThread = new NotificationPollingThread(user.getUsername());
-			pollingThread.start();
-			
+			if(!isWeb) {
+				var pollingThread = new NotificationPollingThread(user.getUsername());
+				pollingThread.start();
+			}
 		} catch (SQLException e) {
 			throw new DAOException(e.getMessage());		
 		}

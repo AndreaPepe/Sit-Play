@@ -1,0 +1,56 @@
+@charset "ISO-8859-1";
+
+.left{
+	position: absolute;
+	text-align: center;
+	width: 60%;
+	padding-left: 10%;
+	padding-top:5%;
+}
+
+.left label{
+	font-family: "Papyrus", fantasy;
+	font-size: 24px;
+	text-align: center;
+	display: block;
+	max-width: 300px;
+	margin-top: 40px;
+	color: #296581;
+}
+
+.right{
+	display: block;
+	margin-left: 50%;
+	width: 30%;
+	padding-top: 10%;
+}
+
+.right select{
+	display: block;
+	width: 100%;
+	font-size: 16px;
+	margin: 30px 0 30px 0;
+	border: 2px solid #4CA1D8;
+	height: 30px;
+}
+
+.right input[type=submit]{
+	display: block;
+	margin-top: 120px;
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	width: 60%;
+	margin-left: 20%;
+	line-height: 40px;
+}
+
+.right input[type=submit]:hover{
+	background-color: #4CA1D8;
+}
+
+.right input[type=submit]:active{
+	transform: scale(0.9);
+}
