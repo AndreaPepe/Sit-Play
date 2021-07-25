@@ -1,0 +1,55 @@
+@charset "ISO-8859-1";
+
+.map {
+	position: absolute;
+	left: 2%; 
+	top : 15%;
+	right: 15%;
+	width: 60%;
+	bottom: 15%;
+	top: 15%;
+}
+
+.right_col {
+	position: absolute;
+	left: 65%;
+	width: 30%;
+	top: 35%;
+	bottom: 35%;
+	text-align: center;
+	align-content: center;
+}
+
+.right_col label {
+	display: block;
+	margin-top: 30px;
+}
+.right_col input[type=text]{
+	display: block;
+	margin-top: 20px;
+	line-height: 30px;
+	width:100%;
+	font-size: 15px;
+	border: 2px solid #4CA1D8;
+	text-align: center;
+}
+.right_col .btn {
+	display: block;
+	margin-top: 100px;
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	width: 60%;
+	margin-left: 20%;
+	line-height: 40px;
+}
+
+.right_col .btn:hover{
+	background-color: #4CA1D8;
+}
+
+.right_col .btn:active{
+	transform: scale(0.9);
+}

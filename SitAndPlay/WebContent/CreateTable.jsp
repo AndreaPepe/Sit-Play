@@ -89,27 +89,10 @@
 <script src="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.js"></script>
 <link href="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.css" rel="stylesheet" />
 
-
-<link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet"></link>
 <script src="javascript/jquery.min.js"></script>
+<link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet"></link>
 <script src="https://code.jquery.com/jquery-1.10.2.js" ></script>  
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    
-<script type="text/javascript">
-	function loadUser(){
-		$("#content").load("PlayerUserPage.jsp");
-	}
-
-	function loadTables(){
-		$("#content").load("CreateTableProva.jsp");
-	}
-	function loadTournaments(){
-		$("#content").load("PlayerUserPage.jsp");
-	}
-	function loadNotifications(){
-		$("#content").load("PlayerUserPage.jsp");
-	}
-</script>    
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     
 <script type="text/javascript">
 	var list = [];
@@ -239,7 +222,7 @@
 		<div id="content" class="content">
 			<div class="topnav">
   				<a href="CreateTable.jsp">Create Table</a>
-  				<a onclick="loadCreate()">Reserve A Seat</a>
+  				<a href="PlayerReserveTable.jsp">Reserve A Seat</a>
   				<a onclick="loadCreate()">My Tables</a>
   				<a onclick="loadCreate()">Organized Tables</a>
 			</div>
@@ -251,15 +234,14 @@
 				<input id="place" type="text" name="place" placeholder="Place" class="ui-widget">
 				<select id="cardGame" name="cardGame">
 					<option disabled selected>Card Game</option>
-					<option value="Poker">Poker</option>
-					<option value="Black Jack">Black Jack</option>
-					<option value="Texas Holdem Poker">Texas Holdem Poker</option>
-					<option value="Scopa">Scopa</option>
-					<option value="Scopone">Scopone</option>
-					<option value="Briscola">Briscola</option>
-					<option value="Buraco">Buraco</option>
-					<option value="Rummy">Rummy</option>
-					<option value="Tressette">Tressette</option>
+					<%
+					for(CardGame cg: CardGame.values()){
+						%>
+						<option value= "<%= cg.toString()%>"><%= cg.toString()%></option>
+						<%
+					}
+					%>
+					
 				</select>
 				
 				<input id="date" type="date" name="date">
