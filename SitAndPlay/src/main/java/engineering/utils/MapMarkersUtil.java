@@ -49,7 +49,7 @@ public class MapMarkersUtil {
 				+");";
 	}
 	
-	private static String encodeToBase64UTF8(InputStream is) throws IOException {
+	public static String encodeToBase64UTF8(InputStream is) throws IOException {
 		byte[] byteArray = IOUtils.toByteArray(is);
 		byte[] base64 = Base64.getEncoder().encode(byteArray);
 		return new String(base64, StandardCharsets.UTF_8);

@@ -1,0 +1,143 @@
+@charset "ISO-8859-1";
+
+.topDiv{
+	width: 100%;
+	height: 45%;
+	display: flex;
+	align-content: center;
+	align-items: center;
+}
+
+.formTables{
+	display: block;
+	margin-top : 20px;
+	margin-left: 40px;
+	margin-bottom: 20px;
+	width: 25%;
+}
+
+.formTables select{
+	display:block;
+	width: 100%;
+	font-size: 14px;
+}
+
+.formTables input[type=submit]{
+	display: block;
+	width: 50%;
+	line-height: 35px;
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	margin-left: 25%;
+	margin-top: 30px;
+	border-radius: 25px;
+}
+
+.formTables input[type=submit]:hover{
+	background-color: #4CA1D8;
+}
+
+.formTables input[type=submit]:active{
+	transform: scale(0.9);
+}
+
+.singleTab{
+	display: inline-block;
+	margin-top : 20px;
+	margin-left: 50px;
+	margin-bottom: 20px;
+	width: 60%;
+	height: 200px;
+	border: 2px solid #061A2D;
+	background-color: #CCE1E9;
+	
+	display: block;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+
+
+.bottomDiv{
+	width: 100%;
+	height: 45%;
+	display: flex;
+	align-content: center;
+	align-items: center;
+}
+
+.formTournaments{
+	display: block;
+	margin-top : 20px;
+	margin-left: 40px;
+	margin-bottom: 20px;
+	width: 25%;
+}
+
+.formTournaments select{
+	display:block;
+	width: 100%;
+	font-size: 14px;
+}
+
+.formTournaments input[type=submit]{
+	display: block;
+	width: 50%;
+	line-height: 35px;
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	margin-left: 25%;
+	margin-top: 30px;
+	border-radius: 25px;
+}
+
+.formTournaments input[type=submit]:hover{
+	background-color: #4CA1D8;
+}
+
+.formTournaments input[type=submit]:active{
+	transform: scale(0.9);
+}
+
+.singleTourn{
+	display: inline-block;
+	margin-top : 20px;
+	margin-left: 50px;
+	margin-bottom: 20px;
+	width: 60%;
+	height: 250px;
+	border: 2px solid #061A2D;
+	background-color: #CCE1E9;
+	
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+
+.title{
+	font-size: 22px;
+	font-weight: bold;
+	text-align: center;
+	display: block;
+}
+
+.lbl{
+	text-align: center;
+	display: block;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.logo{
+	margin-left: 100px;;
+	margin: auto;
+	width: 100px;
+	height: 100px;
+}
