@@ -1,27 +1,48 @@
 @charset "ISO-8859-1";
 
-.title-label{
+.title-label {
 	font-size: 22px;
 	font-family: "Papyrus", fantasy;
 	color: #296581;
 	text-align: center;
 	display: block;
-	padding-top: 30px;	
+	padding-top: 30px;
 }
 
-.radio-group{
-	margin-top: 20px;
-	text-align: center;
+.radio-group {
+	margin-top: 20px; 
+	text-align : center;
 	display: inline-block;
 	align-content: center;
 	width: 100%;
+	text-align: center;
 }
 
-.radio-group input[type=radio]{
+.radio-group input[type=radio] {
 	display: inline-block;
 }
 
-.scrollPane{
+.radio-group .btn {
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	width: 150px;
+	margin-left: 20px;
+	line-height: 35px;
+	border-radius: 25px;
+}
+
+
+.radio-group .btn:hover{
+	background-color: #4CA1D8;
+}
+
+.radio-group .btn:active{
+	transform: scale(0.9);
+}
+.scrollPane {
 	border: 2px solid #061A2D;
 	margin-left: 10%;
 	margin-right: 10%;
@@ -31,23 +52,21 @@
 	overflow-x: hidden;
 }
 
-.notif{
-	display:flex;
-	align-items: center;
-	height: 100px;
-	width:100%;
-	background-color: #4CA1D8;
+.notif {
+	display: flex;
+	align-items: center; height : 100px;
+	width: 100%;
+	background-color: #CCE1E9;
 	text-align: center;
-	border: 2px solid white;
+	border: 10px solid white;
 	vertical-align: middle;
+	height: 100px;
 }
 
-.msg{
-	color: white;
+.msg {
 	font-size: 18px;
 	text-align: center;
 	width: 90%;
-	display:block;
+	display: block;
 	margin-left: 5%;
-	
 }

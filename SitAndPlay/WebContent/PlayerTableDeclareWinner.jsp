@@ -21,10 +21,9 @@ List<TableBean> tables = c.retrieveTablesToDeclareWinnerTo(user);
     	}
     	
     	String table = request.getParameter("table");
-    	out.println(table);
     	String winner = request.getParameter("winner");
     	if(table == null || winner == null){
-    		throw new Exception("You have not selected table or participant; table: " + table + "  participant: " + winner);
+    		throw new Exception("You did not select table or participant; table: " + table + "  participant: " + winner);
     	}
     	ReserveTableSeatController ctrl = new ReserveTableSeatController();
     	List<TableBean> newList = ctrl.retrieveTablesToDeclareWinnerTo(ssn.getUser());
@@ -103,7 +102,7 @@ function changeParticipants() {
   				<a href="CreateTable.jsp">Create Table</a>
   				<a href="PlayerReserveTable.jsp">Reserve A Seat</a>
   				<a href="PlayerTableDeclareWinner.jsp">Declare Winner</a>
-  				<a onclick="loadCreate()">Organized Tables</a>
+  				<a href="OrganizedTables.jsp">Organized Tables</a>
   				
 			</div>
 			

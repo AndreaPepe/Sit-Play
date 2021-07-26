@@ -1,0 +1,62 @@
+@charset "ISO-8859-1";
+
+.tableDiv{
+	margin-top:50px;
+	margin-left: 20%;
+	width: 60%;
+	height: 220px;
+	border: 2px solid #061A2D;
+	background-color: #CCE1E9;
+	display: block;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.tableDiv .title{
+	font-size: 22px;
+	font-weight: bold;
+	text-align: center;
+	display: block;
+}
+
+.tableDiv label{
+	text-align: center;
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.formDiv{
+	display: inline-block;
+	margin-top: 50px;
+	text-align: center;
+	width: 100%;
+}
+
+.formDiv select {
+	font-size: 15px;
+	height: 30px;
+	width: 200px;
+	text-align: center;
+	text-align-last: center; 
+}
+
+.formDiv input[type=submit] {
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	width: 150px;
+	margin-left: 20px;
+	line-height: 30px;
+	border-radius: 25px;
+}
+
+.formDiv input[type=submit]:hover{
+	background-color: #4CA1D8;
+}
+
+.formDiv input[type=submit]:active{
+	transform: scale(0.9);
+}

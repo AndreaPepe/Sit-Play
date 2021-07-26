@@ -27,10 +27,6 @@
 %>    
     
 <%
-	if(request.getParameter("userbtn")!=null){
-		%><jsp:forward page="PlayerUserPage.jsp"/><%
-	}
-
 	if(request.getParameter("btnCreate")!=null){
 		String name = request.getParameter("tablename");
 		String placeName = request.getParameter("place");
@@ -224,7 +220,7 @@
   				<a href="CreateTable.jsp">Create Table</a>
   				<a href="PlayerReserveTable.jsp">Reserve A Seat</a>
   				<a href="PlayerTableDeclareWinner.jsp">Declare Winner</a>
-  				<a onclick="loadCreate()">Organized Tables</a>
+  				<a href="OrganizedTables.jsp">Organized Tables</a>
 			</div>
 	
 		<div id="innerPage" class="innerDiv">
@@ -233,7 +229,7 @@
 				<input id="tablename" type="text" name="tablename" placeholder="Table's name"> 
 				<input id="place" type="text" name="place" placeholder="Place" class="ui-widget">
 				<select id="cardGame" name="cardGame">
-					<option disabled selected>Card Game</option>
+					<option disabled selected>-- Card Game --</option>
 					<%
 					for(CardGame cg: CardGame.values()){
 						%>

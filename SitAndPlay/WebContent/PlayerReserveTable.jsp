@@ -156,8 +156,8 @@ if(beanList == null || beanList.isEmpty()){
 			<div class="topnav">
   				<a href="CreateTable.jsp">Create Table</a>
   				<a href="PlayerReserveTable.jsp">Reserve A Seat</a>
-  				<a onclick="loadCreate()">My Tables</a>
-  				<a onclick="loadCreate()">Organized Tables</a>
+  				<a href="PlayerTableDeclareWinner.jsp">My Tables</a>
+  				<a href="OrganizedTables.jsp">Organized Tables</a>
 			</div>
 	
 		<div id="innerPage" class="innerDiv">
