@@ -7,6 +7,7 @@ import java.util.List;
 import main.java.engineering.bean.businessactivity.BusinessActivityBean;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.dao.BusinessActivityDAO;
+import main.java.engineering.dao.TournamentDAO;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.exceptions.DeleteActivityException;
@@ -48,18 +49,19 @@ public class ManageActivitiesController {
 
 	public void deleteBusinessActivity(BusinessActivityBean bean) throws DAOException, DeleteActivityException, DateParsingException {
 		try {
-			List<Tournament> sponsorizedTournaments = BusinessActivityDAO
-					.retrieveOpenSponsorizedTournaments(bean.getName());
+			List<Tournament> sponsorizedTournaments = TournamentDAO
+					.retrieveOpenSponsoredTournaments(bean.getName());
 
 			// if the activity is sponsoring tournaments, it can't be deleted
 			if (!sponsorizedTournaments.isEmpty()) {
 				throw new DeleteActivityException(
-						"This activity is currently used to sponsorize one or more tournaments and can't be deleted");
+						"This activity is currently used to sponsor one or more tournaments and can't be deleted");
 			}
 			
 			BusinessActivityDAO.deleteBusinessActivity(bean.getName());
 			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 	}

@@ -45,7 +45,7 @@ public class QueryBusinessActivity {
 		return stmt.executeQuery(query);
 	}
 
-	public static ResultSet retrieveOpenSponosrizedTournaments(Statement stmt, String activity) throws SQLException {
+	public static ResultSet retrieveOpenSponsoredTournaments(Statement stmt, String activity) throws SQLException {
 		var query = String.format(
 				"SELECT * FROM Tournaments WHERE sponsor = '%s' AND datetime > ADDTIME(current_timestamp(), '3:00:00');",
 				activity);

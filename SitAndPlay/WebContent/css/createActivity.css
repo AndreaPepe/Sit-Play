@@ -1,0 +1,78 @@
+@charset "ISO-8859-1";
+
+.sx{
+	position: absolute;
+	width: 45%;
+	margin-top: 7%;
+	margin-left: 5%;
+	height: auto;
+}
+
+.sx label{
+	text-align: center;
+	display:block;
+	width: 50%;
+	margin-left: 25%;
+	margin-top: 25px;
+	margin-bottom: 40px;
+	font-family: "Papyrus", fantasy;
+	font-size: 22px;
+	color: #296581;
+}
+
+.dx {
+	width: 40%;
+	height: 95%;
+	margin-left: 47%;
+	vertical-align: middle;
+	text-align: center;
+	position: absolute;
+}
+
+.dx input[type="text"] {
+	font-size: 15px;
+	display: block;
+	margin-top: 70px;
+	width: 68%;
+	margin-left: 16%;
+	border: 2px solid #4CA1D8;
+	height: 25px;
+}
+
+.dx input[type = "submit"] {
+	width: 50%;
+	margin-left: 25%;
+	display: block;
+	margin-top: 70px;
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	line-height: 35px;
+	border-radius: 25px;
+}
+
+.dx input[type = "submit"]:hover{
+	background-color: #4CA1D8;
+}
+
+.dx input[type = "submit"]:active{
+	transform: scale(0.9);
+}
+
+.dx img {
+	width: 150px;
+	height: 150px;
+	margin-top: 30px;
+	display: block;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.loader{
+	display:block;
+	margin-top: 40px;
+	margin-left: 25%;
+}

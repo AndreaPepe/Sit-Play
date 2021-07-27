@@ -452,5 +452,44 @@ public class TournamentDAO {
 		}
 		return sum;
 	}
+	
+	public static List<Tournament> retrieveOpenSponsoredTournaments(String activityName) throws SQLException, DateParsingException {
+		Connection conn = null;
+		Statement stmt = null;
+		List<Tournament> list = new ArrayList<>();
+
+		conn = DBConnector.getInstance().getConnection();
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = QueryTournament.retrieveOpenSponsoredTournaments(stmt, activityName);
+			while (rs.next()) {
+				var tournamentName = rs.getString("name");
+				var place = new Place(rs.getString("address"), rs.getDouble("lat"), rs.getDouble("lng"));
+				var game = CardGame.getConstant(rs.getString("cardGame"));
+				var date = DatetimeUtil.fromMysqlTimestampToDate(
+						rs.getTimestamp("datetime", Calendar.getInstance(Locale.getDefault())));
+				var partInformation = new ParticipationInfo(rs.getInt("maxParticipants"), rs.getFloat("price"),
+						rs.getFloat("award"));
+				var requested = rs.getBoolean("requestedSponsor");
+				var org = rs.getString("organizer");
+				BusinessActivity busActivity = null;
+				var sponsorName = rs.getString("sponsor");
+				if (sponsorName != null) {
+					busActivity = new BusinessActivity(sponsorName, rs.getBinaryStream("logo"),
+							rs.getString("businessman"));
+				}
+				var t = new Tournament(tournamentName, place, game, date, org, requested, partInformation);
+				t.setSponsor(busActivity);
+				list.add(t);
+			}
+			rs.close();
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
+	}
+
 
 }

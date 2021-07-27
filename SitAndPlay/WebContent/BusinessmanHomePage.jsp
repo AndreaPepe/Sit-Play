@@ -2,34 +2,22 @@
     pageEncoding="ISO-8859-1"%>
     
     
+    <%
+    //TODO: remove this forward
+    %>
+    <jsp:forward page="CreateActivity.jsp"></jsp:forward>
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>Home page</title>
 
-<link rel="stylesheet" href="css/homepage.css">
+<link rel="stylesheet" href="css/basicStyle.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script type="text/javascript">
-	function loadUser(){
-		$("#content").load("PlayerUserPage.jsp");
-	}
-
-	function loadActivities(){
-		$("#content").load("PlayerUserPage.jsp");
-	}
-	function loadTournaments(){
-		$("#content").load("PlayerUserPage.jsp");
-	}
-	function loadNotifications(){
-		$("#content").load("PlayerUserPage.jsp");
-	}
-</script>
-
-
 </head>
-<body onload="loadUser()">
+<body>
 	<header>
 		<div class="left_area">
 			<h3>Sit<span>&amp;</span>Play</h3>

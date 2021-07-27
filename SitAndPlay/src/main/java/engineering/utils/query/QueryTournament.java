@@ -81,8 +81,7 @@ public class QueryTournament {
 	public static ResultSet retrieveOpenTournaments(Statement stmt) throws SQLException {
 		var query = "SELECT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo "
 				+ "FROM tournaments JOIN OrganizedTournaments ON tournament = name "
-				+ "LEFT JOIN businessactivity on activity = sponsor "
-				+ "WHERE datetime > ADDTIME(current_timestamp(), '3:00:00');";
+				+ "LEFT JOIN businessactivity on activity = sponsor WHERE datetime > ADDTIME(current_timestamp(), '3:00:00');";
 		return stmt.executeQuery(query);
 	}
 
@@ -188,4 +187,14 @@ public class QueryTournament {
 		var query = String.format("SELECT SUM(award) FROM Tournaments WHERE winner = '%s';", player);
 		return stmt.executeQuery(query);
 	}
+	
+	public static ResultSet retrieveOpenSponsoredTournaments(Statement stmt, String activity) throws SQLException {
+		var query = String.format("SELECT DISTINCT name, address, lat, lng, cardGame, datetime, price, award, maxParticipants, requestedSponsor, organizer, sponsor, businessman, logo FROM tournaments JOIN OrganizedTournaments ON tournament=name "
+				+ "LEFT JOIN businessactivity on activity = sponsor "
+				+ "WHERE sponsor = '%s' AND datetime > ADDTIME(current_timestamp(), '3:00:00');",
+				activity);
+		return stmt.executeQuery(query);
+	}
+	
+	
 }
