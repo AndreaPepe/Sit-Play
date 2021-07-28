@@ -1,66 +1,78 @@
-<%@page import="main.java.engineering.bean.login.BeanUser"%>
-<%@page import="java.util.Base64"%>
-<%@page import="org.apache.commons.io.IOUtils"%>
-<%@page import="main.java.engineering.bean.businessactivity.BusinessActivityBean"%>
 <%@page import="main.java.engineering.utils.MapMarkersUtil"%>
+<%@page import="main.java.engineering.bean.businessactivity.BusinessActivityBean"%>
 <%@page import="main.java.engineering.bean.tournaments.TournamentBean"%>
 <%@page import="java.util.List"%>
 <%@page import="main.java.engineering.utils.Session"%>
-<%@page import="main.java.controller.applicationcontroller.reserveaseat.tournament.ReserveTournamentSeatController"%>
+<%@page import="main.java.controller.applicationcontroller.business.SponsorizeTournamentController"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@page errorPage="ErrorPage.jsp" %>
     
     <%
-    ReserveTournamentSeatController ctrl = new ReserveTournamentSeatController();
     Session ssn = (Session) session.getAttribute("ssn");
     if(ssn == null){
-    	throw new Exception("Session is expired! Please go back and log in again.");
+    	throw new Exception("Session is expired! Please go back and log in again!");
     }
-    List<TournamentBean> tournaments = ctrl.retrieveOpenTournaments();
+    SponsorizeTournamentController ctrl = new SponsorizeTournamentController();
+    List<TournamentBean> tournaments = ctrl.getTournamentsToSponsorize();
+    List<BusinessActivityBean> activities = ctrl.getBusinessmanActivities(ssn.getUser());
     %>
     
+    
     <%
-    if(request.getParameter("btnJoin") != null){
+    if(request.getParameter("btnSponsor") != null){
     	ssn = (Session) session.getAttribute("ssn");
-    	if(ssn == null){
-    		throw new Exception ("Session is expired! Go back and log in again.");
-    	}
-    	
-    	String tournamentName = (String) request.getParameter("selTmt");
-		if(tournamentName == null || tournamentName.isBlank()){
-			throw new Exception("No tournament selected");
-		}
-		TournamentBean tBean = null;
-		for(TournamentBean tb: tournaments){
-			if(tb.getName().equals(tournamentName)){
-				tBean = tb;
-				break;
-			}
-		}
-		if(tBean == null){
-			throw new Exception("Something went wrong, please reload the page");
-		}
-		
-		ReserveTournamentSeatController contr = new ReserveTournamentSeatController();
-		BeanUser player = ssn.getUser();
-		contr.joinTournament(tBean, player);
+        if(ssn == null){
+        	throw new Exception("Session is expired! Please go back and log in again!");
+        }
+        
+        String selectedTmt = request.getParameter("selTmt");
+        if(selectedTmt == null || selectedTmt.isBlank()){
+        	throw new Exception("You did not select a tournament!");
+        }
+        String selectedActivity = request.getParameter("selAct");
+        if(selectedActivity == null || selectedActivity.isBlank()){
+        	throw new Exception("You did not select a business activity to sponsor tournament!");
+        }
+        
+        BusinessActivityBean sponsor = null;
+        for(BusinessActivityBean act : activities){
+        	if(act.getName().equals(selectedActivity)){
+        		sponsor = act;
+        	}
+        }
+        
+        TournamentBean tournament = null;
+        for(TournamentBean b: tournaments){
+        	if(b.getName().equals(selectedTmt)){
+        		tournament = b;
+        		ctrl = new SponsorizeTournamentController();
+                ctrl.confirmSponsorization(tournament, sponsor);
+                %>
+                <jsp:forward page="SponsorTournament.jsp"/>
+                <%
+        	}
+        }
+        
+        
     }
     %>
+    
+    
     
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="ISO-8859-1">
-<title>Join Tournament</title>
+<title>Sponsor Tournament</title>
 
 <link rel="stylesheet" href="css/basicStyle.css">
 <link rel="stylesheet" href="css/PlayerReserveTable.css">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script src="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.js"></script>
 <link href="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.css" rel="stylesheet" />
-
-<script src="javascript/jquery.min.js"></script>
 
 <style>
 			.leaflet-popup-close-button {
@@ -78,7 +90,8 @@
 			}
 			
 </style>
-		<script>
+
+<script>
 		var map;
 		var lastSelectedMarker = null;
 		var selectedTournament = null;
@@ -162,27 +175,29 @@
 			    L.mapbox.styleLayer('mapbox://styles/mapbox/outdoors-v11').addTo(map);
 			}
 		}	
-		</script>
+</script>
+
+
 </head>
 <body>
-	
+
 	<header>
 		<div class="left_area">
 			<h3>Sit<span>&amp;</span>Play</h3>
 		</div>
 	</header>
-	
+
 	<div class="container">
 		<div class="sidebar">
-			<a href="PlayerUserPage.jsp"><span>User</span></a>
-			<a href="CreateTable.jsp"><span>Tables</span></a>
-			<a href="JoinTournament.jsp"><span>Tournaments</span></a>
+			<a href="BusinessmanUserPage.jsp"><span>User</span></a>
+			<a href="CreateActivity.jsp"><span>Activities</span></a>
+			<a href="SponsorTournament.jsp"><span>Tournaments</span></a>
 			<a href="Notifications.jsp"><span>Notifications</span></a>
 		</div>
 	
 		<div id="content" class="content">
 			<div class="topnav">
-  				<a href="JoinTournament.jsp">Join Tournament</a>
+  				<a href="SponsorTournament.jsp">Sponsor Tournament</a>
 			</div>
 	
 		<div id="innerPage" class="innerDiv">
@@ -240,14 +255,24 @@
 			<div class="right_col">
 				<label> You have currently selected the tournament:</label>
 				
-				<form action="JoinTournament.jsp" name="reserveTournament">
+				<form action="SponsorTournament.jsp" name="sponsorTournament">
 					<input type="text" readonly="readonly" id="selTmt" name ="selTmt" value="">
-					<input type="submit" id="btnJoin" name="btnJoin" value="Reserve A Seat" class="btn">
+					<select id="selAct" name="selAct" class="selAct">
+						<option selected disabled>-- Select Activity --</option>
+						<%
+						for(BusinessActivityBean act : activities){
+							%>
+							<option><%= act.getName() %></option>
+							<%
+						}						
+						%>
+					</select>
+					<input type="submit" id="btnSponsor" name="btnSponsor" value="Sponsor Tournament" class="btn">
 				</form>
 				
 			</div>
-	</div>
 		</div>
+	</div>
 	</div>
 </body>
 </html>

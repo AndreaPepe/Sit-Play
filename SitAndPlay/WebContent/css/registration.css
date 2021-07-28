@@ -28,12 +28,12 @@ html, body{
   margin-left: auto;
   margin-right: auto;
   background-color: #296581;
+  text-align: center;
 }
 
 input[type=text], input[type=password] {
 
   width: 80%;
-  margin-left: 10%;
   padding: 12px 20px;
   margin-top: 16px;
   display: inline-block;
@@ -67,7 +67,6 @@ label{
 }
 
 #back{
-	margin-left: 8%;
 	margin-top: 80px;
 }
 
@@ -83,6 +82,7 @@ input[type=submit] {
   border: none;
   cursor: pointer;
   width: 240px;
+  display: inline-block;
 }
 
 input[type=submit]:hover{
@@ -91,4 +91,10 @@ input[type=submit]:hover{
 
 input[type=submit]:active{
 	transform: scale(0.9);
+}
+
+.btnContainer{
+	width: 100%;
+	text-align: center;
+	display: inline-block;
 }

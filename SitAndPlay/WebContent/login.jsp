@@ -1,7 +1,7 @@
+<%@page import="main.java.engineering.utils.Session"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-
-<%@page import="main.java.engineering.utils.Session"%>
+<%@page errorPage="ErrorPage.jsp" %>
 <%@page import="main.java.engineering.bean.login.BeanUser"%>
 <%@page
 	import="main.java.controller.applicationcontroller.LoginController"%>
@@ -9,7 +9,6 @@
 <%@page
 	import="main.java.engineering.exceptions.WrongCredentialsExceptions"%>
 <%@page import="main.java.engineering.exceptions.EmptyDataException"%>
-<%@page errorPage="ErrorPage.jsp" %>
 
 <jsp:useBean id="userBean" scope="session"
 	class="main.java.engineering.bean.login.BeanUser" />
@@ -28,15 +27,15 @@
 		LoginController ctrl = new LoginController();
 		BeanUser loggedUser = ctrl.login(beanUser, true);
 
-		// create a new web Session -> isWeb = true
+		// create a new web Session -> isWeb must be true
 		// Registration of the user into Session
 
-		Session mySession = new Session(true);
+		Session mySsn = new Session(true);
 
-		mySession.setUser(loggedUser);
-		session.setAttribute("ssn", mySession);
+		mySsn.setUser(loggedUser);
+		session.setAttribute("ssn", mySsn);
 
-		String pg = mySession.getHomePage();
+		String pg = mySsn.getHomePage();
 %>
 		<jsp:forward page="<%=pg%>" />
 <%
@@ -61,7 +60,7 @@
 	</div>
 	<div class="lowPageContainer">
 		<div class="container">
-			<form action="login.jsp" name="loginform" method="get">
+			<form action="login.jsp" name="loginform" method="post">
 				<input id="tfUsername" type="text" name="tfUsername"
 					placeholder="Username"> <input id="pfPassword"
 					type="password" name="pfPassword" placeholder="Password">

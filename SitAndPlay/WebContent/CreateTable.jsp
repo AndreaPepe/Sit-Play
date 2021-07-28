@@ -1,3 +1,4 @@
+<%@page import="main.java.model.UserType"%>
 <%@page import="java.text.ParseException"%>
 <%@page import="main.java.engineering.exceptions.DateParsingException"%>
 <%@page import="main.java.engineering.exceptions.MapboxException"%>
@@ -209,16 +210,39 @@
 	
 	<div class="container">
 		<div class="sidebar">
+			<%
+			Session ssn = (Session) session.getAttribute("ssn");
+			if(ssn == null){
+				throw new Exception("Session is expired! Please go back and log in again.");
+			}
+			UserType type = ssn.getUser().getUserType();
+			if(type == UserType.PLAYER){
+			%>
 			<a href="PlayerUserPage.jsp"><span>User</span></a>
 			<a href="CreateTable.jsp"><span>Tables</span></a>
 			<a href="JoinTournament.jsp"><span>Tournaments</span></a>
 			<a href="Notifications.jsp"><span>Notifications</span></a>
+			<%
+			}else if(type == UserType.ORGANIZER){
+			%>
+			<a href="OrganizerUserPage.jsp"><span>User</span></a>
+			<a href="CreateTable.jsp"><span>Tables</span></a>
+			<a href="CreateTournament.jsp"><span>Tournaments</span></a>
+			<a href="Notifications.jsp"><span>Notifications</span></a>
+			<%
+			}
+			%>
 		</div>
 	
 		<div id="content" class="content">
 			<div class="topnav">
   				<a href="CreateTable.jsp">Create Table</a>
-  				<a href="PlayerReserveTable.jsp">Reserve A Seat</a>
+  				<%if(type == UserType.PLAYER){
+  					%>
+  					<a href="PlayerReserveTable.jsp">Reserve A Seat</a>
+  					<%
+  				}
+  				%>
   				<a href="PlayerTableDeclareWinner.jsp">Declare Winner</a>
   				<a href="OrganizedTables.jsp">Organized Tables</a>
 			</div>

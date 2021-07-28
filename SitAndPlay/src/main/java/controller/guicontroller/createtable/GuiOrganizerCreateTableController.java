@@ -89,10 +89,10 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 
 	// second page attributes
 	@FXML
-	private ComboBox<String> cbSelectedWinnerTable;
+	private ComboBox<String> cbWinnerTable;
 
 	@FXML
-	private ComboBox<String> cbSelectedWinner;
+	private ComboBox<String> cbSelectWinner;
 
 	@FXML
 	private Button btnDeclareWinner;
@@ -270,7 +270,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		conf.getButtonTypes().setAll(btnYes, btnNo);
 		conf.showAndWait().ifPresent(type -> {
 			if (type == btnYes) {
-				var newWinner = cbSelectedWinner.getValue();
+				var newWinner = cbSelectWinner.getValue();
 				var controller = new ReserveTableSeatController();
 				var tBean = getSelectedWinnerTable();
 				if (tBean != null) {
@@ -293,13 +293,13 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 		var ctrl = new ReserveTableSeatController();
 		try {
 			winnerBeans = ctrl.retrieveTablesToDeclareWinnerTo(ssn.getUser());
-			cbSelectedWinner.getItems().clear();
-			cbSelectedWinner.setPromptText("Select winner");
-			cbSelectedWinnerTable.getItems().clear();
-			cbSelectedWinnerTable.setPromptText("Select organized table");
+			cbSelectWinner.getItems().clear();
+			cbSelectWinner.setPromptText("Select winner");
+			cbWinnerTable.getItems().clear();
+			cbWinnerTable.setPromptText("Select organized table");
 			
 			for (TableBean b : winnerBeans) {
-				cbSelectedWinnerTable.getItems().add(b.getName());
+				cbWinnerTable.getItems().add(b.getName());
 			}
 
 		} catch (DateParsingException | DAOException e) {
@@ -308,29 +308,29 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 	}
 
 	private void setUIElements() {
-		cbSelectedWinner.setDisable(true);
+		cbSelectWinner.setDisable(true);
 		btnDeclareWinner.setDisable(true);
 
-		cbSelectedWinnerTable.valueProperty().addListener((obs, oldVal, newVal) -> {
+		cbWinnerTable.valueProperty().addListener((obs, oldVal, newVal) -> {
 			if (newVal != null) {
-				cbSelectedWinner.getItems().clear();
+				cbSelectWinner.getItems().clear();
 				var tableBean = getSelectedWinnerTable();
 				if (tableBean != null) {
-					tableBean.getParticipants().forEach(it -> cbSelectedWinner.getItems().add(it));
+					tableBean.getParticipants().forEach(it -> cbSelectWinner.getItems().add(it));
 				}
-				cbSelectedWinner.setDisable(false);
+				cbSelectWinner.setDisable(false);
 			} else {
-				cbSelectedWinner.setDisable(true);
+				cbSelectWinner.setDisable(true);
 				btnDeclareWinner.setDisable(true);
 			}
 		});
 
-		cbSelectedWinner.valueProperty().addListener((obs, oldVal, newVal) -> btnDeclareWinner.setDisable((newVal == null)));
+		cbSelectWinner.valueProperty().addListener((obs, oldVal, newVal) -> btnDeclareWinner.setDisable((newVal == null)));
 
 	}
 
 	private TableBean getSelectedWinnerTable() {
-		var selectedTableName = cbSelectedWinner.getValue();
+		var selectedTableName = cbSelectWinner.getValue();
 		if (selectedTableName == null) {
 			AlertFactory.getInstance().createAlert("Select a table first", AlertType.WARNING).show();
 

@@ -60,7 +60,7 @@
 	</div>
 	<div class="lowPageContainer">
 		<div class="container">
-			<form action="registration.jsp" name="registration" method="get">
+			<form action="registration.jsp" name="registration" method="post">
 				<input id="tfUsername" type="text" name="tfUsername" placeholder="Username"> 
 				<input id="pfPassword" type="password" name="pfPassword" placeholder="Password">
 				<div class="radioContainer">
@@ -71,7 +71,7 @@
 					<input id="bus" type="radio" name="account" value="Businessman">
 					<label for="bus">Businessman</label> 
 				</div>
-				<div >
+				<div class = "btnContainer">
 					<input id="back" type="submit" name="back" value="Back to Login" >
 					<input id="signup" type="submit" name="signup" value="Sign Up">
 				</div>

@@ -69,14 +69,14 @@
 				%>
 				<a href="BusinessmanUserPage.jsp"><span>User</span></a>
 				<a href="CreateActivity.jsp"><span>Activities</span></a>
-				<a href="JoinTournament.jsp"><span>Tournaments</span></a>
+				<a href="SponsorTournament.jsp"><span>Tournaments</span></a>
 				<a href="Notifications.jsp"><span>Notifications</span></a>
 				<%	
 			}else if(type == UserType.ORGANIZER){
 				%>
-				<a href="PlayerUserPage.jsp"><span>User</span></a>
-				<a href="CreateActivity.jsp"><span>Activities</span></a>
-				<a href="JoinTournament.jsp"><span>Tournaments</span></a>
+				<a href="OrganizerUserPage.jsp"><span>User</span></a>
+				<a href="CreateTable.jsp"><span>Tables</span></a>
+				<a href="CreateTournament.jsp"><span>Tournaments</span></a>
 				<a href="Notifications.jsp"><span>Notifications</span></a>
 				<%
 			}

@@ -4,7 +4,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@page errorPage="ErrorPage.jsp" %>
-   
+    
+    <%
+    Session ssn = (Session) session.getAttribute("ssn");
+	if(ssn==null){
+		throw new Exception("Session is expired! Please go back and log in again!");
+	}
+    %>
     
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +20,7 @@
 
 <link rel="stylesheet" href="css/basicStyle.css">
 <link rel="stylesheet" href="css/userpage.css">
+
 </head>
 <body>
 	<header>
@@ -24,15 +31,15 @@
 	
 	<div class="container">
 		<div class="sidebar">
-			<a href="BusinessmanUserPage.jsp"><span>User</span></a>
-			<a href="CreateActivity.jsp"><span>Activities</span></a>
-			<a href="SponsorTournament.jsp"><span>Tournaments</span></a>
+			<a href="OrganizerUserPage.jsp"><span>User</span></a>
+			<a href="CreateTable.jsp"><span>Tables</span></a>
+			<a href="CreateTournament.jsp"><span>Tournaments</span></a>
 			<a href="Notifications.jsp"><span>Notifications</span></a>
 		</div>
 	
 		<div id="content" class="content">
 			<div class="topnav">
-  				<a href="BusinessmanUserPage.jsp">Profile</a>
+  				<a href="OrganizerUserPage.jsp">Profile</a>
 			</div>
 			
 			<div id="innerPage" class="innerDiv">
@@ -42,16 +49,16 @@
 				<br>
 				<br>
 				<p>Account of type:</p>
-				<h3><strong>Businessman</strong></h3>
+				<h3><strong>Organizer</strong></h3>
 			</div>
 	
 			<div class= "right_pane">
 			<% 
 			StatisticsController ctrl = new StatisticsController();
-			Session ssn = (Session) session.getAttribute("ssn");
-			int sponsoredTournaments = ctrl.getNumberOfSponsorizedTournaments(ssn.getUser()); %>
+			StatsBean stats = ctrl.getStats(ssn.getUser()); %>
 				<div>
-					<p>You have currently sponsored <%= sponsoredTournaments %> tournaments!</p>
+					<p>You have currently organized <%= stats.getOrgTables() %> tables!</p>
+					<p>You have currently organized <%= stats.getOrgTournaments() %> tournaments!</p>
 				</div>
 				
 			</div>
