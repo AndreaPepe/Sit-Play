@@ -1,35 +1,28 @@
-<%@page import="main.java.model.UserType"%>
+<%@page import="main.java.controller.applicationcontroller.createtournament.CreateTournamentController"%>
+<%@page import="main.java.engineering.bean.tournaments.TournamentBean"%>
 <%@page import="java.text.ParseException"%>
-<%@page import="main.java.engineering.exceptions.DateParsingException"%>
-<%@page import="main.java.engineering.exceptions.MapboxException"%>
-<%@page import="main.java.engineering.exceptions.BeanCheckException"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="main.java.engineering.utils.map.MapPlaceAdapter"%>
+<%@page import="main.java.engineering.exceptions.MapboxException"%>
+<%@page import="org.json.simple.JSONObject"%>
+<%@page import="java.util.List"%>
+<%@page import="main.java.controller.MapboxController"%>
 <%@page import="main.java.engineering.utils.Session"%>
-<%@page import="main.java.engineering.bean.createtable.PlaceBean"%>
-<%@page import="main.java.engineering.bean.createtable.TableBean"%>
-<%@page import="main.java.controller.applicationcontroller.createtable.CreateTableController"%>
-<%@page import="java.util.ArrayList"%>
 <%@page import="main.java.model.CardGame"%>
+<%@page import="main.java.engineering.utils.map.MapPlace"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-
-<%@page import="main.java.engineering.utils.map.MapPlaceAdapter"%>
-<%@page import="java.util.List"%>
-<%@page import="org.json.simple.JSONObject"%>
-<%@page import="main.java.controller.MapboxController"%>
-<%@page import="main.java.engineering.utils.map.MapPlace"%>    
-
-<%@page errorPage="ErrorPage.jsp" %>
+    <%@page errorPage="ErrorPage.jsp" %>
     
-    
-<% MapPlace selectedPlace; 
-
-%>    
-    
-<%
-	if(request.getParameter("btnCreate")!=null){
-		String name = request.getParameter("tablename");
+	<%
+	if(request.getParameter("btnCreate") != null){
+		Session ssn = (Session) session.getAttribute("ssn");
+		if(ssn == null){
+			throw new Exception("Session is expired! Please go back and log in again!");
+		}
+		
+		String name = request.getParameter("tmtname");
 		String placeName = request.getParameter("place");
 		if(placeName == null || placeName.isBlank()){
 			throw new Exception("The selected place is missing");
@@ -58,29 +51,51 @@
 			String correctDate = new SimpleDateFormat("dd/MM/yyyy").format(builtDate);
 			
 			String time = request.getParameter("time");
-			Session ssn = (Session) session.getAttribute("ssn");
-			CreateTableController controller = new CreateTableController();
-			PlaceBean placeBean = new PlaceBean(mapPlace.toString(), mapPlace.getCoordinates().get(0), mapPlace.getCoordinates().get(1));
-			TableBean bean = new TableBean(name, placeBean, cgame, correctDate, time, ssn.getUser().getUsername());
-			bean.checkCreateTable();
+			int maxPart = Integer.parseInt(request.getParameter("part"));
+			float price = Float.parseFloat(request.getParameter("price"));
+			float award = Float.parseFloat(request.getParameter("award"));
+			String reqSponsor = request.getParameter("sponsor");
+			boolean sponsorizable;
+			if(reqSponsor != null && reqSponsor.equals("true")){
+				sponsorizable = true;
+			}else{
+				sponsorizable = false;
+			}
 			
-			controller.createTable(bean);
+			TournamentBean newTournament = new TournamentBean();
+			newTournament.setName(name);
+			newTournament.setAddress(mapPlace.toString());
+			newTournament.setLatitude(mapPlace.getCoordinates().get(0));
+			newTournament.setLongitude(mapPlace.getCoordinates().get(1));
+			newTournament.setCardGame(cgame);
+			newTournament.setDate(correctDate);
+			newTournament.setTime(time);
+			newTournament.setMaxParticipants(maxPart);
+			newTournament.setPrice(price);
+			newTournament.setAward(award);
+			newTournament.setInRequestForSponsor(sponsorizable);
+			newTournament.setOrganizer(ssn.getUser().getUsername());
+			
+			newTournament.checkRulesForInsert();
+			
+			CreateTournamentController controller = new CreateTournamentController();
+			controller.createTournament(newTournament);
 		}catch (ParseException e){
 			throw new Exception("Date or time are missing or possibly written in a wrong format");
+		}catch(NumberFormatException ex){
+			throw new Exception("One of the fields 'Max number of participants', 'Price', 'Award' was written in a wrong format");
 		}
 	}
-%>    
-    
-    
+	%>
+
     
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="ISO-8859-1">
-<title>Create table</title>
+<title>Create Tournament</title>
 
-
-<link rel="stylesheet" href="css/createtable.css">
+<link rel="stylesheet" href="css/createtournament.css">
 <link rel="stylesheet" href="css/basicStyle.css">
 
 <script src="https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.js"></script>
@@ -90,7 +105,7 @@
 <link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet"></link>
 <script src="https://code.jquery.com/jquery-1.10.2.js" ></script>  
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    
+
 <script type="text/javascript">
 	var list = [];
 	var lati = [];
@@ -198,10 +213,14 @@
 	function init(){
 		$(document).ready(loadMap);
 	}
-</script>    
-   
+	
+	
+</script>
+
+
 </head>
 <body onload="init();">
+	
 	<header>
 		<div class="left_area">
 			<h3>Sit<span>&amp;</span>Play</h3>
@@ -210,74 +229,54 @@
 	
 	<div class="container">
 		<div class="sidebar">
-			<%
-			Session ssn = (Session) session.getAttribute("ssn");
-			if(ssn == null){
-				throw new Exception("Session is expired! Please go back and log in again.");
-			}
-			UserType type = ssn.getUser().getUserType();
-			if(type == UserType.PLAYER){
-			%>
-			<a href="PlayerUserPage.jsp"><span>User</span></a>
-			<a href="CreateTable.jsp"><span>Tables</span></a>
-			<a href="JoinTournament.jsp"><span>Tournaments</span></a>
-			<a href="Notifications.jsp"><span>Notifications</span></a>
-			<%
-			}else if(type == UserType.ORGANIZER){
-			%>
 			<a href="OrganizerUserPage.jsp"><span>User</span></a>
 			<a href="CreateTable.jsp"><span>Tables</span></a>
 			<a href="CreateTournament.jsp"><span>Tournaments</span></a>
 			<a href="Notifications.jsp"><span>Notifications</span></a>
-			<%
-			}
-			%>
 		</div>
 	
 		<div id="content" class="content">
 			<div class="topnav">
-  				<a href="CreateTable.jsp">Create Table</a>
-  				<%if(type == UserType.PLAYER){
-  					%>
-  					<a href="PlayerReserveTable.jsp">Reserve A Seat</a>
-  					<%
-  				}
-  				%>
-  				<a href="PlayerTableDeclareWinner.jsp">Declare Winner</a>
-  				<a href="OrganizedTables.jsp">Organized Tables</a>
+  				<a href="CreateTournament.jsp">Create Tournament</a>
+  				<a href="HandleTournaments.jsp">HandleTournaments</a>
+  				<a href="DeclareWinnerTournament.jsp">Declare Winner</a>
 			</div>
-	
-		<div id="innerPage" class="innerDiv">
-			<div class="left_div">
-			<form action="CreateTable.jsp" name="create">
-				<input id="tablename" type="text" name="tablename" placeholder="Table's name"> 
-				<input id="place" type="text" name="place" placeholder="Place" class="ui-widget">
-				<select id="cardGame" name="cardGame">
-					<option disabled selected>-- Card Game --</option>
-					<%
-					for(CardGame cg: CardGame.values()){
-						%>
-						<option value= "<%= cg.toString()%>"><%= cg.toString()%></option>
-						<%
-					}
-					%>
-					
-				</select>
-				
-				<input id="date" type="date" name="date">
-				<input id="time" type="time" name="time">
-				
-				<input id="btnCreate" name="btnCreate" type="submit" value="Create Table">
-			</form>
 			
-			</div>
-	
-			<div id="map" class="map">
-	
+			<div id="innerPage" class="innerDiv">
+				<div class="left_div">
+				<form action="CreateTournament.jsp" name="create" method="get">
+					<input id="tmtname" type="text" name="tmtname" placeholder="Tournament's name"> 
+					<input id="place" type="text" name="place" placeholder="Place" class="ui-widget">
+					<select id="cardGame" name="cardGame">
+						<option disabled selected>-- Card Game --</option>
+						<%
+						for(CardGame cg: CardGame.values()){
+							%>
+							<option value= "<%= cg.toString()%>"><%= cg.toString()%></option>
+							<%
+						}
+						%>
+						
+					</select>
+					
+					<input id="date" type="date" name="date">
+					<input id="time" type="time" name="time">
+					<input id="part" type="text" name="part" placeholder="Max number of participants" pattern="[1-9]{1}[0-9]{0,5}" title="Must be an integer (e.g. '5')">
+					<input id="price" type="text" name="price" placeholder="Price [&euro;XXX.XX]" pattern="\d+(.\d{1,2})?" title="Must be an integer or a float value with 1 or 2 decimal digits after the point (e.g. '12.4', '123.94')">
+					<input id="award" type="text" name="award"  placeholder="Award [&euro;XXX.XX]" pattern="\d+(.\d{1,2})?" title="Must be an integer or a float value with 1 or 2 decimal digits after the point (e.g. '12.4', '123.94')">
+					<input id="sponsor" name="sponsor" type="checkbox" value="true">
+					<label for="sponsor">Request Sponsor</label>
+					
+					<input id="btnCreate" name="btnCreate" type="submit" value="Create Tournament">
+				</form>
+				
+				</div>
+		
+				<div id="map" class="map">
+		
+				</div>
 			</div>
 	</div>
 		</div>
-	</div>
-	
 </body>
 </html>
