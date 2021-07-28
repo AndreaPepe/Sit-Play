@@ -1,3 +1,4 @@
+<%@page import="main.java.model.UserType"%>
 <%@page import="main.java.engineering.bean.login.BeanUser"%>
 <%@page import="main.java.engineering.utils.Session"%>
 <%@page import="main.java.engineering.bean.notifications.NotificationBean"%>
@@ -55,10 +56,32 @@
 	
 	<div class="container">
 		<div class="sidebar">
-			<a href="PlayerUserPage.jsp"><span>User</span></a>
-			<a href="CreateTable.jsp"><span>Tables</span></a>
-			<a href="JoinTournament.jsp"><span>Tournaments</span></a>
-			<a href="Notifications.jsp"><span>Notifications</span></a>
+			<%
+			UserType type = ssn.getUser().getUserType();
+			if(type == UserType.PLAYER){
+			%>
+				<a href="PlayerUserPage.jsp"><span>User</span></a>
+				<a href="CreateTable.jsp"><span>Tables</span></a>
+				<a href="JoinTournament.jsp"><span>Tournaments</span></a>
+				<a href="Notifications.jsp"><span>Notifications</span></a>
+			<%
+			}else if (type == UserType.BUSINESSMAN){
+				%>
+				<a href="BusinessmanUserPage.jsp"><span>User</span></a>
+				<a href="CreateActivity.jsp"><span>Activities</span></a>
+				<a href="JoinTournament.jsp"><span>Tournaments</span></a>
+				<a href="Notifications.jsp"><span>Notifications</span></a>
+				<%	
+			}else if(type == UserType.ORGANIZER){
+				%>
+				<a href="PlayerUserPage.jsp"><span>User</span></a>
+				<a href="CreateActivity.jsp"><span>Activities</span></a>
+				<a href="JoinTournament.jsp"><span>Tournaments</span></a>
+				<a href="Notifications.jsp"><span>Notifications</span></a>
+				<%
+			}
+			 %>
+			
 		</div>
 	
 		<div id="content" class="content">

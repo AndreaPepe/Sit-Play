@@ -31,7 +31,7 @@ public class GuiBusinessmanUserPageController extends GuiBasicInternalPageContro
     @FXML
     private Label lblSponsorizedTournaments;
 
-    private static final String SPONSORIZED_TOURNAMENTS_STRING = "You have currently sponsorized %d tournaments!";
+    private static final String SPONSORED_TOURNAMENTS_STRING = "You have currently sponsored %d tournaments!";
     
     
 	public GuiBusinessmanUserPageController(Session ssn) {
@@ -56,7 +56,7 @@ public class GuiBusinessmanUserPageController extends GuiBasicInternalPageContro
 		apnProfile.toFront();
 		lblUser.setText(ssn.getUser().getUsername());
 		var tournamentsSponsorized = getNumberOfSponsorizedTournaments();
-		lblSponsorizedTournaments.setText(String.format(SPONSORIZED_TOURNAMENTS_STRING, tournamentsSponsorized));
+		lblSponsorizedTournaments.setText(String.format(SPONSORED_TOURNAMENTS_STRING, tournamentsSponsorized));
     }
 	
 	private int getNumberOfSponsorizedTournaments() {

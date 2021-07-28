@@ -1,0 +1,121 @@
+@charset "ISO-8859-1";
+
+.selectDiv{
+	position: absolute;
+	height: 95%;
+	margin-left: 5%;
+	width: 50%;
+	text-align: center;
+}
+
+.selectDiv select{
+	display:inline-block;
+	width: 35%;
+	margin-left:auto;
+	margin-right: auto;
+	margin-top: 70px;
+	margin-bottom: 50px;
+}
+
+.selectDiv input[type=submit]{
+	width: 130px;
+	display: inline-block;
+	margin-right: auto;
+	margin-left:auto;
+	margin-top: 70px;
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	line-height: 35px;
+	border-radius: 25px;
+	margin-bottom: 50px;
+	margin-left: 5px;
+}
+
+.selectDiv input[type=submit]:hover{
+	background-color: #4CA1D8;
+}
+
+.selectDiv input[type=submit]:active{
+	transform: scale(0.9);
+}
+
+.modifyLogo{
+	position: absolute;
+	height: 95%;
+	margin-left: 60%;
+	width: 35%;
+	text-align: center;
+}
+
+.modifyLogo select{
+	margin-top: 77px;
+	width: 60%;
+}
+
+.modifyLogo .preview{
+	width: 150px;
+	height: 150px;
+	display: block;
+	margin-left: auto;
+	margin-right:auto;
+	margin-top: 30px;
+}
+
+.modifyLogo input[type=submit]{
+	width: 130px;
+	display: block;
+	margin-right: auto;
+	margin-left:auto;
+	margin-top: 70px;
+	background-color: #296581;
+	font-size: 16px;
+	color: white;
+	border: none;
+	cursor: pointer;
+	line-height: 35px;
+	border-radius: 25px;
+	margin-bottom: 50px;
+}
+
+.modifyLogo input[type=submit]:hover{
+	background-color: #4CA1D8;
+}
+
+.modifyLogo input[type=submit]:active{
+	transform: scale(0.9);
+}
+.loader{
+	display:block;
+	margin-top: 40px;
+	margin-left: 25%;
+}
+
+.activityContent{
+	border: 2px solid #296581;
+	height: 250px;
+	margin-left: 5%;
+	width:90%;
+	background-color: #CCE1E9;
+	text-align: center;
+}
+
+.activityContent .logo{
+	width: 150px;
+	height: 150px;
+	display: block;
+	margin-left: auto;
+	margin-right:auto;
+	margin-top: 30px;
+}
+
+.activityContent .title{
+	font-weight: bold;
+	font-size: 22px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: block;
+	text-align: center;
+}

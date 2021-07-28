@@ -3,17 +3,17 @@
 <%@page import="main.java.engineering.utils.Session"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@page errorPage="ErrorPage.jsp" %>
+   
+    
 <!DOCTYPE html>
-<html lang ="en">
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
-<title>Home Page</title>
+<title>Home page</title>
 
 <link rel="stylesheet" href="css/basicStyle.css">
 <link rel="stylesheet" href="css/userpage.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
 </head>
 <body>
 	<header>
@@ -24,16 +24,15 @@
 	
 	<div class="container">
 		<div class="sidebar">
-			<a href="PlayerUserPage.jsp"><span>User</span></a>
-			<a href="CreateTable.jsp"><span>Tables</span></a>
+			<a href="BusinessmanUserPage.jsp"><span>User</span></a>
+			<a href="CreateActivity.jsp"><span>Activities</span></a>
 			<a href="JoinTournament.jsp"><span>Tournaments</span></a>
 			<a href="Notifications.jsp"><span>Notifications</span></a>
 		</div>
 	
 		<div id="content" class="content">
 			<div class="topnav">
-  				<a href="PlayerUserPage.jsp">Profile</a>
-  				<a href="PlayerReservedSeats.jsp">My Reserved Seats</a>
+  				<a href="BusinessmanUserPage.jsp">Profile</a>
 			</div>
 			
 			<div id="innerPage" class="innerDiv">
@@ -43,37 +42,21 @@
 				<br>
 				<br>
 				<p>Account of type:</p>
-				<h3><strong>Player</strong></h3>
+				<h3><strong>Businessman</strong></h3>
 			</div>
 	
 			<div class= "right_pane">
 			<% 
 			StatisticsController ctrl = new StatisticsController();
 			Session ssn = (Session) session.getAttribute("ssn");
-			StatsBean stats = ctrl.getStats(ssn.getUser()); %>
+			int sponsoredTournaments = ctrl.getNumberOfSponsorizedTournaments(ssn.getUser()); %>
 				<div>
-					<p>You have joined <%= stats.getJoinedTables() %> tables</p>
-					<p>You have won <%= stats.getWonTables() %> tables</p>
-					<p>You have won the <%= String.format("%.2f", stats.getTablesWinningPercentage()) %> % of the joined tables</p>
-					<p>You have organized <%= stats.getOrgTables() %> tables </p>
+					<p>You have currently sponsored <%= sponsoredTournaments %> tournaments!</p>
 				</div>
 				
-				<div>
-					<p>You have joined <%= stats.getJoinedTournaments() %> tournaments</p>
-					<p>You have joined <%= stats.getJoinedTournaments() %> tournaments</p>
-					<p>You have won the <%= String.format("%.2f", stats.getTournamentWinningPercentage()) %> % of the joined tournaments</p>
-					<p>With tournaments you have won <%= String.format("%.2f", stats.getTotalMoney()) %> &euro;</p>
-				</div>
 			</div>
 		</div>
 	</div>
 		</div>
-	
-		
-
-	
-	
 </body>
-
-
 </html>

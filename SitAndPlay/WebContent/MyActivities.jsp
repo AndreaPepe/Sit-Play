@@ -1,3 +1,10 @@
+<%@page import="main.java.engineering.bean.login.BeanUser"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.apache.commons.fileupload.FileItem"%>
+<%@page import="org.apache.commons.fileupload.servlet.ServletFileUpload"%>
+<%@page import="org.apache.commons.fileupload.disk.DiskFileItemFactory"%>
+<%@page import="java.io.InputStream"%>
 <%@page import="main.java.engineering.utils.MapMarkersUtil"%>
 <%@page import="main.java.engineering.bean.businessactivity.BusinessActivityBean"%>
 <%@page import="java.util.List"%>
@@ -16,6 +23,78 @@ if(ssn == null){
 ManageActivitiesController ctrl = new ManageActivitiesController();
 List<BusinessActivityBean> myActivities = ctrl.retrieveActivities(ssn.getUser());
 %>    
+
+	<%
+    	if(request.getMethod().equalsIgnoreCase("POST")){
+    		ssn = (Session) session.getAttribute("ssn");
+    		if(ssn == null){
+    			throw new Exception("Session is expired! Please go back and log in again!");
+    		}
+    		
+    		String activityName = null;
+    	    String changePressed = null;
+    		InputStream logo = null;
+    		DiskFileItemFactory factory  = new DiskFileItemFactory();
+    		
+    		ServletFileUpload upload = new ServletFileUpload(factory);
+    		
+    		List<FileItem> fileItems = new ArrayList<>();
+    		for(Object i : upload.parseRequest(request)){
+    			fileItems.add((FileItem) i);
+    		}
+    		
+    		Iterator<FileItem> iterator = fileItems.iterator();
+    		
+    		while(iterator.hasNext()){
+    			FileItem item = iterator.next();
+    			
+    			if(item.isFormField()){
+    				if(item.getFieldName().equals("modAct")){
+    					activityName = item.getString();
+    				}
+    				if(item.getFieldName().equals("change")){
+    					changePressed = item.getString();
+    				}
+    			
+    			}else{
+    				if(item.getFieldName().equals("changeFile")){
+	    				InputStream is = item.getInputStream();
+	    				if(is.markSupported()){
+	    					is.mark(0);
+	    					if(is.read() != -1){
+	    						is.reset();
+	    						logo = is;
+	    					}else{
+	    						logo = null;
+	    					}
+	    				}else{
+	    					logo = is;
+	    				}
+    				}
+    			}
+    		}
+    		
+    		if(changePressed != null){
+    			if(activityName == null || activityName.isBlank()){
+    				throw new Exception("You did not select an activity");
+    			}
+    			ManageActivitiesController controller = new ManageActivitiesController();
+    			BeanUser user = ssn.getUser();
+    			BusinessActivityBean activity = new BusinessActivityBean(activityName, logo, user.getUsername());
+    			if(activity.checkFields()){
+    				controller.modifyLogo(activity);
+    				%>
+    				<jsp:forward page="MyActivities.jsp"/>
+    				<%
+    			}
+    		}
+    		
+    	}
+    %>
+
+
+
+
     <%
     if(request.getParameter("btnDelete") != null){
     	ssn = (Session) session.getAttribute("ssn");
@@ -49,7 +128,7 @@ List<BusinessActivityBean> myActivities = ctrl.retrieveActivities(ssn.getUser())
 <title>My Activities</title>
 
 <link rel="stylesheet" href="css/basicStyle.css">
-<link rel="stylesheet" href="css/basicStyle.css">
+<link rel="stylesheet" href="css/myactivities.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -70,13 +149,8 @@ function changeActivity(){
 				source = "\"" + "resources/no_image.png" + "\"";
 			}
 			%>
-			newHtml += ("<img style='width:100px; height:100px;' src=" + <%= source %> +">");
-			
-			newHtml += "<form action='MyActivities.jsp' method='post' enctype='multipart/form-data'>";
-			newHtml += "<input type='file' class='loader' name='fileImg' id='fileImg' accept='image/*'>";
-			newHtml += "<img id='preview' alt='Logo' src='resources/upload_img.png'>";
-			newHtml += "<input type='submit' id='btnSubmit' name='btnSubmit' value='Create new activity'>"; 
-			newHtml += "</form>";
+			newHtml += ("<img class='logo' src=" + <%= source %> +">");
+				
 		}
 	<%
 	}
@@ -84,6 +158,8 @@ function changeActivity(){
 	document.getElementById("activityContent").innerHTML = newHtml;
 }
 </script>
+
+
 </head>
 <body>
 
@@ -123,13 +199,53 @@ function changeActivity(){
 					
 					<input type = "submit" name="btnDelete" value="Delete">
 				</form>
+				
+				<div class = "activityContent" id="activityContent">
+			
+				</div>
 			</div>
 			
-			<div class = "activityContent" id="activityContent">
-			
+			<div class="modifyLogo">
+				<form action="MyActivities.jsp" method="post" name="changeLogo" enctype="multipart/form-data">
+					<select id="modAct" name="modAct">
+						<option selected disabled>-- Select Activity --</option>
+						<%
+						for(BusinessActivityBean bean : myActivities){
+						%>
+							<option><%= bean.getName() %></option>
+						<%
+						}
+						%>
+					</select>
+					
+					<input type="file" class="loader" id="changeFile" name="changeFile" accept="image/*">
+					<img id="preview" src="resources/upload_img.png" alt="New Logo" class="preview">
+					<input type="submit" name="change" id="change" value="Change Logo">
+				</form>
 			</div>
+			
+			
 		</div>
 	</div>
 	</div>
+	
+	
+	<script type="text/javascript">
+	const input = document.querySelector('.loader');
+	
+	input.addEventListener('change', changePreview);
+	
+	function changePreview(){
+		var image = document.getElementById('preview');
+		const curFiles = input.files;
+		if(curFiles.length != 0){
+			var file = curFiles[0];
+			image.src = URL.createObjectURL(file);
+		}else{
+			image.src = "resources/upload_img.png";
+		}
+	}
+	
+	</script>
 </body>
 </html>
