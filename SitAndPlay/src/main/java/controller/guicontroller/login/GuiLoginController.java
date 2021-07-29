@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,16 +27,14 @@ import main.java.controller.guicontroller.GuiHomePageOrganizerController;
 import main.java.controller.guicontroller.GuiHomePagePlayerController;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.exceptions.AlertFactory;
+import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
-import main.java.engineering.exceptions.EmptyDataException;
 import main.java.engineering.exceptions.WrongCredentialsExceptions;
 import main.java.engineering.utils.Session;
 
 public class GuiLoginController implements Initializable {
 
 	private static final String REGISTRATION_PAGE = "/main/java/view/standalone/login/Registration.fxml";
-	private static final String EMPTY_USERNAME_ERROR_MESSAGE = "Username can't be empty!";
-	private static final String EMPTY_PASSWORD_ERROR_MESSAGE = "Password can't be empty!";
 	private static final String DAO_ERROR_MESSAGE = "Error with database, please retry";
 	private static final String GENERIC_ERROR_MESSAGE = "Something went wrong, please retry";
 
@@ -129,20 +126,8 @@ public class GuiLoginController implements Initializable {
 			appStage.setY(20);
 			appStage.show();
 
-		} catch (EmptyDataException e) {
-			int code = e.getErrorCode();
-			if (code == 0) {
-				lblErrorUsername.setText(EMPTY_USERNAME_ERROR_MESSAGE);
-				lblErrorUsername.setVisible(true);
-
-				AlertFactory.getInstance().createAlert(EMPTY_USERNAME_ERROR_MESSAGE, AlertType.ERROR).showAndWait();
-			} else if (code == 3) {
-				lblErrorPassword.setText(EMPTY_PASSWORD_ERROR_MESSAGE);
-				lblErrorPassword.setVisible(true);
-				AlertFactory.getInstance().createAlert(EMPTY_PASSWORD_ERROR_MESSAGE, AlertType.ERROR).showAndWait();
-			}
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,
-					String.format("EmptyDataException catched: %s", e.getMessage()));
+		} catch (BeanCheckException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		} catch (WrongCredentialsExceptions e) {
 			lblErrorUsername.setText(e.getMessage());
 			lblErrorUsername.setVisible(true);
@@ -152,7 +137,6 @@ public class GuiLoginController implements Initializable {
 			lblErrorUsername.setVisible(true);
 			AlertFactory.getInstance().createAlert(DAO_ERROR_MESSAGE, AlertType.ERROR).showAndWait();
 		} catch (Exception e) {
-			e.printStackTrace();
 			lblErrorUsername.setText(GENERIC_ERROR_MESSAGE);
 			lblErrorUsername.setVisible(true);
 			AlertFactory.getInstance().createAlert(GENERIC_ERROR_MESSAGE, AlertType.ERROR).showAndWait();

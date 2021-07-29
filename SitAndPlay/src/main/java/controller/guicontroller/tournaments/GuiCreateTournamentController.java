@@ -183,7 +183,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 			var url = mapboxUrl.toString();
 			engine.load(url);
 		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
+			AlertFactory.getInstance().createAlert("Unable to load the map, sorry :( ", AlertType.WARNING).show();
 		}
 	}
 

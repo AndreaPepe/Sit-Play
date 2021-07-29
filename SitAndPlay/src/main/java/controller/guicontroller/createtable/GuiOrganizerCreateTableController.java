@@ -161,7 +161,7 @@ public class GuiOrganizerCreateTableController extends GuiBasicInternalPageContr
 			var url = myUrl.toString();
 			webEngine.load(url);
 		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
+			AlertFactory.getInstance().createAlert("Unable to load the map, sorry :( ", AlertType.WARNING).show();
 		}
 	}
 

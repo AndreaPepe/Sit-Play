@@ -33,7 +33,6 @@ public class CreateTableController {
 		} catch (SQLException e) {
 			// Change the exception type, so the graphic controller
 			// has not to be aware of database concepts and error 
-			e.printStackTrace();
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 		

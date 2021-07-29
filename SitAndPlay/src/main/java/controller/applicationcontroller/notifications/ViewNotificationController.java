@@ -22,7 +22,6 @@ public class ViewNotificationController {
 				beans.add(bean);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 		return beans;

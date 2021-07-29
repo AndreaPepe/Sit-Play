@@ -40,9 +40,7 @@ public class NotificationController {
 					NotificationDAO.setNotificationAsShown(notif.getId());				
 					Thread.sleep(SPAMMING_INTERVAL);
 					
-				} catch (WindowNotFoundException | SQLException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
+				} catch (WindowNotFoundException | SQLException | InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
 			}

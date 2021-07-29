@@ -16,7 +16,7 @@ public class QueryTournament {
 	}
 
 	public static ResultSet retrieveTournament(Statement stmt, String name) throws SQLException {
-		String query = "SELECT * FROM Tournaments WHERE name = '" + name + "';";
+		var query = String.format("SELECT * FROM Tournaments WHERE name = '%s';", name);
 		return stmt.executeQuery(query);
 	}
 
@@ -70,10 +70,17 @@ public class QueryTournament {
 		stmt.executeUpdate(query);
 	}
 
-	public static void addOrganizer(Statement stmt, String tournament, String organizer) throws SQLException {
-		var query = String.format("INSERT INTO OrganizedTournaments(tournament, organizer) VALUES ('%s', '%s');",
-				tournament, organizer);
-		stmt.executeUpdate(query);
+	public static void addOrganizer(Connection conn, String tournament, String organizer) throws SQLException {
+		var sql = "INSERT INTO OrganizedTournaments(tournament, organizer) VALUES (?,?);";
+		var pstmt = conn.prepareStatement(sql);
+		try {
+			pstmt.setString(1, tournament);
+			pstmt.setString(2, organizer);
+			
+			pstmt.executeUpdate();
+		} finally {
+			pstmt.close();
+		}
 	}
 
 	// reservation of a seat is allowed only in 3 hours from the beginning of the

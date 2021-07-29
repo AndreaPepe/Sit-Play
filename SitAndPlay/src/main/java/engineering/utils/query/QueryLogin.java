@@ -1,5 +1,6 @@
 package main.java.engineering.utils.query;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,11 +14,11 @@ public class QueryLogin {
 	}
 	
 	public static ResultSet login(Statement stmt, String username, String password) throws SQLException {
-		String query = "SELECT * FROM Users WHERE username = '" + username + "' AND password = '" + password + "';";
+		var query = String.format("SELECT * FROM Users WHERE username = '%s' AND password = '%s';", username, password);
 		return stmt.executeQuery(query);
 	}
 	
-	public static void registration(Statement stmt, BeanUser user) throws SQLException {
+	public static void registration(Connection conn, BeanUser user) throws SQLException {
 		String type;
 		switch(user.getUserType()) {
 		case PLAYER:
@@ -29,8 +30,16 @@ public class QueryLogin {
 		default:
 			throw new SQLException("User type unsupported");
 		}
-		var query = String.format("INSERT INTO Users (username, password, userType) VALUES ('%s', '%s', '%s');",
-				user.getUsername(), user.getPassword(), type);
-		stmt.executeUpdate(query);
+		var query = "INSERT INTO Users (username, password, userType) VALUES (?,?,?);";
+		var pstmt = conn.prepareStatement(query);
+		try {
+			pstmt.setString(1, user.getUsername());
+			pstmt.setString(2, user.getPassword());
+			pstmt.setString(3, type);
+			pstmt.executeUpdate(query);
+		} finally {
+			pstmt.close();
+		}
+		
 	}
 }

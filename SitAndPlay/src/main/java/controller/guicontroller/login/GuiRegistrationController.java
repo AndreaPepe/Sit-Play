@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,18 +16,18 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import main.java.controller.applicationcontroller.RegistrationController;
 import main.java.engineering.bean.login.BeanUser;
+import main.java.engineering.exceptions.AlertFactory;
+import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
-import main.java.engineering.exceptions.EmptyDataException;
 import main.java.model.UserType;
 
 public class GuiRegistrationController implements Initializable{
 	
 	private static final String LOGIN_PAGE = "/main/java/view/standalone/login/Login.fxml";
-	private static final String EMPTY_USERNAME_ERR_MSG = "Username can't be empty!";
-	private static final String EMPTY_PASSWORD_ERR_MSG = "Password can't be empty!";
 	private static final String GENERIC_ERR_MSG = "Something went wrong, please retry";
 	private static final String SUCCESSFUL_REGISTRATION_MSG = "Registration succedeed! Go back to login page to log in";
 	
@@ -70,7 +69,7 @@ public class GuiRegistrationController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// nothing to init
+		// nothing to initialize
 	}
 	
 	@FXML
@@ -107,16 +106,8 @@ public class GuiRegistrationController implements Initializable{
 				lblSuccess.setText(SUCCESSFUL_REGISTRATION_MSG);
 				lblSuccess.setVisible(true);
 			}
-		} catch (EmptyDataException e) {
-			int code = e.getErrorCode();
-			if (code == 0) {
-				lblGenericError.setText(EMPTY_USERNAME_ERR_MSG);
-				lblGenericError.setVisible(true);
-			}else if (code == 3) {
-				lblGenericError.setText(EMPTY_PASSWORD_ERR_MSG);
-				lblGenericError.setVisible(true);
-			}
-			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("EmptyDataException catched: %s" , e.getMessage()));
+		} catch (BeanCheckException e) {
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).show();
 		} catch (DAOException e) {
 			lblGenericError.setText(e.getMessage());
 			lblGenericError.setVisible(true);

@@ -41,7 +41,6 @@ public class ManageActivitiesController {
 				ret.add(bean);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 		return ret;
@@ -61,7 +60,6 @@ public class ManageActivitiesController {
 			BusinessActivityDAO.deleteBusinessActivity(bean.getName());
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 	}

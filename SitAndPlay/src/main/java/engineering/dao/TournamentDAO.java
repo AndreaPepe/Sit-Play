@@ -118,14 +118,11 @@ public class TournamentDAO {
 
 	public static void insertTournament(Tournament tournament) throws SQLException, DAOException {
 		var conn = DBConnector.getInstance().getConnection();
-		Statement stmt = null;
 		try {
 			QueryTournament.insertTournament(conn, tournament);
 			// insert the organizer
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			QueryTournament.addOrganizer(stmt, tournament.getName(), tournament.getOrganizer());
+			QueryTournament.addOrganizer(conn, tournament.getName(), tournament.getOrganizer());
 		} catch (SQLIntegrityConstraintViolationException e) {
-			e.printStackTrace();
 			throw new DAOException("A tournament with this name already exists");
 		}
 

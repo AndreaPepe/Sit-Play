@@ -19,7 +19,7 @@ public class QueryTable {
 	private static final String SELECT_HEADER = "SELECT DISTINCT name, address, lat, lng, cardGame, datetime, organizer ";
 
 	public static ResultSet retrieveTable(Statement stmt, String name) throws SQLException {
-		String query = "SELECT * FROM Tables WHERE name = '" + name + "';";
+		var query = String.format("SELECT * FROM Tables WHERE name = '%s';", name);
 		return stmt.executeQuery(query);
 	}
 
@@ -41,10 +41,17 @@ public class QueryTable {
 		}
 	}
 
-	public static void insertOrganizedTable(Statement stmt, String table, String organizer) throws SQLException {
-		var query = String.format("INSERT INTO OrganizedTables (tablename, organizer) VALUES ('%s', '%s');", table,
-				organizer);
-		stmt.executeUpdate(query);
+	public static void insertOrganizedTable(Connection conn, String table, String organizer) throws SQLException {
+		var sql = "INSERT INTO OrganizedTables (tablename, organizer) VALUES (?, ?);";
+		var pstmt = conn.prepareStatement(sql);
+		try {
+			pstmt.setString(1, table);
+			pstmt.setString(2, organizer);
+			
+			pstmt.executeUpdate();
+		} finally {
+			pstmt.close();
+		}
 	}
 
 	public static void addParticipant(Statement stmt, String table, String participant) throws SQLException {
@@ -87,8 +94,8 @@ public class QueryTable {
 	}
 
 	public static ResultSet retrieveDeletableTables(Statement stmt, String organizer) throws SQLException {
-		var query = SELECT_HEADER + "FROM tables JOIN organizedtables " + "WHERE name=tablename "
-				+ "AND datetime > ADDTIME(current_timestamp(), '02:00:00') AND organizer = '" + organizer + "';";
+		var query = String.format(SELECT_HEADER + "FROM tables JOIN organizedtables " + "WHERE name=tablename "
+				+ "AND datetime > ADDTIME(current_timestamp(), '02:00:00') AND organizer = '%s';", organizer);
 		return stmt.executeQuery(query);
 	}
 

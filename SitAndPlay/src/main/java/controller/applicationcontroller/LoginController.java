@@ -5,14 +5,14 @@ import java.sql.SQLException;
 import main.java.controller.applicationcontroller.notifications.NotificationPollingThread;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.dao.LoginDAO;
+import main.java.engineering.exceptions.BeanCheckException;
 import main.java.engineering.exceptions.DAOException;
-import main.java.engineering.exceptions.EmptyDataException;
 import main.java.engineering.exceptions.WrongCredentialsExceptions;
 import main.java.model.User;
 
 public class LoginController {
 
-	public BeanUser login(BeanUser beanUser, boolean isWeb) throws DAOException, WrongCredentialsExceptions, EmptyDataException {
+	public BeanUser login(BeanUser beanUser, boolean isWeb) throws DAOException, WrongCredentialsExceptions, BeanCheckException {
 		User user;
 		BeanUser newBean;
 		try {

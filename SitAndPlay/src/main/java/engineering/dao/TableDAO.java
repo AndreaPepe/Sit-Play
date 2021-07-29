@@ -99,7 +99,6 @@ public class TableDAO {
 	public static void insertTable(String name, Place place, String cardGame, Date datetime, String organizer)
 			throws SQLException, DAOException {
 		Statement stmt1 = null;
-		Statement stmt2 = null;
 		Connection conn = null;
 
 		conn = DBConnector.getInstance().getConnection();
@@ -116,8 +115,7 @@ public class TableDAO {
 				stmt1.close();
 			}
 		}
-		stmt2 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-		QueryTable.insertOrganizedTable(stmt2, name, organizer);
+		QueryTable.insertOrganizedTable(conn, name, organizer);
 
 	}
 

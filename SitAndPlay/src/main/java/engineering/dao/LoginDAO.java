@@ -63,23 +63,17 @@ public class LoginDAO {
 	
 	
 	public static void registration(BeanUser user) throws SQLException, DAOException {
-		Statement stmt = null;
 		Connection conn = null;
 		
 		
 		try {
 			conn = DBConnector.getInstance().getConnection();
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
-			QueryLogin.registration(stmt, user);
+			QueryLogin.registration(conn, user);
 			
 		}catch (SQLIntegrityConstraintViolationException e) {
 			// duplicate entry for PK username
 			throw new DAOException("Username already in use!");
-		}
-		finally {
-			if(stmt != null)
-				stmt.close();
 		}
 	}
 

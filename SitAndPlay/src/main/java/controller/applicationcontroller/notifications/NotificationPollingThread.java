@@ -37,7 +37,6 @@ public class NotificationPollingThread extends Thread {
 				// if a lot of notifications have been retrieved, give the time to process them
 				Thread.sleep(POLLING_INTERVAL * newNotifications.size() + 1000l);
 			} catch (SQLException | InterruptedException e) {
-				e.printStackTrace();
 				Thread.currentThread().interrupt();
 			}
 		}
