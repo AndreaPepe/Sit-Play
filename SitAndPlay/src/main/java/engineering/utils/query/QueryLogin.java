@@ -12,7 +12,7 @@ public class QueryLogin {
 		
 	}
 	
-	public static String getLoginQuery() throws SQLException {
+	public static String getLoginQuery() {
 		return LOGIN_QUERY;
 	}
 	
