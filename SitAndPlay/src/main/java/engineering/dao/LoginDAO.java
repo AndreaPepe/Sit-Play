@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.Statement;
-
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.WrongCredentialsExceptions;
@@ -23,15 +21,17 @@ public class LoginDAO {
 	}
 	
 	public static User login(String username, String password) throws SQLException, DAOException, WrongCredentialsExceptions {
-		Statement stmt = null;
 		Connection conn = null;
 		User user;
 		
 		conn = DBConnector.getInstance().getConnection();
+		String sql = QueryLogin.getLoginQuery();
+		var pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
 			
-			ResultSet rs = QueryLogin.login(stmt, username, password);
+			ResultSet rs = pstmt.executeQuery();
 			if (!rs.first()) {
 				throw new WrongCredentialsExceptions("Username or password are wrong");
 			}
@@ -51,12 +51,12 @@ public class LoginDAO {
 			default:
 				throw new DAOException("Unexpected value: " + uType);
 			}
-			
-			rs.close();			
+				
+			rs.close();		
 		} finally {
-			if (stmt != null) 
-				stmt.close();
+			pstmt.close();
 		}
+			
 		
 		return user;		
 	}

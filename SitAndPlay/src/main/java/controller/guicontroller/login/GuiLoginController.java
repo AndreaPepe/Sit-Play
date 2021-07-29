@@ -135,7 +135,7 @@ public class GuiLoginController implements Initializable {
 		} catch (DAOException e) {
 			lblErrorUsername.setText(DAO_ERROR_MESSAGE);
 			lblErrorUsername.setVisible(true);
-			AlertFactory.getInstance().createAlert(DAO_ERROR_MESSAGE, AlertType.ERROR).showAndWait();
+			AlertFactory.getInstance().createAlert(e.getMessage(), AlertType.ERROR).showAndWait();
 		} catch (Exception e) {
 			lblErrorUsername.setText(GENERIC_ERROR_MESSAGE);
 			lblErrorUsername.setVisible(true);

@@ -1,21 +1,19 @@
 package main.java.engineering.utils.query;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import main.java.engineering.bean.login.BeanUser;
 
 public class QueryLogin {
+	private static final String LOGIN_QUERY = "SELECT * FROM Users WHERE username = ? AND password = ?;";
 	
 	private QueryLogin() {
 		
 	}
 	
-	public static ResultSet login(Statement stmt, String username, String password) throws SQLException {
-		var query = String.format("SELECT * FROM Users WHERE username = '%s' AND password = '%s';", username, password);
-		return stmt.executeQuery(query);
+	public static String getLoginQuery() throws SQLException {
+		return LOGIN_QUERY;
 	}
 	
 	public static void registration(Connection conn, BeanUser user) throws SQLException {
