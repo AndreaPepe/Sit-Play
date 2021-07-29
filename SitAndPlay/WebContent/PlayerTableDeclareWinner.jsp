@@ -41,8 +41,6 @@ List<TableBean> tables = c.retrieveTablesToDeclareWinnerTo(user);
         	%>
         	<jsp:forward page="PlayerTableDeclareWinner.jsp"></jsp:forward>
         	<%
-    	}else{
-    		throw new Exception("Something went wrong! Please reload the page and retry");
     	}
     }
     %>
@@ -155,7 +153,7 @@ function changeParticipants() {
 						</select>
 					
 					
-						<input type="submit" id="btnDeclare" name="btnDeclare" value="Declare Winner">
+						<input type="submit" id="btnDeclare" name="btnDeclare" value="Declare Winner" onclick="return confirm('This is an irreversible operation. Are you sure?')">
 					</form>
 					
 				</div>

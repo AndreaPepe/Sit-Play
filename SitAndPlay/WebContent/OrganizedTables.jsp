@@ -111,13 +111,13 @@ List<TableBean> beans = ctrl.retrieveDeletableTables(ssn.getUser());
 						%>
 						</select>
 						
-						<input type="submit" id="btnDel" name="btnDel" value ="Delete">	
+						<input type="submit" id="btnDel" name="btnDel" value ="Delete" onclick="return confirm('This is an irreversible operation. Are you sure?')">	
 					</form>
 				</div>
 			
-			<div id="tableDiv" class="tableDiv">
+				<div id="tableDiv" class="tableDiv">
 			
-			</div>
+				</div>
 							
 			</div>
 		</div>

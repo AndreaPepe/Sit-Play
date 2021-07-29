@@ -83,7 +83,7 @@
 		}catch (ParseException e){
 			throw new Exception("Date or time are missing or possibly written in a wrong format");
 		}catch(NumberFormatException ex){
-			throw new Exception("One of the fields 'Max number of participants', 'Price', 'Award' was written in a wrong format");
+			throw new Exception("One of the fields 'Max number of participants', 'Price', 'Award' is blank or written in a wrong format");
 		}
 	}
 	%>

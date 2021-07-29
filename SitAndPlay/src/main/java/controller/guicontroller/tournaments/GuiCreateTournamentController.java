@@ -128,6 +128,7 @@ public class GuiCreateTournamentController extends GuiBasicInternalPageControlle
 		var toggleGroup = new ToggleGroup();
 		toggleCreate.setToggleGroup(toggleGroup);
 		toggleHandleTournaments.setToggleGroup(toggleGroup);
+		toggleDeclareWinner.setToggleGroup(toggleGroup);
 		// avoid unselected button
 		toggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
 			if (newVal == null) {
