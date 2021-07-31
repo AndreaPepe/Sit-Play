@@ -111,7 +111,7 @@ public class StatisticsController {
 		} else if (won >= played) {
 			return 100f;
 		} else {
-			return (float) won / played;
+			return 100f *( (float) won / played);
 		}
 	}
 }
