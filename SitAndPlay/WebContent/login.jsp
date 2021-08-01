@@ -8,7 +8,6 @@
 <%@page import="main.java.engineering.exceptions.DAOException"%>
 <%@page
 	import="main.java.engineering.exceptions.WrongCredentialsExceptions"%>
-<%@page import="main.java.engineering.exceptions.EmptyDataException"%>
 
 <jsp:useBean id="userBean" scope="session"
 	class="main.java.engineering.bean.login.BeanUser" />

@@ -60,6 +60,7 @@ public class ManageActivitiesController {
 			BusinessActivityDAO.deleteBusinessActivity(bean.getName());
 			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
 	}

@@ -5,7 +5,6 @@
 <%@page import="main.java.engineering.bean.login.BeanUser" %>
 <%@page import="main.java.controller.applicationcontroller.RegistrationController" %>
 <%@page import="main.java.engineering.exceptions.DAOException" %>
-<%@page import="main.java.engineering.exceptions.EmptyDataException" %>   
 
 <%@page errorPage="ErrorPage.jsp"%> 
     

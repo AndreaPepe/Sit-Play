@@ -9,7 +9,7 @@ html, body{
 }
 
 .appName{
-	font-family: system-bold-italic;
+	font-family: "Roboto", sans-serif;
 	font-size: 36px;
 	margin: 2% 0% 2% 0%;
 	color: white;

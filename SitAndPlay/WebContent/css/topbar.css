@@ -10,7 +10,6 @@ body {
 	position: absolute; 
 	height: 50px;
 	width: 100%;
-	overflow : hidden;
 	background-color: #296581;
 	overflow: hidden;
 }

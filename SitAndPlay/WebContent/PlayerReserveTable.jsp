@@ -156,7 +156,7 @@ if(beanList == null || beanList.isEmpty()){
 			<div class="topnav">
   				<a href="CreateTable.jsp">Create Table</a>
   				<a href="PlayerReserveTable.jsp">Reserve A Seat</a>
-  				<a href="PlayerTableDeclareWinner.jsp">My Tables</a>
+  				<a href="PlayerTableDeclareWinner.jsp">Declare Winner</a>
   				<a href="OrganizedTables.jsp">Organized Tables</a>
 			</div>
 	

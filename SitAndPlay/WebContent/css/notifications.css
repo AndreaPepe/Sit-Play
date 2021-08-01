@@ -15,7 +15,6 @@
 	display: inline-block;
 	align-content: center;
 	width: 100%;
-	text-align: center;
 }
 
 .radio-group input[type=radio] {
@@ -54,13 +53,13 @@
 
 .notif {
 	display: flex;
-	align-items: center; height : 100px;
+	align-items: center;
+	height : 100px;
 	width: 100%;
 	background-color: #CCE1E9;
 	text-align: center;
 	border: 10px solid white;
 	vertical-align: middle;
-	height: 100px;
 }
 
 .msg {
