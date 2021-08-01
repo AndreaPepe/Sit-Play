@@ -34,7 +34,7 @@
     	newUser.setUserType(type);
     	
     	RegistrationController ctrl = new RegistrationController();
-    	ctrl.signIn(newUser);
+    	ctrl.signUp(newUser);
     }
     %>
     

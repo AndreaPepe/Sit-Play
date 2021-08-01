@@ -28,13 +28,13 @@ public class QueryLogin {
 		default:
 			throw new SQLException("User type unsupported");
 		}
-		var query = "INSERT INTO Users (username, password, userType) VALUES (?,?,?);";
+		var query = "INSERT INTO Users(username, password, userType) VALUES(?,?,?);";
 		var pstmt = conn.prepareStatement(query);
 		try {
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, type);
-			pstmt.executeUpdate(query);
+			pstmt.executeUpdate();
 		} finally {
 			pstmt.close();
 		}

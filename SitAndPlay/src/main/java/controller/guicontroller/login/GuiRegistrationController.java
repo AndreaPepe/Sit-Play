@@ -100,7 +100,7 @@ public class GuiRegistrationController implements Initializable{
 			
 			// instantiate application controller
 			var ctrl = new RegistrationController();
-			boolean result = ctrl.signIn(beanUser);
+			boolean result = ctrl.signUp(beanUser);
 			
 			if(result) {
 				lblSuccess.setText(SUCCESSFUL_REGISTRATION_MSG);

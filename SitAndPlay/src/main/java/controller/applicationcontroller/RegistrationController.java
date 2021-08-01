@@ -7,7 +7,7 @@ import main.java.engineering.exceptions.DAOException;
 
 public class RegistrationController {
 	
-	public boolean signIn(BeanUser user) throws DAOException {
+	public boolean signUp(BeanUser user) throws DAOException {
 		try {
 			LoginDAO.registration(user);
 			return true;

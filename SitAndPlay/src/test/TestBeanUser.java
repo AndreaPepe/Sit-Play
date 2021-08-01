@@ -34,7 +34,7 @@ public class TestBeanUser {
 	
 	
 	/**
-	 * Test if a correct settings of attributes doesn't throw any exception
+	 * Test if a correct setting of attributes doesn't throw any exception
 	 */
 	@Test
 	public void testSetAttributes() {
