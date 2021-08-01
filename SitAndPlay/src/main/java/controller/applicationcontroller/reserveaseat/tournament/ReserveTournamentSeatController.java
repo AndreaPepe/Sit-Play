@@ -4,10 +4,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.controller.applicationcontroller.notifications.NotificationSender;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.bean.tournaments.TournamentBeanFactory;
-import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.dao.TournamentDAO;
 import main.java.engineering.exceptions.AlreadyExistingWinnerException;
 import main.java.engineering.exceptions.DAOException;
@@ -18,7 +18,6 @@ import main.java.engineering.exceptions.OutOfTimeException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
-import main.java.model.Notification;
 import main.java.model.Tournament;
 import main.java.model.UserType;
 
@@ -58,8 +57,8 @@ public class ReserveTournamentSeatController {
 				TournamentDAO.addParticipant(bean.getName(), user.getUsername());
 				var notificationContent = String.format(CommonStrings.getTournamentReservedNotif(), user.getUsername(),
 						bean.getName());
-				var notif = new Notification(-1, user.getUsername(), bean.getOrganizer(), notificationContent, false);
-				NotificationDAO.insertNotification(notif);
+				var notifSender = new NotificationSender();
+				notifSender.sendNotification(user.getUsername(), bean.getOrganizer(), notificationContent);
 			}
 		} catch (SQLException e) {
 			// Change the exception type, so the graphic controller
@@ -81,8 +80,8 @@ public class ReserveTournamentSeatController {
 			TournamentDAO.removeParticipant(tournament.getName(), participant.getUsername());
 			var notifContent = String.format(CommonStrings.getTournamentSeatLeaved(), participant.getUsername(),
 					tournament.getName());
-			var notif = new Notification(-1, participant.getUsername(), tournament.getOrganizer(), notifContent, false);
-			NotificationDAO.insertNotification(notif);
+			var notifSender = new NotificationSender();
+			notifSender.sendNotification(participant.getUsername(), tournament.getOrganizer(), notifContent);
 		} catch (SQLException e) {
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
@@ -133,8 +132,8 @@ public class ReserveTournamentSeatController {
 				TournamentDAO.setWinner(tournament.getName(), tournament.getWinner());
 				var message = String.format(CommonStrings.getTournamentWinnerString(), tournament.getName(),
 						userOrg.getUsername());
-				var notif = new Notification(-1, userOrg.getUsername(), tournament.getWinner(), message, false);
-				NotificationDAO.insertNotification(notif);
+				var sender = new NotificationSender();
+				sender.sendNotification(userOrg.getUsername(), tournament.getWinner(), message);
 			}
 		} catch (SQLException e) {
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
@@ -168,16 +167,15 @@ public class ReserveTournamentSeatController {
 			} else {
 				var content = String.format(CommonStrings.getDeletedTournamentNotif(), checkTournament.getName(),
 						checkTournament.getOrganizer());
+				var notifSender = new NotificationSender();
 				if (checkTournament.getSponsor() != null) {
-					var notif = new Notification(-1, checkTournament.getOrganizer(),
-							checkTournament.getSponsor().getBusinessman(), content, false);
-					NotificationDAO.insertNotification(notif);
+					notifSender.sendNotification(checkTournament.getOrganizer(),
+							checkTournament.getSponsor().getBusinessman(), content);
 				}
 				
 				var participants = checkTournament.getParticipants();
 				for(String part : participants) {
-					var not = new Notification(-1, checkTournament.getOrganizer(), part, content, false);
-					NotificationDAO.insertNotification(not);
+					notifSender.sendNotification(checkTournament.getOrganizer(), part, content);
 				}
 				
 				TournamentDAO.deleteTournament(checkTournament.getName());

@@ -4,10 +4,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.controller.applicationcontroller.notifications.NotificationSender;
 import main.java.engineering.bean.createtable.PlaceBean;
 import main.java.engineering.bean.createtable.TableBean;
 import main.java.engineering.bean.login.BeanUser;
-import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.dao.TableDAO;
 import main.java.engineering.exceptions.AlreadyExistingWinnerException;
 import main.java.engineering.exceptions.DAOException;
@@ -17,7 +17,6 @@ import main.java.engineering.exceptions.OutOfTimeException;
 import main.java.engineering.exceptions.WrongUserTypeException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.engineering.utils.DatetimeUtil;
-import main.java.model.Notification;
 import main.java.model.Table;
 import main.java.model.UserType;
 
@@ -47,8 +46,8 @@ public class ReserveTableSeatController {
 			TableDAO.addParticipant(table.getName(), user.getUsername());
 			var notificationContent = String.format(CommonStrings.getTableReservedNotif(), user.getUsername(),
 					table.getName());
-			var notif = new Notification(-1, user.getUsername(), table.getOrganizer(), notificationContent, false);
-			NotificationDAO.insertNotification(notif);
+			var notifSender = new NotificationSender();
+			notifSender.sendNotification(user.getUsername(), table.getOrganizer(), notificationContent);
 		} catch (SQLException e) {
 			// Change the exception type, so the graphic controller
 			// has not to be aware of database concepts and error
@@ -67,8 +66,8 @@ public class ReserveTableSeatController {
 			TableDAO.removeParticipant(table.getName(), usr.getUsername());
 			var notificationMessage = String.format(CommonStrings.getTableSeatLeaved(), usr.getUsername(),
 					table.getName());
-			var not = new Notification(-1, usr.getUsername(), table.getOrganizer(), notificationMessage, false);
-			NotificationDAO.insertNotification(not);
+			var notifSender = new NotificationSender();
+			notifSender.sendNotification(usr.getUsername(), table.getOrganizer(), notificationMessage);
 		} catch (SQLException e) {
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
@@ -122,8 +121,8 @@ public class ReserveTableSeatController {
 			}
 			TableDAO.addWinner(tableBean.getName(), tableBean.getWinner());
 			var msg = String.format(CommonStrings.getTableWinnerString(), tableBean.getName(), organizer.getUsername());
-			var notif = new Notification(-1, organizer.getUsername(), tableBean.getWinner(), msg, false);
-			NotificationDAO.insertNotification(notif);
+			var sender = new NotificationSender();
+			sender.sendNotification(organizer.getUsername(), tableBean.getWinner(), msg);
 		} catch (SQLException e) {
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
@@ -139,11 +138,11 @@ public class ReserveTableSeatController {
 			
 			var tableCheck = TableDAO.retrieveTable(bean.getName());
 			var participants = tableCheck.getParticipants();
+			var sender = new NotificationSender();
 			for (String part : participants) {
 				// notify each participant
 				var content = String.format(CommonStrings.getDeletedTableNotif(), tableCheck.getName(), tableCheck.getOrganizer());
-				var notif = new Notification(-1, tableCheck.getOrganizer(), part, content, false);
-				NotificationDAO.insertNotification(notif);
+				sender.sendNotification(tableCheck.getOrganizer(), part, content);
 			}
 			
 			TableDAO.deleteTable(tableCheck.getName());

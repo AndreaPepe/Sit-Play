@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.exceptions.WindowNotFoundException;
 import main.java.model.Notification;
 import main.java.view.PopupFxFactory;
@@ -37,7 +36,8 @@ public class NotificationController {
 				try {
 					var notif = notificationToPopup.take();
 					PopupFxFactory.getInstance().showPopup(notif.getContent());
-					NotificationDAO.setNotificationAsShown(notif.getId());				
+					var notifCtrl = new NotificationSender();
+					notifCtrl.setNotificationAsRead(notif);
 					Thread.sleep(SPAMMING_INTERVAL);
 					
 				} catch (WindowNotFoundException | SQLException | InterruptedException e) {

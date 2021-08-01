@@ -4,18 +4,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.controller.applicationcontroller.notifications.NotificationSender;
 import main.java.engineering.bean.businessactivity.BusinessActivityBean;
 import main.java.engineering.bean.login.BeanUser;
 import main.java.engineering.bean.tournaments.TournamentBean;
 import main.java.engineering.bean.tournaments.TournamentBeanFactory;
 import main.java.engineering.dao.BusinessActivityDAO;
-import main.java.engineering.dao.NotificationDAO;
 import main.java.engineering.dao.TournamentDAO;
 import main.java.engineering.exceptions.DAOException;
 import main.java.engineering.exceptions.DateParsingException;
 import main.java.engineering.utils.CommonStrings;
 import main.java.model.BusinessActivity;
-import main.java.model.Notification;
 import main.java.model.Tournament;
 
 public class SponsorizeTournamentController {
@@ -53,8 +52,8 @@ public class SponsorizeTournamentController {
 			TournamentDAO.updateSponsor(bean.getName(), sponsor.getName());
 			var notif = String.format(CommonStrings.getTournamentSponsorizationNotif(), bean.getName(),
 					sponsor.getOwner(), sponsor.getName());
-			var notification = new Notification(-1, sponsor.getOwner(), bean.getOrganizer(), notif, false);
-			NotificationDAO.insertNotification(notification);
+			var notifSender = new NotificationSender();
+			notifSender.sendNotification(sponsor.getOwner(), bean.getOrganizer(), notif);
 		} catch (SQLException e) {
 			throw new DAOException(CommonStrings.getDatabaseErrorMsg());
 		}
