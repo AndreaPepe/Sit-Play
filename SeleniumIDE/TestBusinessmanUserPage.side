@@ -1,0 +1,99 @@
+{
+  "id": "35a7cde3-8865-4250-a48c-6037eecdfe1b",
+  "version": "2.0",
+  "name": "TestSit&Play",
+  "url": "http://localhost:8080/SitAndPlay/",
+  "tests": [{
+    "id": "c457a235-0e94-4878-a5c4-dba7bdc8ad6f",
+    "name": "TestBusinessmanUserPage",
+    "commands": [{
+      "id": "7fe019bb-126d-4b2a-ae75-ff38f90f29ff",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8080/SitAndPlay/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b900b2d9-b9bb-425b-a807-febd2de7fc6e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "927x606",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "58b913bd-7a37-43a1-8612-a0d8ccbae4d1",
+      "comment": "",
+      "command": "click",
+      "target": "id=tfUsername",
+      "targets": [
+        ["id=tfUsername", "id"],
+        ["name=tfUsername", "name"],
+        ["css=#tfUsername", "css:finder"],
+        ["xpath=//input[@id='tfUsername']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "adde6e50-53d3-4673-854e-7a941f86e8bd",
+      "comment": "",
+      "command": "type",
+      "target": "id=tfUsername",
+      "targets": [
+        ["id=tfUsername", "id"],
+        ["name=tfUsername", "name"],
+        ["css=#tfUsername", "css:finder"],
+        ["xpath=//input[@id='tfUsername']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "bus"
+    }, {
+      "id": "20108bb5-4e7e-4fb6-8d6e-474d9a0439fd",
+      "comment": "",
+      "command": "type",
+      "target": "id=pfPassword",
+      "targets": [
+        ["id=pfPassword", "id"],
+        ["name=pfPassword", "name"],
+        ["css=#pfPassword", "css:finder"],
+        ["xpath=//input[@id='pfPassword']", "xpath:attributes"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": "bus"
+    }, {
+      "id": "6beca22f-f7f2-4e6b-b713-367a8838fd0f",
+      "comment": "",
+      "command": "click",
+      "target": "id=login",
+      "targets": [
+        ["id=login", "id"],
+        ["name=btnLogin", "name"],
+        ["css=#login", "css:finder"],
+        ["xpath=//input[@id='login']", "xpath:attributes"],
+        ["xpath=//input[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e0e8783d-2c72-479b-a92f-a68c63962170",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=strong",
+      "targets": [
+        ["css=strong", "css:finder"],
+        ["xpath=//div[@id='innerPage']/div/h3/strong", "xpath:idRelative"],
+        ["xpath=//strong", "xpath:position"],
+        ["xpath=//strong[contains(.,'Businessman')]", "xpath:innerText"]
+      ],
+      "value": "Businessman"
+    }]
+  }],
+  "suites": [{
+    "id": "93fb3e1c-e17f-494d-81a8-fed2021ad82d",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["http://localhost:8080/", "http://localhost:8080/SitAndPlay/"],
+  "plugins": []
+}
