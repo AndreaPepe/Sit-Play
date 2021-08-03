@@ -17,6 +17,14 @@ import main.java.engineering.exceptions.MapboxException;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+/**
+ * The task of this class is to make HTTP requests to
+ * mapbox, in order to perform the auto-completion of text fields
+ * used to search a place. The responses are in the form of JSONObjects.
+ * 
+ * @author Andrea Pepe
+ *
+ */
 public class MapboxController {
 
 	private static String token = "pk.eyJ1IjoiYW5kcmVhcGVwZTMwIiwiYSI6ImNrcW52aGlzejAxNGUydXFzN2Y3N25lemwifQ._T3qFEHfLLxs4R4Nhy69rg";
@@ -24,33 +32,26 @@ public class MapboxController {
 		return token;
 	}
 	
-	public List<JSONObject> getPredictions(String input) throws MapboxException{
-		return mabpoxQuery(input, true, 10, "place,address,locality,poi");
+	public List<JSONObject> getPlaces(String input) throws MapboxException{
+		return mabpoxRequest(input, true, 10, "place,address,locality,poi");
 	}
 	
-	private List<JSONObject> mabpoxQuery(String input, Boolean fuzzyMatch, int upperBound, String types) throws MapboxException{
-		if (upperBound>10) {
-			upperBound = 10;
-		}
-		if (upperBound < 1) {
-			upperBound = 1;
-		}
-		
+	private List<JSONObject> mabpoxRequest(String input, Boolean fuzzyMatch, int upperBound, String types) throws MapboxException{	
 		String encodedInput;
 		try {
 			encodedInput = URLEncoder.encode(input,"UTF-8");
 		    HttpClient client = HttpClientBuilder.create().build();
-		    String urlFormat = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + encodedInput + ".json" +		    		
+		    String urlAddress = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + encodedInput + ".json" +		    		
 		    		"?fuzzyMatch=" + fuzzyMatch +
 		    		"&limit=" + upperBound +
 		    		"&types=" + types +
 		    		"&access_token=" + token;
 		    
-		    var getRequest = new HttpGet(urlFormat);
+		    var getRequest = new HttpGet(urlAddress);
 		    getRequest.addHeader("accept", "application/json");
 		    HttpResponse response = client.execute(getRequest);
-		    var json = EntityUtils.toString(response.getEntity(), "UTF-8");
-		    return parseJsonString(json);
+		    var jsonString = EntityUtils.toString(response.getEntity(), "UTF-8");
+		    return parseJsonString(jsonString);
 		    
 		} catch (IOException e) {
 			throw new MapboxException(e.getMessage());
@@ -77,30 +78,4 @@ public class MapboxController {
 		return results;	
 	}
 	
-	public JSONObject getPlaceByName (String name) throws MapboxException {
-		var placeName = "place_name";
-		List<String> types = new ArrayList<>();
-		types.add("place");
-		types.add("address");
-		types.add("locality");
-		types.add("poi");
-		
-		List<JSONObject> results = getPredictions(name);
-		JSONObject obj = results.get(0);
-		for(JSONObject res : results) {
-			if (name.startsWith(res.get(placeName).toString()) || name.endsWith(res.get(placeName).toString())) {
-				return res;
-			}
-		}
-		
-		for(String t : types) {
-			results = this.mabpoxQuery(name, false, 10, t);
-			for(JSONObject res : results) {
-				if (name.startsWith(res.get(placeName).toString()) || name.endsWith(res.get(placeName).toString())) {
-					return res;
-				}
-			}
-		}
-		return obj;
-	}
 }

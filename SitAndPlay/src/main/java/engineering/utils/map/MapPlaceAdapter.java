@@ -8,10 +8,10 @@ import org.json.simple.JSONObject;
 
 public class MapPlaceAdapter implements MapPlace {
 
-	private String pred;
+	private String placeName;
 	private String type;
 	private String country;
-	private String city="unkown";
+	private String city="???";
 	private double lng;
 	private double lat;
 	private String postCode;
@@ -20,7 +20,7 @@ public class MapPlaceAdapter implements MapPlace {
 	
 	
 	public MapPlaceAdapter(JSONObject place) {
-		this.adaptFromJson(place);
+		this.buildFromJson(place);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class MapPlaceAdapter implements MapPlace {
 
 	@Override
 	public String getPlaceName() {
-		return this.pred;
+		return this.placeName;
 	}
 
 	@Override
@@ -68,11 +68,11 @@ public class MapPlaceAdapter implements MapPlace {
 	
 	@Override
 	public String toString() {
-		return this.pred;
+		return this.placeName;
 	}
 
 	private void setPlaceName(String placeName) {
-		this.pred = placeName;
+		this.placeName = placeName;
 	}
 
 	private void setType(String type) {
@@ -111,7 +111,7 @@ public class MapPlaceAdapter implements MapPlace {
 	 * 
 	 * @param place
 	 */
-	private void adaptFromJson(JSONObject place) {
+	private void buildFromJson(JSONObject place) {
 		this.setPlaceName(place.get("place_name").toString());
 		JSONArray types = (JSONArray) place.get("place_type");
 		String jtype = (String) types.get(0);

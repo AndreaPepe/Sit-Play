@@ -7,10 +7,10 @@ import org.json.simple.JSONObject;
 
 import javafx.application.Platform;
 import javafx.geometry.Side;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import main.java.controller.MapboxController;
+import main.java.engineering.exceptions.AlertFactory;
 import main.java.engineering.exceptions.MapboxException;
 import main.java.engineering.utils.map.MapPlace;
 import main.java.engineering.utils.map.MapPlaceAdapter;
@@ -36,7 +36,7 @@ public class SearchMapPlaceTextField extends AutocompleteTextField<MapPlace> {
 		var controller = new MapboxController();
 		List<MapPlace> mapPlaces = new ArrayList<>();
 		try {
-			List<JSONObject> results = controller.getPredictions(text);
+			List<JSONObject> results = controller.getPlaces(text);
 			for(JSONObject obj : results) {
 				// the adapter performs the parsing of the json and stores data as a place
 				mapPlaces.add(new MapPlaceAdapter(obj));
@@ -44,10 +44,7 @@ public class SearchMapPlaceTextField extends AutocompleteTextField<MapPlace> {
 			return mapPlaces;
 		}catch (MapboxException e) {
 			Platform.runLater(() -> {
-				var alert = new Alert(AlertType.ERROR);
-				alert.setHeaderText("Mapbox error");
-				alert.setContentText(e.getMessage());
-				alert.showAndWait();
+				AlertFactory.getInstance().createAlert(String.format("Mapbox Error: %s", e.getMessage()), AlertType.ERROR).showAndWait();
 			});
 		}
 		return mapPlaces;

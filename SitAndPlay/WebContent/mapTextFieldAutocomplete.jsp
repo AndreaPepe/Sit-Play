@@ -15,7 +15,7 @@
     	try{
     		String input = (String) request.getParameter("place");
     		MapboxController ctrl = new MapboxController();	
-    		List<JSONObject> results = ctrl.getPredictions(input);
+    		List<JSONObject> results = ctrl.getPlaces(input);
     		
     		// use hash map to explicitly declare parameters types
     		HashMap<String,Object> hashMap = new HashMap<>();

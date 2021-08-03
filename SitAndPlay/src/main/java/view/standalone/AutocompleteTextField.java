@@ -24,7 +24,7 @@ import java.util.ArrayList;
  */
 public abstract class AutocompleteTextField<S> {
 
-	// The text field that we modify with an autocompletion feature
+	// The text field that is modified with an autocompletion feature
 	private Side pos;
 	private final TextField textField;
 	private boolean blocked;
@@ -94,9 +94,9 @@ public abstract class AutocompleteTextField<S> {
 	 * 
 	 * @param predictions
 	 */
-	protected final void setUpPopUp(List<S> predictions) {
+	protected final void setUpPopUp(List<S> items) {
 		this.entries.clear();
-		for (S predict : predictions) {
+		for (S predict : items) {
 			entries.add(predict);
 		}
 		LinkedList<S> searchResult = new LinkedList<>();
@@ -133,7 +133,7 @@ public abstract class AutocompleteTextField<S> {
 	 * Abstract method to define the logic of prediction's retrieve.
 	 *
 	 * @param text is the text to use for the filtering of predictions
-	 * @return List<S> a list of data chosen to store predictions
+	 * @return List<S> a list of predictions elements
 	 */
 	protected abstract List<S> getPredictions(String text);
 

@@ -1,14 +1,6 @@
 package main.java.model;
 
-/** This is an abstract class User,
- * so that it can't be instantiated,
- * used to group common info about different
- * user's types.
- * @author Andrea Pepe
- *
- */
-
-public abstract class User {
+public class User {
 	private String username;
 	private String password;
 	private UserType userType;
