@@ -43,9 +43,9 @@ public class SearchMapPlaceTextField extends AutocompleteTextField<MapPlace> {
 			}
 			return mapPlaces;
 		}catch (MapboxException e) {
-			Platform.runLater(() -> {
-				AlertFactory.getInstance().createAlert(String.format("Mapbox Error: %s", e.getMessage()), AlertType.ERROR).showAndWait();
-			});
+			Platform.runLater(() -> 
+				AlertFactory.getInstance().createAlert(String.format("Mapbox Error: %s", e.getMessage()), AlertType.ERROR).showAndWait()
+			);
 		}
 		return mapPlaces;
 		
