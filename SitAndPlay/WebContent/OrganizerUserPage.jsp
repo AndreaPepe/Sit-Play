@@ -52,15 +52,14 @@
 				<h3><strong>Organizer</strong></h3>
 			</div>
 	
-			<div class= "right_pane">
+			<div class= "right_central">
 			<% 
 			StatisticsController ctrl = new StatisticsController();
 			StatsBean stats = ctrl.getStats(ssn.getUser()); %>
-				<div>
+					<label>Organize tables and tournaments, with the opportunity to request a sponsor!</label>
 					<p>You have currently organized <%= stats.getOrgTables() %> tables!</p>
 					<p>You have currently organized <%= stats.getOrgTournaments() %> tournaments!</p>
-				</div>
-				
+		
 			</div>
 		</div>
 	</div>

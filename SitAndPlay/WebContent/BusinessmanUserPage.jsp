@@ -45,14 +45,15 @@
 				<h3><strong>Businessman</strong></h3>
 			</div>
 	
-			<div class= "right_pane">
+			<div class= "right_central">
 			<% 
 			StatisticsController ctrl = new StatisticsController();
 			Session ssn = (Session) session.getAttribute("ssn");
 			int sponsoredTournaments = ctrl.getNumberOfSponsorizedTournaments(ssn.getUser()); %>
-				<div>
-					<p>You have currently sponsored <%= sponsoredTournaments %> tournaments!</p>
-				</div>
+			
+				<label>Create your business activities and sponsorize tournaments to promote them!</label>
+				<p>You have currently sponsored <%= sponsoredTournaments %> tournaments!</p>
+				
 				
 			</div>
 		</div>
