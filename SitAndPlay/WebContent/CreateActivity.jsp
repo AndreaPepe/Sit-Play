@@ -1,3 +1,4 @@
+<%@page import="java.io.BufferedInputStream"%>
 <%@page import="main.java.engineering.utils.Session"%>
 <%@page import="main.java.model.UserType"%>
 <%@page import="main.java.engineering.bean.login.BeanUser"%>
@@ -50,7 +51,7 @@
     				}
     			
     			}else{
-    				InputStream is = item.getInputStream();
+    				InputStream is = new BufferedInputStream(item.getInputStream());
     				if(is.markSupported()){
     					is.mark(0);
     					if(is.read() != -1){
@@ -60,7 +61,7 @@
     						logo = null;
     					}
     				}else{
-    					throw new Exception("Input stream does not support mark");
+    					throw new Exception("Unable to load logo");
     				}
     			}
     		}

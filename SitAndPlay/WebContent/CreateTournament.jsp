@@ -28,7 +28,7 @@
 			throw new Exception("The selected place is missing");
 		}
 		MapboxController ctrl = new MapboxController();
-		List<JSONObject> predictions = ctrl.getPredictions(placeName);
+		List<JSONObject> predictions = ctrl.getPlaces(placeName);
 		if(predictions.isEmpty()){
 			throw new MapboxException("Seems to be no places with this name");
 		}
