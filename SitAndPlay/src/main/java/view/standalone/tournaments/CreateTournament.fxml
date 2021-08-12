@@ -48,34 +48,6 @@
       </ToolBar>
       <Pane layoutY="40.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
-            <AnchorPane fx:id="apCreateTournament" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: white;">
-               <children>
-                  <WebView fx:id="webViewCreate" layoutX="295.0" layoutY="14.0" prefHeight="365.0" prefWidth="350.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
-                  <TextField fx:id="tfName" layoutX="25.0" layoutY="15.0" prefHeight="25.0" prefWidth="250.0" promptText="Tournament's name" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="15.0" />
-                  <ComboBox fx:id="cbCardGame" layoutX="31.0" layoutY="186.0" prefHeight="25.0" prefWidth="250.0" promptText="Card game" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="85.0" />
-                  <DatePicker fx:id="dpDatePicker" editable="false" layoutX="31.0" layoutY="238.0" prefHeight="25.0" prefWidth="250.0" promptText="Date" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="120.0" />
-                  <HBox alignment="CENTER" layoutX="319.0" layoutY="168.0" prefHeight="25.0" prefWidth="250.0" spacing="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="155.0">
-                     <children>
-                        <ComboBox fx:id="cbHours" prefWidth="80.0" promptText="Hours" />
-                        <Label text=":">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cbMin" prefWidth="80.0" promptText="Min" />
-                     </children>
-                  </HBox>
-                  <TextField fx:id="tfMaxParticipants" layoutX="325.0" layoutY="225.0" prefHeight="25.0" prefWidth="180.0" promptText="Max number of participants" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="190.0" />
-                  <TextField fx:id="tfPrice" layoutX="325.0" layoutY="265.0" prefHeight="25.0" prefWidth="180.0" promptText="Price [€ XXX.XX]" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="225.0" />
-                  <TextField fx:id="tfAwards" layoutX="325.0" layoutY="303.0" prefHeight="25.0" prefWidth="180.0" promptText="Award [€ XXX.XX]" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="260.0" />
-                  <CheckBox fx:id="cbSearchSponsor" contentDisplay="CENTER" layoutX="325.0" layoutY="338.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="180.0" text="Search for sponsorization" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="295.0" />
-                  <Button fx:id="btnCreateTournament" layoutX="58.0" layoutY="346.0" mnemonicParsing="false" onAction="#createTournament" prefWidth="180.0" styleClass="btn" stylesheets="@../createtable/StandardStyle.css" text="Create Tournament" textFill="WHITE" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="58.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="apDeclareWinner" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Label alignment="TOP_CENTER" layoutX="41.0" layoutY="180.0" prefHeight="160.0" prefWidth="225.0" text="First select one of the available tournaments and then the participant that will be declared winner!" textAlignment="CENTER" textFill="#296581" wrapText="true">
@@ -113,6 +85,34 @@
                      </content>
                   </ScrollPane>
                </children></AnchorPane>
+            <AnchorPane fx:id="apCreateTournament" prefHeight="390.0" prefWidth="650.0" style="-fx-background-color: white;">
+               <children>
+                  <WebView fx:id="webViewCreate" layoutX="295.0" layoutY="14.0" prefHeight="365.0" prefWidth="350.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                  <TextField fx:id="tfName" layoutX="25.0" layoutY="15.0" prefHeight="25.0" prefWidth="250.0" promptText="Tournament's name" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="15.0" />
+                  <ComboBox fx:id="cbCardGame" layoutX="31.0" layoutY="186.0" prefHeight="25.0" prefWidth="250.0" promptText="Card game" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="85.0" />
+                  <DatePicker fx:id="dpDatePicker" editable="false" layoutX="31.0" layoutY="238.0" prefHeight="25.0" prefWidth="250.0" promptText="Date" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="120.0" />
+                  <HBox alignment="CENTER" layoutX="319.0" layoutY="168.0" prefHeight="25.0" prefWidth="250.0" spacing="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="155.0">
+                     <children>
+                        <ComboBox fx:id="cbHours" prefWidth="80.0" promptText="Hours" />
+                        <Label text=":">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cbMin" prefWidth="80.0" promptText="Min" />
+                     </children>
+                  </HBox>
+                  <TextField fx:id="tfMaxParticipants" layoutX="325.0" layoutY="225.0" prefHeight="25.0" prefWidth="180.0" promptText="Max number of participants" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="190.0" />
+                  <TextField fx:id="tfPrice" layoutX="325.0" layoutY="265.0" prefHeight="25.0" prefWidth="180.0" promptText="Price [€ XXX.XX]" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="225.0" />
+                  <TextField fx:id="tfAwards" layoutX="325.0" layoutY="303.0" prefHeight="25.0" prefWidth="180.0" promptText="Award [€ XXX.XX]" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="260.0" />
+                  <CheckBox fx:id="cbSearchSponsor" contentDisplay="CENTER" layoutX="325.0" layoutY="338.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="180.0" text="Request sponsor" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="295.0" />
+                  <Button fx:id="btnCreateTournament" layoutX="58.0" layoutY="346.0" mnemonicParsing="false" onAction="#createTournament" prefWidth="180.0" styleClass="btn" stylesheets="@../createtable/StandardStyle.css" text="Create Tournament" textFill="WHITE" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="58.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
          </children>
       </Pane>
    </children>
