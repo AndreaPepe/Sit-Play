@@ -68,7 +68,7 @@
                   </VBox>
                   <AnchorPane layoutX="250.0" prefHeight="390.0" prefWidth="401.0">
                      <children>
-                        <Label alignment="TOP_CENTER" layoutX="23.0" layoutY="55.0" prefHeight="159.0" prefWidth="355.0" text="Create your business activities and sponsorize tournaments to promote them!" textAlignment="CENTER" textFill="#296581" wrapText="true">
+                        <Label alignment="TOP_CENTER" layoutX="23.0" layoutY="55.0" prefHeight="159.0" prefWidth="355.0" text="Create your business activities and sponsor tournaments to promote them!" textAlignment="CENTER" textFill="#296581" wrapText="true">
                            <font>
                               <Font name="Papyrus" size="24.0" />
                            </font></Label>

@@ -51,7 +51,7 @@
 			Session ssn = (Session) session.getAttribute("ssn");
 			int sponsoredTournaments = ctrl.getNumberOfSponsorizedTournaments(ssn.getUser()); %>
 			
-				<label>Create your business activities and sponsorize tournaments to promote them!</label>
+				<label>Create your business activities and sponsor tournaments to promote them!</label>
 				<p>You have currently sponsored <%= sponsoredTournaments %> tournaments!</p>
 				
 				
